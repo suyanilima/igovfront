@@ -1,0 +1,40 @@
+#relatorio-modal-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:200;padding:16px;background:rgba(12,50,111,.4);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+#relatorio-modal-overlay.open{display:flex;animation:overlayIn .15s ease}
+#relatorio-modal-overlay.open .modal{animation:modalIn .18s cubic-bezier(.2,.8,.3,1)}
+.relatorio-modal{width:min(880px,calc(100vw - 32px));max-width:none;max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain}
+.relatorio-modal .modal-head{position:static;margin:0 0 12px;padding:0 0 12px;background:#fff;border-bottom:1px solid var(--border)}
+.relatorio-intro{margin:0 0 12px;color:var(--ink-soft);font-size:13px}
+.relatorio-fontes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.relatorio-fontes[hidden]{display:none}
+.relatorio-fonte-toggle{display:flex;align-items:center;gap:10px;padding:14px;border:1px solid var(--border);border-radius:10px;background:#fff;color:var(--gov-blue-dark);font-weight:800;cursor:pointer}
+.relatorio-fonte-toggle:has(input:checked){border-color:var(--gov-blue);background:var(--gov-blue-bg)}
+.relatorio-fonte-toggle input,.relatorio-check input{width:17px;height:17px;accent-color:var(--gov-blue)}
+.selecao-coluna,.selecao-registro{display:flex;align-items:center;justify-content:center}
+.selecao-coluna input,.selecao-registro input{width:17px;height:17px;margin:0;accent-color:var(--gov-blue);cursor:pointer}
+.relatorio-secao{margin-top:10px;padding:14px;border:1px solid var(--border);border-radius:12px;background:#fafbfc}
+.relatorio-secao[hidden]{display:none}
+.relatorio-secao-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.relatorio-secao-head h4{margin:0;color:var(--gov-blue-dark);font-size:16px}
+.relatorio-secao-head small{display:block;margin-top:4px;color:var(--ink-soft);font-size:12px;font-weight:500}
+.relatorio-campos-acoes{display:flex;gap:6px}
+.relatorio-campos-acoes button{padding:7px 11px;border:1px solid var(--border);border-radius:999px;background:#fff;color:var(--gov-blue);font:700 11px 'Inter',sans-serif;cursor:pointer}
+.relatorio-campos-acoes button:hover{border-color:var(--gov-blue);background:var(--gov-blue-bg)}
+.relatorio-contador{padding:5px 9px;border-radius:999px;background:var(--gov-blue-bg);color:var(--gov-blue);font-size:11px;font-weight:800}
+.relatorio-filtros{display:grid;grid-template-columns:2fr repeat(2,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+.relatorio-filtros label,.relatorio-campos-titulo{display:flex;flex-direction:column;gap:5px;color:var(--ink-soft);font-size:11px;font-weight:800}
+.relatorio-filtros input,.relatorio-filtros select{width:100%;min-height:40px}
+.relatorio-campos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:6px 0 0;border:1px solid var(--border);border-radius:9px;background:#fff;overflow:hidden}
+.relatorio-check{display:flex;box-sizing:border-box;align-items:center;gap:9px;min-height:44px;margin:0;padding:9px 12px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);color:var(--ink);font-size:12px;cursor:pointer}
+.relatorio-check:nth-child(3n){border-right:0}
+.relatorio-check:nth-last-child(-n+2){border-bottom:0}
+.relatorio-check:hover{background:var(--gov-blue-bg)}
+.relatorio-lista-acoes{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.relatorio-link-btn{border:0;background:transparent;color:var(--gov-blue);font:800 11px 'Inter',sans-serif;cursor:pointer}
+.relatorio-registros{max-height:170px;overflow:auto;border:1px solid var(--border);border-radius:9px;background:#fff}
+.relatorio-registro{display:grid;grid-template-columns:24px minmax(0,1fr) auto;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px;cursor:pointer}
+.relatorio-registro:last-child{border-bottom:0}.relatorio-registro:hover{background:var(--gov-blue-bg)}
+.relatorio-registro strong{display:block;color:var(--ink)}.relatorio-registro small{color:var(--ink-soft)}
+.relatorio-vazio{padding:18px;text-align:center;color:var(--ink-soft);font-size:12px}
+.relatorio-modal .modal-actions{position:sticky;bottom:-24px;z-index:4;margin:18px -24px -24px;padding:14px 24px 22px;background:#fff;border-top:1px solid var(--border)}
+@media(max-height:760px){.relatorio-modal{max-height:calc(100dvh - 20px)}.relatorio-intro{margin-bottom:12px}.relatorio-secao{margin-top:10px;padding:14px}.relatorio-registros{max-height:135px}}
+@media(max-width:700px){#relatorio-modal-overlay{padding:8px}.relatorio-modal{width:calc(100vw - 16px);max-height:calc(100dvh - 16px)}.relatorio-fontes,.relatorio-filtros,.relatorio-campos{grid-template-columns:1fr}.relatorio-check{border-right:0;border-bottom:1px solid var(--border)}.relatorio-check:last-child{border-bottom:0}.relatorio-secao-head{align-items:flex-start;flex-direction:column}.relatorio-registro{grid-template-columns:24px minmax(0,1fr)}.relatorio-registro>small{grid-column:2}}

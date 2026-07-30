@@ -128,7 +128,8 @@ function configurarBuscaCargoUnidade(indice){
     const termo=campo.value.trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
     const cargosDisponiveis=[...new Set([...CARGOS_UNIDADE,...cargosLegadosUnidade])];
     const resultados=cargosDisponiveis.filter(cargo=>!termo || cargo.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().includes(termo));
-    sugestoes.innerHTML=resultados.map(cargo=>`<button type="button" role="option" data-cargo="${escapeHtml(cargo)}">${escapeHtml(cargo)}</button>`).join('');
+    sugestoes.innerHTML=resultados.map(cargo=>`<button type="button" role="option" data-cargo="${escapeHtml(cargo)}">${escapeHtml(cargo)}</button>`).join('')
+      + '<button type="button" role="option" data-cargo-outro="true">Outro</button>';
     if(typeof campo.getBoundingClientRect==='function'){
       const modal=campo.closest?.('.modal');
       const campoRect=campo.getBoundingClientRect();
@@ -139,15 +140,20 @@ function configurarBuscaCargoUnidade(indice){
       sugestoes.classList.toggle('abre-acima',abrirAcima);
       sugestoes.style.maxHeight=`${Math.min(220,abrirAcima?espacoAcima:espacoAbaixo)}px`;
     }
-    sugestoes.hidden=resultados.length===0;
+    sugestoes.hidden=false;
   };
   campo.addEventListener('focus',atualizar);
   campo.addEventListener('input',atualizar);
   campo.addEventListener('blur',()=>setTimeout(esconder,120));
   sugestoes.addEventListener('mousedown',evento=>{
-    const opcao=evento.target.closest('[data-cargo]'); if(!opcao) return;
-    evento.preventDefault(); campo.value=opcao.dataset.cargo;
-    atualizarMembroNovaUnidade(indice,'cargo',campo.value); esconder(); campo.focus();
+    const opcao=evento.target.closest('[data-cargo],[data-cargo-outro]'); if(!opcao) return;
+    evento.preventDefault();
+    campo.value=opcao.dataset.cargoOutro ? '' : opcao.dataset.cargo;
+    campo.placeholder=opcao.dataset.cargoOutro ? 'Digite o cargo desejado' : 'Cargo';
+    atualizarMembroNovaUnidade(indice,'cargo',campo.value);
+    esconder();
+    campo.focus();
+    if(typeof campo.setSelectionRange==='function') campo.setSelectionRange(campo.value.length,campo.value.length);
   });
 }
 function alternarOpcoesPeriodicidadeUnidade(){
@@ -182,10 +188,10 @@ function cadastrarUnidade(){
   const nome=limitarTexto(document.getElementById('unidade-nome').value.trim(),50);
   const selecaoPeriodicidade=document.getElementById('unidade-periodicidade').value;
   const periodicidade=limitarTexto((selecaoPeriodicidade==='Outra'?document.getElementById('unidade-periodicidade-outra').value:selecaoPeriodicidade).trim(),30);
-  const cargosPermitidos=[...new Set([...CARGOS_UNIDADE,...cargosLegadosUnidade])];
-  const cargoInvalido=membrosNovaUnidade.find(m=>m.cargo.trim() && !cargosPermitidos.some(cargo=>cargo.toLowerCase()===m.cargo.trim().toLowerCase()));
-  if(cargoInvalido){ toast('Digite e escolha um cargo válido da lista.', 'alerta'); return; }
-  const membros=membrosNovaUnidade.map(m=>({cargo:cargosPermitidos.find(cargo=>cargo.toLowerCase()===m.cargo.trim().toLowerCase()) || '',nome:limitarTexto(formatarNomeProprio(m.nome.trim()),50)})).filter(m=>m.cargo && m.nome);
+  const membros=membrosNovaUnidade.map(m=>({
+    cargo:limitarTexto(m.cargo.trim(),50),
+    nome:limitarTexto(formatarNomeProprio(m.nome.trim()),50)
+  })).filter(m=>m.cargo && m.nome);
   if(!nome || !periodicidade || !membros.length){ toast('Informe o nome, a periodicidade e pelo menos um membro com cargo.', 'alerta'); return; }
   const codigo=unidadeEditandoCodigo || normalizarCodigoUnidade(nome);
   if(!unidadeEditandoCodigo && FREQUENCIAS_REUNIAO[codigo]){ toast('Já existe uma unidade com esse nome.', 'alerta'); return; }

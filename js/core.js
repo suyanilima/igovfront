@@ -252,6 +252,7 @@ async function carregar(){
       doc.baseLegalNumero = limitarTexto(doc.baseLegalNumero, LIMITES_CAMPOS.baseLegalNumero);
       doc.gestorNome = limitarTexto(doc.gestorNome, LIMITES_CAMPOS.gestorNome);
       doc.gestorSetor = limitarTexto(doc.gestorSetor, LIMITES_CAMPOS.gestorSetor);
+      doc.unidade = typeof localizarUnidadeDocumento === 'function' ? (localizarUnidadeDocumento(doc.unidade)?.codigo || '') : limitarTexto(doc.unidade, 30);
       doc.gestorEmail = limitarTexto(doc.gestorEmail, LIMITES_CAMPOS.gestorEmail);
       doc.gestorWhatsapp = limitarTexto(doc.gestorWhatsapp, LIMITES_CAMPOS.gestorWhatsapp);
       doc.descricao = limitarTexto(doc.descricao, LIMITES_CAMPOS.descricao);
@@ -313,6 +314,7 @@ document.addEventListener('keydown', event => {
     'delete-modal-overlay': fecharModalExcluir,
     'delete-reuniao-modal-overlay': fecharModalExcluirReuniao,
     'delete-minuta-modal-overlay': fecharModalExcluirMinuta,
+    'exportar-ata-modal-overlay': fecharModalExportarAta,
     'edit-reuniao-modal-overlay': fecharModalEditarReuniao,
     'edit-modal-overlay': fecharModalEditar,
     'resumo-modal-overlay': fecharModalResumo,

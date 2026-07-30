@@ -1,5 +1,15 @@
 /* ===== CADASTRO, EDIÇÃO E EXCLUSÃO DE REUNIÕES ===== */
 
+let reuniaoRemarcandoId = null;
+
+function obterSituacaoReuniao(reuniao){
+  if(reuniao?.cancelada || reuniao?.situacao === 'Cancelada') return 'Cancelada';
+  const instante = new Date(`${reuniao?.data || ''}T${reuniao?.horario || '23:59'}`);
+  if(!Number.isNaN(instante.getTime()) && instante.getTime() < Date.now()) return 'Concluída';
+  if(reuniao?.reagendada || reuniao?.situacao === 'Reagendada') return 'Reagendada';
+  return 'Agendada';
+}
+
 function todosParticipantesReuniao(item){
   const membros = normalizarMembros(item.membros, item.frequencia).filter(membro => membro.nome).map(membro => `${membro.nome} — ${membro.cargo}`);
   const convidados = normalizarParticipantes(item.convidados ?? item.participantes);
@@ -25,7 +35,10 @@ function carregarReunioes(){
       membros: normalizarMembros(item.membros, item.frequencia === 'GOVTIC' ? 'CGOVTIC' : item.frequencia),
       convidados: normalizarParticipantes(item.convidados ?? item.participantes),
       participantes: normalizarParticipantes(item.participantes),
-      resumo: limitarTexto(item.resumo, 100)
+      resumo: limitarTexto(item.resumo, 100),
+      situacao: item.situacao === 'Cancelada' ? 'Cancelada' : item.situacao === 'Reagendada' ? 'Reagendada' : '',
+      cancelada: item.cancelada === true || item.situacao === 'Cancelada',
+      reagendada: item.reagendada === true || item.situacao === 'Reagendada'
     })) : [];
   }catch(e){
     reunioes = [];
@@ -137,6 +150,9 @@ function editarReuniao(id){
   const reuniao = reunioes.find(item => item.id === id);
   if(!reuniao) return;
   reuniaoEditandoId = id;
+  reuniaoRemarcandoId = null;
+  const tituloModal=document.getElementById('editar-reuniao-titulo');
+  if(tituloModal) tituloModal.textContent='Editar reunião';
   document.getElementById('edit-r-data').value = reuniao.data || '';
   document.getElementById('edit-r-horario').value = reuniao.horario || '';
   document.getElementById('edit-r-frequencia').value = reuniao.frequencia || 'CGOVTIC';
@@ -154,8 +170,66 @@ function editarReuniao(id){
 function fecharModalEditarReuniao(){
   fecharModalElemento('edit-reuniao-modal-overlay');
   reuniaoEditandoId = null;
+  reuniaoRemarcandoId = null;
   participantesReuniaoEdicao = [];
   membrosReuniaoEdicao = [];
+}
+
+function remarcarReuniao(id){
+  const reuniao=reunioes.find(item=>item.id===id);
+  if(!reuniao) return;
+  reuniaoRemarcandoId=id;
+  const identificacao=document.getElementById('remarcar-reuniao-identificacao');
+  const data=document.getElementById('remarcar-reuniao-data');
+  if(identificacao) identificacao.textContent=`${reuniao.frequencia} • atualmente em ${fmtData(reuniao.data)}`;
+  if(data){
+    data.value=reuniao.data || '';
+    data.min=todayStr();
+  }
+  abrirModalElemento('remarcar-reuniao-modal-overlay');
+  setTimeout(()=>data?.focus(),0);
+}
+
+function fecharRemarcacaoReuniao(){
+  fecharModalElemento('remarcar-reuniao-modal-overlay');
+  reuniaoRemarcandoId=null;
+}
+
+function confirmarRemarcacaoReuniao(){
+  const reuniao=reunioes.find(item=>item.id===reuniaoRemarcandoId);
+  const campo=document.getElementById('remarcar-reuniao-data');
+  if(!reuniao || !campo?.value || !campo.checkValidity()){
+    mostrarErroCampo(campo,'Informe uma nova data válida.');
+    campo?.focus();
+    return;
+  }
+  const anterior={...reuniao};
+  reuniao.data=campo.value;
+  reuniao.reagendada=true;
+  reuniao.cancelada=false;
+  reuniao.situacao='Reagendada';
+  if(!salvarReunioes()){
+    Object.assign(reuniao,anterior);
+    return;
+  }
+  renderReunioes();
+  fecharRemarcacaoReuniao();
+  toast('Reunião remarcada com sucesso.','valido');
+}
+
+function cancelarReuniao(id){
+  const reuniao=reunioes.find(item=>item.id===id);
+  if(!reuniao || !window.confirm('Cancelar esta reunião?')) return;
+  const anterior={...reuniao};
+  reuniao.cancelada=true;
+  reuniao.reagendada=false;
+  reuniao.situacao='Cancelada';
+  if(!salvarReunioes()){
+    Object.assign(reuniao,anterior);
+    return;
+  }
+  renderReunioes();
+  toast('Reunião cancelada.','alerta');
 }
 
 function alterarTipoEdicaoReuniao(tipo){

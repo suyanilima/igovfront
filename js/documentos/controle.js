@@ -4,9 +4,8 @@
 function render(){
   const withStatus = docs.map(d => ({...d, status: calcularStatus(d)}));
   if(typeof renderDashboard === 'function') renderDashboard();
+  if(typeof renderSetoresDocumentos === 'function') renderSetoresDocumentos();
   const totalDocumentos=document.getElementById('documentos-total');
-  if(totalDocumentos) totalDocumentos.textContent=String(withStatus.length);
-
   popularFiltroAno();
 
   const buscaTexto = (document.getElementById('busca-nome')?.value || '').trim().toLowerCase();
@@ -26,18 +25,22 @@ function render(){
     filtrosAnteriores = assinaturaFiltros;
   }
 
-  let visiveis = statusSelecionado==='todos' ? withStatus : withStatus.filter(d=>d.status===statusSelecionado);
+  let visiveis = unidadeSelecionadaDocumentos
+    ? withStatus.filter(documentoPertenceUnidadeSelecionada)
+    : withStatus;
+  visiveis = statusSelecionado==='todos' ? visiveis : visiveis.filter(d=>d.status===statusSelecionado);
   if(buscaTexto) visiveis = visiveis.filter(d => d.nome.toLowerCase().includes(buscaTexto));
   if(tipoSelecionado) visiveis = visiveis.filter(d => d.tipo === tipoSelecionado);
   if(anoSelecionado) visiveis = visiveis.filter(d => (d.dataVigencia || d.dataCriacao || d.data || '').slice(0,4) === anoSelecionado);
+  if(totalDocumentos) totalDocumentos.textContent=`${visiveis.length} documento${visiveis.length===1?'':'s'}`;
 
   visiveis.sort((a,b)=> (a.data ? new Date(a.data) : Infinity) - (b.data ? new Date(b.data) : Infinity));
 
   const lista = document.getElementById('lista');
 
-  if(docs.length === 0){
+  if(withStatus.length === 0){
     if(typeof atualizarSelecaoVisivelRelatorio === 'function') atualizarSelecaoVisivelRelatorio('documentos', []);
-    lista.innerHTML = `<div class="empty"><b>Nenhum documento aqui</b>Cadastre um documento ao lado para começar a acompanhar o prazo.</div>`;
+    lista.innerHTML = `<div class="empty"><b>Nenhum documento aqui</b>Cadastre um documento para começar a acompanhar o prazo.</div>`;
     renderPaginacao(0);
     return;
   }
@@ -172,9 +175,12 @@ function obterDocumentosVisiveis(){
   const tipoSelecionado = document.getElementById('filtro-tipo')?.value || '';
   const anoSelecionado = document.getElementById('filtro-ano')?.value || '';
 
-  let visiveis = statusSelecionado === 'todos'
-    ? withStatus
-    : withStatus.filter(d => d.status === statusSelecionado);
+  let visiveis = unidadeSelecionadaDocumentos
+    ? withStatus.filter(documentoPertenceUnidadeSelecionada)
+    : withStatus;
+  visiveis = statusSelecionado === 'todos'
+    ? visiveis
+    : visiveis.filter(d => d.status === statusSelecionado);
 
   if(buscaTexto) visiveis = visiveis.filter(d => d.nome.toLowerCase().includes(buscaTexto));
   if(tipoSelecionado) visiveis = visiveis.filter(d => d.tipo === tipoSelecionado);
@@ -202,7 +208,7 @@ function popularFiltroAno(){
   if(!sel) return;
   const atual = sel.value;
   const anos = new Set();
-  docs.forEach(d => {
+  docs.filter(documentoPertenceUnidadeSelecionada).forEach(d => {
     const base = d.dataVigencia || d.dataCriacao || d.data;
     if(base) anos.add(base.slice(0,4));
   });

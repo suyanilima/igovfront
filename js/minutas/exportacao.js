@@ -22,7 +22,7 @@ function baixarMinutaWord(){
   const url = URL.createObjectURL(new Blob(['\ufeff', html], {type:'application/msword;charset=utf-8'}));
   const link = document.createElement('a');
   link.href = url;
-  link.download = `minuta-ata-${reuniao.frequencia.toLowerCase()}-${reuniao.data}.doc`;
+  link.download = `ata-${reuniao.frequencia.toLowerCase()}-${reuniao.data}.doc`;
   document.body.appendChild(link);
   link.click();
   link.remove();
@@ -201,7 +201,7 @@ function imprimirMinutaPdf(){
     doc.setTextColor(90);
     doc.text(`${pagina}/${totalPaginas}`, 194, 291, {align:'right'});
   }
-  doc.save(`minuta-ata-${reuniao.frequencia.toLowerCase()}-${reuniao.data}.pdf`);
+  doc.save(`ata-${reuniao.frequencia.toLowerCase()}-${reuniao.data}.pdf`);
   toast('PDF baixado com sucesso.', 'valido');
 }
 

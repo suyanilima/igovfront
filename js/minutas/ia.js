@@ -41,7 +41,7 @@ function iniciarRevisaoManualMinuta(){
   definirTextoEditorMinuta('minuta-reuniao-descricao', limitarTexto(conteudo, 5000));
   const aviso = document.getElementById('minuta-revisao-aviso');
   if(aviso){
-    aviso.textContent = 'Conteúdo inserido sem IA. Revise a descrição e informe as providências antes de montar a minuta.';
+    aviso.textContent = 'Conteúdo inserido sem IA. Revise a descrição e informe as providências antes de montar a ata.';
     aviso.classList.remove('modo-teste');
   }
   const status = document.getElementById('minuta-ia-status');
@@ -90,9 +90,9 @@ async function gerarDescricaoReuniaoComIA(){
     const providencias = limitarTexto(String(resultado?.providencias || 'Não foram registradas providências.').trim(), 3000);
     definirTextoEditorMinuta('minuta-reuniao-providencias', providencias);
     const avisoRevisao = document.getElementById('minuta-revisao-aviso');
-    avisoRevisao.textContent = 'Conteúdo gerado pela IA. Revise antes de criar a minuta.';
+    avisoRevisao.textContent = 'Conteúdo gerado pela IA. Revise antes de criar a ata.';
     avisoRevisao.classList.remove('modo-teste');
-    if(status) status.textContent = 'Descrição e providências geradas. Revise os textos antes de criar a minuta.';
+    if(status) status.textContent = 'Descrição e providências geradas. Revise os textos antes de criar a ata.';
     passoMinutaLiberado = Math.max(passoMinutaLiberado, 2);
     atualizarNavegacaoMinuta();
     mostrarPassoMinuta(2);
@@ -108,7 +108,7 @@ async function gerarDescricaoReuniaoComIA(){
     passoMinutaLiberado = Math.max(passoMinutaLiberado, 2);
     atualizarNavegacaoMinuta();
     mostrarPassoMinuta(2);
-    toast('Modo de teste ativo: revise a minuta provisória.', 'alerta');
+    toast('Modo de teste ativo: revise a ata provisória.', 'alerta');
   }finally{
     botao.disabled = false;
     botao.textContent = 'Editar com IA';

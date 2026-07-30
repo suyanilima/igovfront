@@ -26,6 +26,32 @@
   --space-6:24px;
   --space-7:32px;
   --space-8:48px;
+  --font-regular:400;
+  --font-medium:500;
+  --font-semibold:600;
+  --font-bold:700;
+  --type-display-size:48px;
+  --type-display-line:56px;
+  --type-h1-size:36px;
+  --type-h1-line:44px;
+  --type-h2-size:30px;
+  --type-h2-line:38px;
+  --type-h3-size:24px;
+  --type-h3-line:32px;
+  --type-h4-size:20px;
+  --type-h4-line:28px;
+  --type-body-large-size:18px;
+  --type-body-large-line:28px;
+  --type-body-size:16px;
+  --type-body-line:24px;
+  --type-body-small-size:14px;
+  --type-body-small-line:20px;
+  --type-label-size:14px;
+  --type-label-line:20px;
+  --type-caption-size:12px;
+  --type-caption-line:16px;
+  --type-overline-size:11px;
+  --type-overline-line:16px;
 }
 
 *{box-sizing:border-box;}
@@ -50,6 +76,17 @@ body{
   min-height:100vh;
   padding-top:73px;
 }
+.type-display{font-size:var(--type-display-size);line-height:var(--type-display-line);font-weight:var(--font-bold)}
+.type-heading-1{font-size:var(--type-h1-size);line-height:var(--type-h1-line);font-weight:var(--font-bold)}
+.type-heading-2{font-size:var(--type-h2-size);line-height:var(--type-h2-line);font-weight:var(--font-semibold)}
+.type-heading-3{font-size:var(--type-h3-size);line-height:var(--type-h3-line);font-weight:var(--font-semibold)}
+.type-heading-4{font-size:var(--type-h4-size);line-height:var(--type-h4-line);font-weight:var(--font-semibold)}
+.type-body-large{font-size:var(--type-body-large-size);line-height:var(--type-body-large-line);font-weight:var(--font-regular)}
+.type-body{font-size:var(--type-body-size);line-height:var(--type-body-line);font-weight:var(--font-regular)}
+.type-body-small{font-size:var(--type-body-small-size);line-height:var(--type-body-small-line);font-weight:var(--font-regular)}
+.type-label{font-size:var(--type-label-size);line-height:var(--type-label-line);font-weight:var(--font-medium)}
+.type-caption{font-size:var(--type-caption-size);line-height:var(--type-caption-line);font-weight:var(--font-regular)}
+.type-overline{font-size:var(--type-overline-size);line-height:var(--type-overline-line);font-weight:var(--font-semibold);letter-spacing:.05em;text-transform:uppercase}
 
 header.main{
   background:#fff;

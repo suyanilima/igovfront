@@ -9,8 +9,8 @@ function abrirMinutaReuniao(id){
   document.querySelector('.minuta-pagina')?.classList.remove('minuta-editando-existente');
   const titulo = document.getElementById('minuta-reuniao-titulo');
   const rotuloEditor = document.querySelector('label[for="minuta-reuniao-texto"]');
-  if(titulo) titulo.textContent = 'Gerar minuta da ata';
-  if(rotuloEditor) rotuloEditor.textContent = 'Minuta gerada';
+  if(titulo) titulo.textContent = 'Gerar ata';
+  if(rotuloEditor) rotuloEditor.textContent = 'Ata gerada';
   document.getElementById('minuta-reuniao-identificacao').textContent = `${reuniao.frequencia} • ${fmtData(reuniao.data)} às ${reuniao.horario}`;
   document.getElementById('minuta-reuniao-transcricao').value = '';
   definirTextoEditorMinuta('minuta-reuniao-descricao', '');
@@ -78,8 +78,8 @@ function montarPaginaMinuta(){
   const voltar = painel.querySelector('.modal-close');
   if(voltar){
     voltar.className = 'minuta-voltar-reunioes';
-    voltar.textContent = 'Fechar minuta';
-    voltar.setAttribute('aria-label', 'Fechar minuta');
+    voltar.textContent = 'Fechar ata';
+    voltar.setAttribute('aria-label', 'Fechar ata');
   }
 
   destino.appendChild(painel);
@@ -122,7 +122,7 @@ function gerarMinutaReuniao(){
   const pauta = limitarTexto(reuniao?.pauta, 200);
   const providencias = limitarTexto(obterTextoEditorMinuta('minuta-reuniao-providencias'), 3000);
   if(!reuniao || !descricao){
-    mostrarErroCampo(campo, 'Descreva o que ocorreu na reunião para gerar a minuta.');
+    mostrarErroCampo(campo, 'Descreva o que ocorreu na reunião para gerar a ata.');
     campo?.focus();
     return;
   }
@@ -140,10 +140,10 @@ async function copiarMinutaReuniao(){
   const texto = obterTextoEditorMinuta('minuta-reuniao-texto');
   try{
     await navigator.clipboard.writeText(texto);
-    toast('Minuta copiada para a área de transferência.', 'valido');
+    toast('Ata copiada para a área de transferência.', 'valido');
   }catch(e){
     document.getElementById('minuta-reuniao-texto')?.focus();
-    toast('Selecione e copie o texto da minuta.', 'alerta');
+    toast('Selecione e copie o texto da ata.', 'alerta');
   }
 }
 
@@ -154,7 +154,7 @@ function baixarMinutaReuniao(){
   const url = URL.createObjectURL(new Blob([texto], {type:'text/plain;charset=utf-8'}));
   const link = document.createElement('a');
   link.href = url;
-  link.download = `minuta-ata-${reuniao.frequencia.toLowerCase()}-${reuniao.data}.txt`;
+  link.download = `ata-${reuniao.frequencia.toLowerCase()}-${reuniao.data}.txt`;
   document.body.appendChild(link);
   link.click();
   link.remove();

@@ -158,7 +158,7 @@ function editar(id){
   document.getElementById('edit-validade').value = obterAnosValidade(doc.validade) || 1;
   document.getElementById('edit-desc').value = doc.descricao || '';
   document.getElementById('edit-gestor-nome').value = doc.gestorNome || '';
-  document.getElementById('edit-gestor-setor').value = doc.gestorSetor || '';
+  document.getElementById('edit-gestor-setor').value = doc.gestorSetor || doc.unidade || '';
   document.getElementById('edit-gestor-email').value = doc.gestorEmail || '';
   document.getElementById('edit-gestor-whatsapp').value = doc.gestorWhatsapp || '';
   atualizarPreviewEdicao();
@@ -225,6 +225,14 @@ async function confirmarEdicao(){
     return;
   }
 
+  const setorEditado=document.getElementById('edit-gestor-setor').value.trim().toUpperCase();
+  if(typeof SETORES_CONVIDADOS!=='undefined' && !SETORES_CONVIDADOS[setorEditado]){
+    const campoSetor=document.getElementById('edit-gestor-setor');
+    mostrarErroCampo(campoSetor, 'Selecione um setor da lista de unidades.');
+    campoSetor?.focus();
+    return;
+  }
+
   const estadoAnterior = {...doc, historico: Array.isArray(doc.historico) ? [...doc.historico] : []};
   const vencimentoAnterior = doc.data;
   const novoVencimento = semNormativo ? '' : calcularVencimento(dataVigencia, validade);
@@ -239,7 +247,8 @@ async function confirmarEdicao(){
   doc.data = novoVencimento;
   doc.descricao = descricao;
   doc.gestorNome = limitarTexto(document.getElementById('edit-gestor-nome').value.trim(), LIMITES_CAMPOS.gestorNome);
-  doc.gestorSetor = limitarTexto(document.getElementById('edit-gestor-setor').value.trim(), LIMITES_CAMPOS.gestorSetor);
+  doc.gestorSetor = limitarTexto(document.getElementById('edit-gestor-setor').value.trim().toUpperCase(), LIMITES_CAMPOS.gestorSetor);
+  doc.unidade = doc.gestorSetor;
   doc.gestorEmail = limitarTexto(document.getElementById('edit-gestor-email').value.trim(), LIMITES_CAMPOS.gestorEmail);
   doc.gestorWhatsapp = limitarTexto(document.getElementById('edit-gestor-whatsapp').value.trim(), LIMITES_CAMPOS.gestorWhatsapp);
   doc.ultimaAtualizacao = todayStr();
@@ -253,6 +262,7 @@ async function confirmarEdicao(){
     return;
   }
   render();
+  renderSetoresDocumentos();
   fecharModalEditar();
   verificarVencimento(doc);
 }

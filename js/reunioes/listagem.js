@@ -30,7 +30,10 @@ function renderReunioes(){
   const inicio = (paginaReunioes - 1) * itensPorPaginaReunioes;
   const pagina = filtradas.slice(inicio, inicio + itensPorPaginaReunioes);
 
-  lista.innerHTML = pagina.map(item => `
+  lista.innerHTML = pagina.map(item => {
+    const situacao=obterSituacaoReuniao(item);
+    const classeSituacao=situacao==='Concluída'?'concluida':situacao==='Cancelada'?'cancelada':situacao==='Reagendada'?'reagendada':'agendada';
+    return `
     <div class="reuniao-item">
       <label class="selecao-registro" onclick="event.stopPropagation()"><input type="checkbox" ${typeof relatorioSelecao!=='undefined'&&relatorioSelecao.reunioes.has(item.id)?'checked':''} onchange="selecionarRegistroParaRelatorio('reunioes','${item.id}',this.checked)" aria-label="Selecionar reunião de ${fmtData(item.data)}"></label>
       <div class="reuniao-data"><strong>${fmtData(item.data)}</strong><span>${escapeHtml(item.horario)}</span></div>
@@ -38,10 +41,13 @@ function renderReunioes(){
       <div class="reuniao-link-celula">${item.link ? `<a class="reuniao-link" href="${escapeHtml(item.link)}" target="_blank" rel="noopener noreferrer">Abrir</a>` : '-'}</div>
       <div class="reuniao-celula reuniao-pauta">${escapeHtml(item.pauta)}</div>
       <div class="reuniao-celula reuniao-participantes-celula">${todosParticipantesReuniao(item).map(nome => `<span>${escapeHtml(nome)}</span>`).join('') || '—'}</div>
+      <div class="reuniao-situacao"><span class="${classeSituacao}">${escapeHtml(situacao)}</span></div>
       <div class="actions reuniao-acoes">
         <button class="actions-toggle" type="button" onclick="toggleAcoes(event,'reuniao-${item.id}')" aria-label="Ações da reunião">⋮</button>
         <div class="actions-dropdown" id="acoes-reuniao-${item.id}">
-          <button type="button" onclick="abrirMinutaReuniao('${item.id}')">Gerar minuta da ata</button>
+          <button type="button" onclick="abrirMinutaReuniao('${item.id}')">Gerar ata</button>
+          <button type="button" onclick="remarcarReuniao('${item.id}')">Remarcar</button>
+          <button type="button" onclick="cancelarReuniao('${item.id}')">Cancelar reunião</button>
           <button type="button" onclick="editarReuniao('${item.id}')">Editar</button>
           <button type="button" onclick="notificarReuniao('${item.id}')">Notificar</button>
           <div class="divider"></div>
@@ -49,9 +55,17 @@ function renderReunioes(){
         </div>
       </div>
     </div>
-  `).join('');
+  `}).join('');
   if(typeof atualizarSelecaoVisivelRelatorio === 'function') atualizarSelecaoVisivelRelatorio('reunioes', pagina);
   renderPaginacaoReunioes(filtradas.length);
+}
+
+function obterSituacaoAtaListagem(reuniao){
+  const registroAta = minutasHistorico.find(registro => registro.reuniao?.id === reuniao.id);
+  const situacaoReuniao = typeof obterSituacaoReuniao === 'function' ? obterSituacaoReuniao(reuniao) : (reuniao.situacao || 'Agendada');
+  if(registroAta) return {rotulo:'Gerada', classe:'gerada', registro:registroAta};
+  if(situacaoReuniao === 'Concluída') return {rotulo:'Não concluída', classe:'nao-concluida', registro:null};
+  return {rotulo:'Pendente', classe:'pendente', registro:null};
 }
 
 function renderEscolhaReuniaoMinuta(){
@@ -61,9 +75,11 @@ function renderEscolhaReuniaoMinuta(){
   const busca = (document.getElementById('minuta-busca-reuniao')?.value || '').trim().toLowerCase();
   const ano = document.getElementById('minuta-filtro-ano')?.value || '';
   const unidade = document.getElementById('minuta-filtro-unidade')?.value || '';
+  const situacaoAtaFiltro = document.getElementById('ata-filtro-situacao')?.value || '';
   const disponiveis = [...reunioes]
     .filter(item => !ano || (item.data || '').slice(0,4) === ano)
     .filter(item => !unidade || item.frequencia === unidade)
+    .filter(item => !situacaoAtaFiltro || obterSituacaoAtaListagem(item).classe === situacaoAtaFiltro)
     .filter(item => !busca || [item.frequencia, nomeUnidadeFiltroMinuta(item.frequencia), item.pauta, fmtData(item.data)].join(' ').toLowerCase().includes(busca))
     .sort((a,b) => `${b.data}T${b.horario}`.localeCompare(`${a.data}T${a.horario}`));
 
@@ -76,20 +92,23 @@ function renderEscolhaReuniaoMinuta(){
     return;
   }
   lista.innerHTML = disponiveis.map(item => {
-    const minutaExistente = minutasHistorico.find(registro => registro.reuniao?.id === item.id);
+    const situacaoAta = obterSituacaoAtaListagem(item);
+    const minutaExistente = situacaoAta.registro;
     const acao = minutaExistente ? `abrirMinutaHistorico('${minutaExistente.id}')` : `abrirMinutaReuniao('${item.id}')`;
     const menu = minutaExistente
-      ? `<button type="button" onclick="abrirMinutaHistorico('${minutaExistente.id}')">Editar minuta</button>
+      ? `<button type="button" onclick="abrirMinutaHistorico('${minutaExistente.id}')">Editar ata</button>
          <button type="button" onclick="baixarMinutaHistorico('${minutaExistente.id}','pdf')">Baixar PDF</button>
          <button type="button" onclick="baixarMinutaHistorico('${minutaExistente.id}','word')">Baixar Word</button>
-         <div class="divider"></div><button class="del" type="button" onclick="excluirMinutaHistorico('${minutaExistente.id}')">Excluir minuta</button>`
-      : `<button type="button" onclick="abrirMinutaReuniao('${item.id}')">Gerar minuta</button>`;
+         <div class="divider"></div><button class="del" type="button" onclick="excluirMinutaHistorico('${minutaExistente.id}')">Excluir ata</button>`
+      : `<button type="button" onclick="abrirMinutaReuniao('${item.id}')">Gerar ata</button>`;
     return `<div class="minuta-reuniao-opcao${minutaExistente ? ' com-minuta' : ''}">
       <button class="minuta-reuniao-selecao" type="button" onclick="${acao}">
         <span class="minuta-reuniao-data"><strong>${escapeHtml(fmtData(item.data))}</strong><small>${escapeHtml(item.horario)}</small></span>
-        <span class="minuta-reuniao-conteudo"><strong>${escapeHtml(item.frequencia)}${minutaExistente ? '<em>Minuta gerada</em>' : ''}</strong><span>${escapeHtml(item.pauta || 'Sem pauta informada')}</span></span>
+        <span class="minuta-reuniao-conteudo"><strong>${escapeHtml(item.frequencia)}</strong></span>
+        <span class="ata-reuniao-pauta">${escapeHtml(item.pauta || 'Sem pauta informada')}</span>
       </button>
-      <div class="actions minuta-reuniao-acoes"><button class="actions-toggle" type="button" onclick="toggleAcoes(event,'minuta-${item.id}')" aria-label="Ações da minuta">⋮</button><div class="actions-dropdown" id="acoes-minuta-${item.id}">${menu}</div></div>
+      <span class="ata-situacao ${situacaoAta.classe}">${situacaoAta.rotulo}</span>
+      <div class="actions minuta-reuniao-acoes"><button class="actions-toggle" type="button" onclick="toggleAcoes(event,'minuta-${item.id}')" aria-label="Ações da ata">⋮</button><div class="actions-dropdown" id="acoes-minuta-${item.id}">${menu}</div></div>
     </div>`;
   }).join('');
 }
@@ -148,7 +167,7 @@ function exportarRelatorioReunioes(){
     toast('Não há reuniões para exportar com os filtros selecionados.', 'alerta');
     return;
   }
-  const cabecalho=['Data','Horário','Unidade','Periodicidade','Formato','Link','Pauta','Membros','Convidados','Resumo','Situação da minuta'];
+  const cabecalho=['Data','Horário','Unidade','Periodicidade','Formato','Situação','Link','Pauta','Membros','Convidados','Resumo','Situação da ata'];
   const linhas=filtradas.map(reuniao=>{
     const membros=normalizarMembros(reuniao.membros,reuniao.frequencia)
       .filter(membro=>membro.nome)
@@ -163,12 +182,13 @@ function exportarRelatorioReunioes(){
       unidade,
       FREQUENCIAS_REUNIAO[reuniao.frequencia] || '',
       rotuloFormatoReuniao(reuniao.formato),
+      obterSituacaoReuniao(reuniao),
       reuniao.link || '',
       reuniao.pauta || '',
       membros,
       convidados,
       reuniao.resumo || '',
-      possuiMinuta ? 'Minuta gerada' : 'Sem minuta'
+      possuiMinuta ? 'Ata gerada' : 'Sem ata'
     ];
   });
   const escaparCsv=valor=>{

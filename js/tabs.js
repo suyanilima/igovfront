@@ -20,6 +20,7 @@ function setTab(tab, opcoes = {}){
     window.history.pushState({ tab }, '', hash);
   }
   if(tab === 'dashboard' && typeof renderDashboard === 'function') renderDashboard();
+  if(tab === 'acompanhamento' && typeof renderSetoresDocumentos === 'function' && !unidadeSelecionadaDocumentos) renderSetoresDocumentos();
 }
 
 function inicializarNavbar(){

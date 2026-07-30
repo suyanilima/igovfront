@@ -76,7 +76,8 @@ async function cadastrar(){
   const validade = semNormativo ? '' : normalizarValidadeAnos(document.getElementById('f-validade').value);
   const descricao = limitarTexto(document.getElementById('f-desc').value.trim(), LIMITES_CAMPOS.descricao);
   const gestorNome = limitarTexto(document.getElementById('f-gestor-nome').value.trim(), LIMITES_CAMPOS.gestorNome);
-  const gestorSetor = limitarTexto(document.getElementById('f-gestor-setor').value.trim(), LIMITES_CAMPOS.gestorSetor);
+  const gestorSetor = limitarTexto(document.getElementById('f-gestor-setor').value.trim().toUpperCase(), LIMITES_CAMPOS.gestorSetor);
+  const unidade = gestorSetor;
   const gestorEmail = limitarTexto(document.getElementById('f-gestor-email').value.trim(), LIMITES_CAMPOS.gestorEmail);
   const gestorWhatsapp = limitarTexto(document.getElementById('f-gestor-whatsapp').value.trim(), LIMITES_CAMPOS.gestorWhatsapp);
 
@@ -113,6 +114,13 @@ async function cadastrar(){
     return;
   }
 
+  if(typeof SETORES_CONVIDADOS!=='undefined' && !SETORES_CONVIDADOS[gestorSetor]){
+    const campoSetor=document.getElementById('f-gestor-setor');
+    mostrarErroCampo(campoSetor, 'Selecione um setor da lista de unidades.');
+    campoSetor?.focus();
+    return;
+  }
+
   const campoInvalido = camposObrigatorios
     .map(campo => document.getElementById(campo.id))
     .find(elemento => elemento && !elemento.checkValidity());
@@ -137,7 +145,7 @@ async function cadastrar(){
   const data = semNormativo ? '' : calcularVencimento(dataVigencia, validade);
 
   const doc = {
-    id:uid(), nome, tipo, sei, dataVigencia, validade, data, descricao,
+    id:uid(), nome, tipo, sei, dataVigencia, validade, data, descricao, unidade,
     baseLegal, baseLegalNumero, semNormativo,
     gestorNome, gestorSetor, gestorEmail, gestorWhatsapp,
     ultimaAtualizacao: todayStr(),

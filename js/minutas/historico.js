@@ -40,9 +40,9 @@ function renderHistoricoMinutas(){
   const lista = document.getElementById('minutas-historico-lista');
   const total = document.getElementById('minutas-historico-total');
   if(!lista || !total) return;
-  total.textContent = `${minutasHistorico.length} ${minutasHistorico.length === 1 ? 'minuta' : 'minutas'}`;
+  total.textContent = `${minutasHistorico.length} ${minutasHistorico.length === 1 ? 'ata' : 'atas'}`;
   if(!minutasHistorico.length){
-    lista.innerHTML = '<div class="minutas-historico-vazio">Nenhuma minuta foi gerada ainda.</div>';
+    lista.innerHTML = '<div class="minutas-historico-vazio">Nenhuma ata foi gerada ainda.</div>';
     return;
   }
   lista.innerHTML = minutasHistorico.map(item => {
@@ -92,7 +92,46 @@ function salvarEdicaoMinutaHistorico(){
   };
   salvarHistoricoMinutas();
   renderEscolhaReuniaoMinuta();
-  toast('Alterações da minuta salvas.', 'valido');
+  toast('Alterações da ata salvas.', 'valido');
+}
+
+function concluirAta(){
+  const reuniao = obterReuniaoMinutaAtual();
+  if(!reuniao) return;
+  if(!minutaHistoricoIdAtivo) registrarMinutaHistorico(reuniao);
+  const indice = minutasHistorico.findIndex(item => item.id === minutaHistoricoIdAtivo);
+  if(indice >= 0){
+    minutasHistorico[indice] = {
+      ...minutasHistorico[indice],
+      concluida:true,
+      concluidaEm:new Date().toISOString(),
+      geradaEm:new Date().toISOString(),
+      transcricao:document.getElementById('minuta-reuniao-transcricao')?.value || '',
+      pautaHtml:obterHtmlEditorMinuta('minuta-reuniao-pauta'),
+      descricaoHtml:obterHtmlEditorMinuta('minuta-reuniao-descricao'),
+      providenciasHtml:obterHtmlEditorMinuta('minuta-reuniao-providencias'),
+      minutaHtml:obterHtmlEditorMinuta('minuta-reuniao-texto')
+    };
+    salvarHistoricoMinutas();
+    renderHistoricoMinutas();
+    renderEscolhaReuniaoMinuta();
+  }
+  fecharModalMinutaReuniao();
+  toast('Ata concluída com sucesso.', 'valido');
+}
+
+function abrirModalExportarAta(){
+  abrirModalElemento('exportar-ata-modal-overlay');
+}
+
+function fecharModalExportarAta(){
+  fecharModalElemento('exportar-ata-modal-overlay');
+}
+
+function exportarAta(formato){
+  fecharModalExportarAta();
+  if(formato === 'pdf') imprimirMinutaPdf();
+  else baixarMinutaWord();
 }
 
 function abrirMinutaHistorico(id){
@@ -102,8 +141,8 @@ function abrirMinutaHistorico(id){
   document.querySelector('.minuta-pagina')?.classList.remove('minuta-editando-existente');
   const titulo = document.getElementById('minuta-reuniao-titulo');
   const rotuloEditor = document.querySelector('label[for="minuta-reuniao-texto"]');
-  if(titulo) titulo.textContent = 'Editar minuta da ata';
-  if(rotuloEditor) rotuloEditor.textContent = 'Visualização da minuta';
+  if(titulo) titulo.textContent = 'Editar ata';
+  if(rotuloEditor) rotuloEditor.textContent = 'Visualização da ata';
   document.getElementById('minuta-pagina-vazia')?.classList.add('oculto');
   document.querySelector('.minuta-pagina')?.classList.remove('oculto');
   document.getElementById('view-minutas')?.classList.add('minuta-em-edicao');
@@ -143,5 +182,5 @@ function confirmarExclusaoMinuta(){
   renderEscolhaReuniaoMinuta();
   fecharModalElemento('delete-minuta-modal-overlay');
   excluindoMinutaId = null;
-  toast('Minuta excluída com sucesso.', 'valido');
+  toast('Ata excluída com sucesso.', 'valido');
 }

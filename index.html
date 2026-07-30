@@ -30,7 +30,7 @@
       <button class="tabbtn active" id="tab-dashboard" role="tab" aria-selected="true" aria-controls="view-dashboard" tabindex="0" onclick="setTab('dashboard')">Dashboard</button>
       <button class="tabbtn" id="tab-acompanhamento" role="tab" aria-selected="false" aria-controls="view-acompanhamento" tabindex="-1" onclick="setTab('acompanhamento')">Documentos</button>
       <button class="tabbtn" id="tab-reunioes" role="tab" aria-selected="false" aria-controls="view-reunioes" tabindex="-1" onclick="setTab('reunioes')">Reuniões</button>
-      <button class="tabbtn" id="tab-minutas" role="tab" aria-selected="false" aria-controls="view-minutas" tabindex="-1" onclick="setTab('minutas')">Minutas</button>
+      <button class="tabbtn" id="tab-minutas" role="tab" aria-selected="false" aria-controls="view-minutas" tabindex="-1" onclick="setTab('minutas')">Atas</button>
       <button class="tabbtn" id="tab-cadastro" role="tab" aria-selected="false" aria-controls="view-cadastro" tabindex="-1" onclick="setTab('cadastro')">Cadastros</button>
       <button class="tabbtn" id="tab-sobre" role="tab" aria-selected="false" aria-controls="view-sobre" tabindex="-1" onclick="setTab('sobre')">Sobre</button>
     </nav>
@@ -63,9 +63,8 @@
   <div class="view active" id="view-dashboard">
     <section class="dashboard-cabecalho">
       <div>
-        <span class="dashboard-kicker">Visão geral</span>
         <h2>Painel de acompanhamento</h2>
-        <p>Documentos, reuniões e minutas reunidos em uma única visão.</p>
+        <p>Documentos, reuniões e atas reunidos em uma única visão.</p>
       </div>
       <div class="dashboard-atualizacao" id="dashboard-atualizacao"></div>
     </section>
@@ -78,10 +77,10 @@
         <span>Reuniões</span><strong id="dashboard-total-reunioes">0</strong><small id="dashboard-reunioes-detalhe">Nenhuma reunião</small>
       </button>
       <button class="dashboard-indicador minutas" type="button" onclick="setTab('minutas')">
-        <span>Minutas criadas</span><strong id="dashboard-total-minutas">0</strong><small id="dashboard-minutas-detalhe">Nenhuma minuta</small>
+        <span>Atas criadas</span><strong id="dashboard-total-minutas">0</strong><small id="dashboard-minutas-detalhe">Nenhuma ata</small>
       </button>
       <button class="dashboard-indicador pendencias" type="button" onclick="setTab('minutas')">
-        <span>Reuniões sem minuta</span><strong id="dashboard-reunioes-sem-minuta">0</strong><small>Requerem acompanhamento</small>
+        <span>Atas pendentes</span><strong id="dashboard-reunioes-sem-minuta">0</strong><small>Requerem acompanhamento</small>
       </button>
     </div>
 
@@ -94,16 +93,9 @@
             <div><i class="vigente"></i><span>Vigentes</span><strong id="dashboard-doc-vigentes">0</strong></div>
             <div><i class="alerta"></i><span>A vencer</span><strong id="dashboard-doc-alerta">0</strong></div>
             <div><i class="vencido"></i><span>Vencidos</span><strong id="dashboard-doc-vencidos">0</strong></div>
+            <div><i class="sem-normativo"></i><span>Documentos sem normativos</span><strong id="dashboard-doc-sem-normativo">0</strong></div>
           </div>
         </div>
-      </section>
-
-      <section class="dashboard-card dashboard-cobertura">
-        <div class="dashboard-card-head"><div><h3>Cobertura das minutas</h3><p>Reuniões com ata registrada</p></div><button type="button" onclick="setTab('minutas')">Ver minutas</button></div>
-        <div class="dashboard-progresso-valor"><strong id="dashboard-cobertura-minutas">0%</strong><span id="dashboard-cobertura-texto">0 de 0 reuniões</span></div>
-        <div class="dashboard-progresso" aria-hidden="true"><span id="dashboard-cobertura-barra"></span></div>
-        <div class="dashboard-subtitulo">Reuniões por unidade</div>
-        <div class="dashboard-unidades" id="dashboard-unidades"></div>
       </section>
 
       <section class="dashboard-card dashboard-documentos-atencao-card">
@@ -112,22 +104,60 @@
       </section>
 
       <section class="dashboard-card dashboard-reunioes-card">
-        <div class="dashboard-card-head"><div><h3>Reuniões recentes</h3><p>Últimos registros cadastrados</p></div><button type="button" onclick="setTab('reunioes')">Ver reuniões</button></div>
+        <div class="dashboard-card-head"><div><h3>Situação das reuniões</h3><p>Acompanhamento dos registros</p></div><button type="button" onclick="setTab('reunioes')">Ver reuniões</button></div>
         <div class="dashboard-lista" id="dashboard-reunioes-recentes"></div>
+      </section>
+
+      <section class="dashboard-card dashboard-atas">
+        <div class="dashboard-card-head"><div><h3>Acompanhamento das Atas</h3><p>Situação geral e conclusão por unidade</p></div><button type="button" onclick="setTab('minutas')">Ver atas</button></div>
+        <div class="dashboard-atas-grid">
+          <div class="dashboard-atas-situacao">
+            <div class="dashboard-situacao-corpo">
+              <div class="dashboard-anel dashboard-anel-atas" id="dashboard-anel-atas"><strong id="dashboard-percentual-atas-concluidas">0%</strong><span>concluídas</span></div>
+              <div class="dashboard-legenda">
+                <div><i class="concluida"></i><span>Concluídas</span><strong id="dashboard-atas-concluidas">0</strong></div>
+                <div><i class="em-andamento"></i><span>Em andamento</span><strong id="dashboard-atas-andamento">0</strong></div>
+                <div><i class="pendente"></i><span>Pendentes</span><strong id="dashboard-atas-pendentes">0</strong></div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="dashboard-subtitulo">Acompanhamento por unidade</div>
+            <div class="dashboard-unidades dashboard-atas-unidades" id="dashboard-unidades"></div>
+          </div>
+        </div>
       </section>
     </div>
   </div>
 
   <!-- VIEW: ACOMPANHAMENTO (principal) -->
   <div class="view" id="view-acompanhamento">
-    <section class="panel documentos-lista-card" aria-labelledby="documentos-lista-titulo">
-      <div class="documentos-lista-head">
-        <div>
-          <h2 id="documentos-lista-titulo">Documentos cadastrados</h2>
-          <div class="desc">Acompanhamento de documentos e prazos</div>
-        </div>
-        <span class="documentos-total" id="documentos-total">0</span>
+    <section class="panel documentos-setores-view" id="documentos-setores-view" aria-labelledby="documentos-setores-titulo">
+      <div class="documentos-pagina-head">
+        <h2>Acompanhamento de documentos</h2>
       </div>
+      <div class="documentos-seletor-unidades">
+        <div class="form-block-title" id="documentos-setores-titulo">Escolha a unidade</div>
+        <div class="reuniao-tipo-opcoes documentos-setores-grid" id="documentos-setores-grid"></div>
+      </div>
+    </section>
+
+    <section class="documentos-acompanhamento oculto" id="documentos-acompanhamento">
+      <div class="panel documentos-contexto-bloco" aria-labelledby="documentos-lista-titulo">
+        <button class="documentos-voltar-setores" type="button" onclick="voltarParaSetoresDocumentos()">← Trocar unidade</button>
+        <div class="documentos-breadcrumb" id="documentos-breadcrumb">Setor</div>
+        <h2 id="documentos-lista-titulo">Documentos cadastrados</h2>
+      </div>
+
+      <div class="panel documentos-filtros-bloco">
+        <div class="documentos-bloco-head">
+          <div>
+            <div class="documentos-filtros-titulo">
+              <h3>Filtros</h3>
+            </div>
+            <p>Refine os documentos da unidade selecionada.</p>
+          </div>
+        </div>
     <div class="toolbar">
       <div class="toolbar-field">
         <label class="toolbar-label" for="busca-nome">Buscar</label>
@@ -176,12 +206,14 @@
         </select>
       </div>
 
-      <div class="toolbar-field toolbar-action">
-        <span class="toolbar-label toolbar-label-spacer">Ação</span>
-        <button class="iconbtn export" onclick="exportarRelatorio()">Exportar relatório <span class="export-icon">▤</span></button>
+      <div class="toolbar-field documentos-exportar-campo">
+        <button class="documentos-exportar-filtro" type="button" onclick="prepararRelatorioDocumentosFiltrados()">Exportar relatório <span class="export-icon">▤</span></button>
       </div>
-    </div>
 
+    </div>
+      </div>
+
+    <section class="panel documentos-lista-card">
     <div class="ledger">
       <div class="ledger-head">
         <div class="selecao-coluna"><input id="selecionar-documentos-visiveis" type="checkbox" onchange="selecionarTodosDocumentosVisiveis(this.checked)" aria-label="Selecionar todos os documentos visíveis"></div>
@@ -195,7 +227,11 @@
       </div>
       <div id="lista"></div>
     </div>
-    <div class="paginacao-rodape"><div id="paginacao" class="paginacao"></div></div>
+    <div class="paginacao-rodape">
+      <div class="documentos-total-texto" id="documentos-total">0 documentos</div>
+      <div id="paginacao" class="paginacao"></div>
+    </div>
+    </section>
     </section>
   </div>
 
@@ -288,8 +324,11 @@
                 <input id="f-gestor-nome" type="text" maxlength="50" placeholder="Nome do gestor responsável" required>
               </div>
               <div>
-                <label>Setor <span class="required-mark">*</span></label>
-                <input id="f-gestor-setor" type="text" maxlength="50" placeholder="Ex: Secretaria de Tecnologia" required>
+                <label>Setor do responsável <span class="required-mark">*</span></label>
+                <div class="setor-busca-wrap">
+                  <input id="f-gestor-setor" class="setor-autocomplete" type="text" maxlength="30" placeholder="Digite a sigla do setor" autocomplete="off" required>
+                  <div id="f-gestor-setor-sugestoes" class="setor-sugestoes" role="listbox" hidden></div>
+                </div>
               </div>
               <div>
                 <label>E-mail do gestor <span class="required-mark">*</span></label>
@@ -424,6 +463,7 @@
             <div>Link</div>
             <div>Pauta</div>
             <div>Participantes</div>
+            <div>Situação</div>
             <div style="text-align:right">Ações</div>
           </div>
           <div id="reunioes-lista"></div>
@@ -434,24 +474,44 @@
 
   <!-- VIEW: MINUTAS -->
   <div class="view" id="view-minutas">
-    <div id="minuta-pagina-vazia" class="panel minuta-pagina-vazia">
-      <h2>Escolha uma reunião</h2>
-      <div class="desc">Clique em uma reunião abaixo para abrir diretamente a geração da minuta.</div>
-      <div class="minuta-escolha-filtros">
-        <div class="minuta-escolha-busca">
-          <label for="minuta-busca-reuniao">Buscar reunião</label>
-          <input id="minuta-busca-reuniao" type="search" maxlength="100" placeholder="Busque por pauta, unidade ou data" oninput="renderEscolhaReuniaoMinuta()">
+    <div id="minuta-pagina-vazia" class="minuta-pagina-vazia">
+      <section class="panel ata-intro-card">
+        <h2>Escolha uma reunião</h2>
+        <div class="desc">Clique em uma reunião abaixo para abrir diretamente a geração da ata.</div>
+      </section>
+      <section class="panel ata-filtros-card">
+        <div class="minuta-escolha-filtros">
+          <div class="minuta-escolha-busca">
+            <label for="minuta-busca-reuniao">Buscar reunião</label>
+            <input id="minuta-busca-reuniao" type="search" maxlength="100" placeholder="Busque por pauta, unidade ou data" oninput="renderEscolhaReuniaoMinuta()">
+          </div>
+          <div class="minuta-escolha-busca">
+            <label for="minuta-filtro-ano">Ano</label>
+            <select id="minuta-filtro-ano" onchange="renderEscolhaReuniaoMinuta()"><option value="">Todos</option></select>
+          </div>
+          <div class="minuta-escolha-busca">
+            <label for="minuta-filtro-unidade">Unidade</label>
+            <select id="minuta-filtro-unidade" onchange="renderEscolhaReuniaoMinuta()"><option value="">Todas</option></select>
+          </div>
+          <div class="minuta-escolha-busca">
+            <label for="ata-filtro-situacao">Situação da ata</label>
+            <select id="ata-filtro-situacao" onchange="renderEscolhaReuniaoMinuta()">
+              <option value="">Todas</option>
+              <option value="gerada">Gerada</option>
+              <option value="nao-concluida">Não concluída</option>
+              <option value="pendente">Pendente</option>
+            </select>
+          </div>
         </div>
-        <div class="minuta-escolha-busca">
-          <label for="minuta-filtro-ano">Ano</label>
-          <select id="minuta-filtro-ano" onchange="renderEscolhaReuniaoMinuta()"><option value="">Todos</option></select>
+      </section>
+      <section class="panel ata-tabela-card">
+        <div class="ata-lista-cabecalho" aria-hidden="true">
+          <span class="ata-cabecalho-reuniao"><span>Data</span><span>Reunião</span><span>Pauta</span></span>
+          <span>Situação da ata</span>
+          <span>Ações</span>
         </div>
-        <div class="minuta-escolha-busca">
-          <label for="minuta-filtro-unidade">Unidade</label>
-          <select id="minuta-filtro-unidade" onchange="renderEscolhaReuniaoMinuta()"><option value="">Todas</option></select>
-        </div>
-      </div>
-      <div id="minuta-reunioes-disponiveis" class="minuta-reunioes-disponiveis"></div>
+        <div id="minuta-reunioes-disponiveis" class="minuta-reunioes-disponiveis"></div>
+      </section>
     </div>
     <div id="minuta-pagina-conteudo"></div>
   </div>
@@ -462,7 +522,7 @@
       <div class="sobre-intro">
         <span class="sobre-kicker">Igov Controle</span>
         <h2 id="sobre-titulo">Sobre o sistema</h2>
-        <p>O Igov Controle centraliza o cadastro e o acompanhamento de documentos, responsáveis, prazos de vigência, unidades, reuniões de governança e minutas de ata. A Dashboard apresenta os principais indicadores desse fluxo em um único lugar.</p>
+        <p>O Igov Controle centraliza o cadastro e o acompanhamento de documentos, responsáveis, prazos de vigência, unidades, reuniões de governança e atas. A Dashboard apresenta os principais indicadores desse fluxo em um único lugar.</p>
       </div>
 
       <div class="sobre-grid">
@@ -472,11 +532,11 @@
         </article>
         <article class="sobre-bloco">
           <span class="sobre-numero">2</span>
-          <div><h3>Acompanhe</h3><p>Use a <strong>Dashboard</strong> para acompanhar documentos, reuniões, minutas e pendências. Nas telas detalhadas, aplique filtros, consulte participantes e gerencie os registros.</p></div>
+          <div><h3>Acompanhe</h3><p>Use a <strong>Dashboard</strong> para acompanhar documentos, reuniões, atas e pendências. Nas telas detalhadas, aplique filtros, consulte participantes e gerencie os registros.</p></div>
         </article>
         <article class="sobre-bloco">
           <span class="sobre-numero">3</span>
-          <div><h3>Gere minutas</h3><p>Na aba <strong>Minutas</strong>, escolha uma reunião e cole a transcrição, as anotações ou o resumo. A formatação da origem é removida e o conteúdo segue para revisão com ou sem auxílio da IA.</p></div>
+          <div><h3>Gere atas</h3><p>Na aba <strong>Atas</strong>, escolha uma reunião e cole a transcrição, as anotações ou o resumo. A formatação da origem é removida e o conteúdo segue para revisão com ou sem auxílio da IA.</p></div>
         </article>
         <article class="sobre-bloco">
           <span class="sobre-numero">4</span>
@@ -494,12 +554,12 @@
       </div>
 
       <div class="sobre-status">
-        <h3>Minutas de ata</h3>
+        <h3>Atas</h3>
         <div class="sobre-reunioes-lista">
           <div><strong>Prosseguir sem IA</strong><span>Conteúdo pronto</span><p>Use esta opção quando já possuir um resumo ou uma descrição. O texto colado é limpo e segue diretamente para o editor.</p></div>
           <div><strong>Editar com IA</strong><span>Transcrição bruta</span><p>Use esta opção para organizar a transcrição em linguagem formal antes da revisão. A integração depende da configuração do serviço de IA.</p></div>
         </div>
-        <p class="desc">O editor permite formatar textos, criar listas e tabelas e ajustar pauta, deliberações e providências. Reuniões com ata são identificadas como <strong>Minuta gerada</strong> e oferecem ações para editar, baixar em Word ou PDF e excluir.</p>
+        <p class="desc">O editor permite formatar textos, criar listas e tabelas e ajustar pauta, deliberações e providências. Reuniões com ata são identificadas como <strong>Ata gerada</strong> e oferecem ações para editar, baixar em Word ou PDF e excluir.</p>
       </div>
 
       <div class="sobre-status">
@@ -575,11 +635,11 @@
 
 <div id="delete-minuta-modal-overlay" aria-hidden="true">
   <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="excluir-minuta-titulo" tabindex="-1">
-    <h3 id="excluir-minuta-titulo">Excluir minuta?</h3>
-    <div class="m-sub">Tem certeza que deseja excluir a minuta da reunião <b id="delete-minuta-identificacao">—</b>? Esta ação não pode ser desfeita.</div>
+    <h3 id="excluir-minuta-titulo">Excluir ata?</h3>
+    <div class="m-sub">Tem certeza que deseja excluir a ata da reunião <b id="delete-minuta-identificacao">—</b>? Esta ação não pode ser desfeita.</div>
     <div class="modal-actions">
       <button type="button" onclick="fecharModalExcluirMinuta()">Cancelar</button>
-      <button class="confirm danger" type="button" onclick="confirmarExclusaoMinuta()"> Excluir minuta</button>
+      <button class="confirm danger" type="button" onclick="confirmarExclusaoMinuta()">Excluir ata</button>
     </div>
   </div>
 </div>
@@ -587,11 +647,11 @@
 <div id="minuta-reuniao-modal-overlay" aria-hidden="true">
   <div class="modal minuta-reuniao-modal" role="dialog" aria-modal="true" aria-labelledby="minuta-reuniao-titulo" tabindex="-1">
     <div class="modal-head">
-      <h3 id="minuta-reuniao-titulo">Gerar minuta da ata</h3>
+      <h3 id="minuta-reuniao-titulo">Gerar ata</h3>
       <button class="modal-close" type="button" onclick="fecharModalMinutaReuniao()" aria-label="Fechar">✕</button>
     </div>
     <div class="m-sub" id="minuta-reuniao-identificacao">—</div>
-    <div class="minuta-etapas" aria-label="Etapas da minuta">
+    <div class="minuta-etapas" aria-label="Etapas da ata">
       <button type="button" class="active" data-minuta-passo="1" onclick="navegarPassoMinuta(1)">1. Conteúdo da reunião</button>
       <button type="button" data-minuta-passo="2" onclick="navegarPassoMinuta(2)" disabled>2. Editar conteúdo</button>
       <button type="button" data-minuta-passo="3" onclick="navegarPassoMinuta(3)" disabled>3. Visualizar documento</button>
@@ -635,17 +695,31 @@
       </div>
       <div class="modal-actions">
         <button type="button" onclick="navegarPassoMinuta(1)">Voltar</button>
-        <button class="confirm" type="button" onclick="gerarMinutaReuniao()">Montar minuta</button>
+        <button class="confirm" type="button" onclick="gerarMinutaReuniao()">Montar ata</button>
       </div>
     </div>
     <div id="minuta-reuniao-resultado" class="oculto">
-      <label for="minuta-reuniao-texto">Visualização da minuta</label>
-      <div id="minuta-reuniao-texto" class="editor-texto editor-minuta-final minuta-somente-leitura" aria-label="Visualização da minuta"></div>
-      <div class="modal-actions">
+      <label for="minuta-reuniao-texto">Visualização da ata</label>
+      <div id="minuta-reuniao-texto" class="editor-texto editor-minuta-final minuta-somente-leitura" aria-label="Visualização da ata"></div>
+      <div class="modal-actions ata-finalizacao-acoes">
         <button class="btn-voltar-revisao" type="button" onclick="navegarPassoMinuta(2)">Editar conteúdo</button>
-        <button type="button" onclick="baixarMinutaWord()">Baixar Word</button>
-        <button type="button" onclick="imprimirMinutaPdf()">Baixar PDF</button>
+        <button type="button" onclick="abrirModalExportarAta()">Exportar</button>
+        <button class="confirm" type="button" onclick="concluirAta()">Concluir</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<div id="exportar-ata-modal-overlay" aria-hidden="true">
+  <div class="modal exportar-ata-modal" role="dialog" aria-modal="true" aria-labelledby="exportar-ata-titulo" tabindex="-1">
+    <div class="modal-head">
+      <h3 id="exportar-ata-titulo">Exportar ata</h3>
+      <button class="modal-close" type="button" onclick="fecharModalExportarAta()" aria-label="Fechar">✕</button>
+    </div>
+    <div class="m-sub">Escolha o formato do arquivo.</div>
+    <div class="modal-actions exportar-ata-opcoes">
+      <button type="button" onclick="exportarAta('word')">Word / Docs</button>
+      <button class="confirm" type="button" onclick="exportarAta('pdf')">PDF</button>
     </div>
   </div>
 </div>
@@ -757,6 +831,22 @@
   </div>
 </div>
 
+<div id="remarcar-reuniao-modal-overlay" aria-hidden="true">
+  <div class="modal remarcar-reuniao-modal" role="dialog" aria-modal="true" aria-labelledby="remarcar-reuniao-titulo" tabindex="-1">
+    <div class="modal-head">
+      <h3 id="remarcar-reuniao-titulo">Remarcar reunião</h3>
+      <button class="modal-close" type="button" onclick="fecharRemarcacaoReuniao()" aria-label="Fechar">✕</button>
+    </div>
+    <div class="m-sub" id="remarcar-reuniao-identificacao">Escolha a nova data da reunião.</div>
+    <label for="remarcar-reuniao-data">Nova data</label>
+    <input id="remarcar-reuniao-data" type="date" min="1900-01-01" max="9999-12-31" required>
+    <div class="modal-actions">
+      <button type="button" onclick="fecharRemarcacaoReuniao()">Cancelar</button>
+      <button class="confirm" type="button" onclick="confirmarRemarcacaoReuniao()">Confirmar nova data</button>
+    </div>
+  </div>
+</div>
+
 <div id="edit-modal-overlay" aria-hidden="true">
   <div class="modal edit-modal" role="dialog" aria-modal="true" aria-labelledby="editar-titulo" tabindex="-1">
     <h3 id="editar-titulo">Editar documento</h3>
@@ -822,8 +912,11 @@
         <label>Nome do gestor</label>
         <input id="edit-gestor-nome" type="text" maxlength="50" placeholder="Nome do gestor responsável" required>
 
-        <label>Setor</label>
-        <input id="edit-gestor-setor" type="text" maxlength="50" placeholder="Ex: Secretaria de Tecnologia" required>
+        <label>Setor do responsável</label>
+        <div class="setor-busca-wrap">
+          <input id="edit-gestor-setor" class="setor-autocomplete" type="text" maxlength="30" placeholder="Digite a sigla do setor" autocomplete="off" required>
+          <div id="edit-gestor-setor-sugestoes" class="setor-sugestoes" role="listbox" hidden></div>
+        </div>
 
         <label>E-mail do gestor</label>
         <input id="edit-gestor-email" type="email" maxlength="50" placeholder="gestor@tre-ac.jus.br" required>
@@ -915,6 +1008,7 @@
 <script src="js/vendor/jspdf.umd.min.js"></script>
 <script src="js/core.js"></script>
 <script src="js/tabs.js"></script>
+<script src="js/documentos/unidades.js"></script>
 <script src="js/documentos/cadastro.js"></script>
 <script src="js/documentos/controle.js"></script>
 <script src="js/documentos/modais.js"></script>

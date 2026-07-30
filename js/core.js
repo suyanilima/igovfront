@@ -316,6 +316,7 @@ document.addEventListener('keydown', event => {
     'delete-minuta-modal-overlay': fecharModalExcluirMinuta,
     'exportar-ata-modal-overlay': fecharModalExportarAta,
     'edit-reuniao-modal-overlay': fecharModalEditarReuniao,
+    'resumo-reuniao-modal-overlay': fecharResumoReuniao,
     'edit-modal-overlay': fecharModalEditar,
     'resumo-modal-overlay': fecharModalResumo,
     'notificar-modal-overlay': fecharModalNotificar,

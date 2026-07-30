@@ -29,6 +29,14 @@ html = html.replace(
     let css = fs.readFileSync(path.join(root, relativePath), 'utf8');
     // Mantém o arquivo totalmente independente, sem baixar fontes externas.
     css = css.replace(/@import\s+url\(['"]https:\/\/fonts\.googleapis\.com\/[^)]*\);?\s*/g, '');
+    css = css.replace(
+      /url\((['"]?)(\.\.\/assets\/[^)'"]+\.svg)\1\)/g,
+      (_, _quote, assetPath) => {
+        const absoluteAssetPath = path.resolve(path.dirname(path.join(root, relativePath)), assetPath);
+        const svg = fs.readFileSync(absoluteAssetPath).toString('base64');
+        return `url("data:image/svg+xml;base64,${svg}")`;
+      },
+    );
     return `<style data-source="${relativePath}">\n${css}\n</style>`;
   },
 );

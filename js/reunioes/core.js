@@ -167,6 +167,8 @@ let minutasHistorico = [];
 let passoMinutaLiberado = 1;
 let paginaReunioes = 1;
 let itensPorPaginaReunioes = 10;
+let paginaAtas = 1;
+let itensPorPaginaAtas = 10;
 
 function normalizarParticipantes(valor){
   const lista = Array.isArray(valor) ? valor : String(valor || '').split(/[\n,;]+/);

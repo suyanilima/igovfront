@@ -16,6 +16,7 @@
 <link href="css/relatorios.css" rel="stylesheet"/>
 <link href="css/dashboard.css" rel="stylesheet"/>
 <link href="css/estados.css" rel="stylesheet"/>
+<link href="css/tipografia.css" rel="stylesheet"/>
 </head>
 <body>
 
@@ -51,7 +52,7 @@
     <h2 id="estado-titulo">Não foi possível abrir esta página</h2>
     <p id="estado-mensagem">Ocorreu um problema inesperado. Tente novamente.</p>
     <div class="estado-acoes">
-      <button type="button" class="estado-btn secundario" id="estado-voltar">Voltar</button>
+      <button type="button" class="estado-btn secundario" id="estado-voltar"><span class="system-icon system-icon-back" aria-hidden="true"></span>Voltar</button>
       <button type="button" class="estado-btn primario" id="estado-tentar">Tentar novamente</button>
     </div>
   </div>
@@ -144,7 +145,7 @@
 
     <section class="documentos-acompanhamento oculto" id="documentos-acompanhamento">
       <div class="panel documentos-contexto-bloco" aria-labelledby="documentos-lista-titulo">
-        <button class="documentos-voltar-setores" type="button" onclick="voltarParaSetoresDocumentos()">← Trocar unidade</button>
+        <button class="documentos-voltar-setores" type="button" onclick="voltarParaSetoresDocumentos()"><span class="system-icon system-icon-back" aria-hidden="true"></span>Trocar unidade</button>
         <div class="documentos-breadcrumb" id="documentos-breadcrumb">Setor</div>
         <h2 id="documentos-lista-titulo">Documentos cadastrados</h2>
       </div>
@@ -162,8 +163,7 @@
       <div class="toolbar-field">
         <label class="toolbar-label" for="busca-nome">Buscar</label>
         <div class="search-wrap">
-          <input type="text" id="busca-nome" placeholder="Buscar documento..." maxlength="50" oninput="render()">
-          <span class="search-icon">⌕</span>
+          <input class="campo-busca-icone" type="text" id="busca-nome" placeholder="Buscar documento..." maxlength="50" oninput="render()">
         </div>
       </div>
 
@@ -207,7 +207,7 @@
       </div>
 
       <div class="toolbar-field documentos-exportar-campo">
-        <button class="documentos-exportar-filtro" type="button" onclick="prepararRelatorioDocumentosFiltrados()">Exportar relatório <span class="export-icon">▤</span></button>
+        <button class="documentos-exportar-filtro" type="button" onclick="prepararRelatorioDocumentosFiltrados()"><span class="export-icon system-icon system-icon-output" aria-hidden="true"></span>Exportar relatório</button>
       </div>
 
     </div>
@@ -419,18 +419,16 @@
 
   <!-- VIEW: REUNIÕES -->
   <div class="view" id="view-reunioes">
-      <section class="panel reunioes-lista-card" aria-labelledby="reunioes-lista-titulo">
-        <div class="reunioes-lista-head">
-          <div>
-            <h2 id="reunioes-lista-titulo">Reuniões cadastradas</h2>
-            <div class="desc">Histórico de reuniões</div>
-          </div>
-          <span class="reunioes-total" id="reunioes-total">0</span>
-        </div>
+    <div class="reunioes-blocos">
+      <section class="panel reunioes-intro-card" aria-labelledby="reunioes-lista-titulo">
+        <h2 id="reunioes-lista-titulo">Reuniões cadastradas</h2>
+        <div class="desc">Histórico de reuniões</div>
+      </section>
+      <section class="panel reunioes-filtros-card" aria-label="Filtros de reuniões">
         <div class="toolbar reunioes-filtros">
           <div class="toolbar-field">
             <label class="toolbar-label" for="reuniao-busca">Buscar</label>
-            <input id="reuniao-busca" type="text" maxlength="100" placeholder="Pauta, participante ou resumo..." oninput="filtrarReunioes()">
+            <input class="campo-busca-icone" id="reuniao-busca" type="text" maxlength="100" placeholder="Pauta, participante ou resumo..." oninput="filtrarReunioes()">
           </div>
           <div class="toolbar-field">
             <label class="toolbar-label" for="reuniao-filtro-tipo">Tipo de reunião</label>
@@ -452,9 +450,11 @@
           </div>
           <div class="toolbar-field toolbar-action">
             <span class="toolbar-label toolbar-label-spacer">Ação</span>
-            <button class="iconbtn export" type="button" onclick="exportarRelatorioReunioes()">Exportar relatório <span class="export-icon">▤</span></button>
+            <button class="iconbtn export" type="button" onclick="exportarRelatorioReunioes()"><span class="export-icon system-icon system-icon-output" aria-hidden="true"></span>Exportar relatório</button>
           </div>
         </div>
+      </section>
+      <section class="panel reunioes-lista-card" aria-labelledby="reunioes-lista-titulo">
         <div class="reunioes-tabela">
           <div class="reunioes-tabela-head">
             <div class="selecao-coluna"><input id="selecionar-reunioes-visiveis" type="checkbox" onchange="selecionarTodasReunioesVisiveis(this.checked)" aria-label="Selecionar todas as reuniões visíveis"></div>
@@ -468,8 +468,12 @@
           </div>
           <div id="reunioes-lista"></div>
         </div>
-        <div id="reunioes-paginacao" class="paginacao reunioes-paginacao"></div>
+        <div class="paginacao-rodape">
+          <div class="paginacao-total-texto" id="reunioes-total">0 reuniões</div>
+          <div id="reunioes-paginacao" class="paginacao reunioes-paginacao"></div>
+        </div>
       </section>
+    </div>
   </div>
 
   <!-- VIEW: MINUTAS -->
@@ -483,34 +487,48 @@
         <div class="minuta-escolha-filtros">
           <div class="minuta-escolha-busca">
             <label for="minuta-busca-reuniao">Buscar reunião</label>
-            <input id="minuta-busca-reuniao" type="search" maxlength="100" placeholder="Busque por pauta, unidade ou data" oninput="renderEscolhaReuniaoMinuta()">
+            <input class="campo-busca-icone" id="minuta-busca-reuniao" type="search" maxlength="100" placeholder="Busque por pauta, unidade ou data" oninput="filtrarAtas()">
           </div>
           <div class="minuta-escolha-busca">
             <label for="minuta-filtro-ano">Ano</label>
-            <select id="minuta-filtro-ano" onchange="renderEscolhaReuniaoMinuta()"><option value="">Todos</option></select>
+            <select id="minuta-filtro-ano" onchange="filtrarAtas()"><option value="">Todos</option></select>
           </div>
           <div class="minuta-escolha-busca">
             <label for="minuta-filtro-unidade">Unidade</label>
-            <select id="minuta-filtro-unidade" onchange="renderEscolhaReuniaoMinuta()"><option value="">Todas</option></select>
+            <select id="minuta-filtro-unidade" onchange="filtrarAtas()"><option value="">Todas</option></select>
           </div>
           <div class="minuta-escolha-busca">
             <label for="ata-filtro-situacao">Situação da ata</label>
-            <select id="ata-filtro-situacao" onchange="renderEscolhaReuniaoMinuta()">
+            <select id="ata-filtro-situacao" onchange="filtrarAtas()">
               <option value="">Todas</option>
               <option value="gerada">Gerada</option>
               <option value="nao-concluida">Não concluída</option>
               <option value="pendente">Pendente</option>
             </select>
           </div>
+          <div class="minuta-escolha-busca">
+            <label for="ata-itens-pagina">Atas por página</label>
+            <select id="ata-itens-pagina" onchange="alterarItensAtas(this.value)">
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+          </div>
         </div>
       </section>
       <section class="panel ata-tabela-card">
         <div class="ata-lista-cabecalho" aria-hidden="true">
-          <span class="ata-cabecalho-reuniao"><span>Data</span><span>Reunião</span><span>Pauta</span></span>
+          <span>Data</span>
+          <span>Reunião</span>
+          <span>Pauta</span>
           <span>Situação da ata</span>
           <span>Ações</span>
         </div>
         <div id="minuta-reunioes-disponiveis" class="minuta-reunioes-disponiveis"></div>
+        <div class="paginacao-rodape">
+          <div class="paginacao-total-texto" id="atas-total">0 atas</div>
+          <div id="atas-paginacao" class="paginacao"></div>
+        </div>
       </section>
     </div>
     <div id="minuta-pagina-conteudo"></div>
@@ -694,7 +712,7 @@
         </section>
       </div>
       <div class="modal-actions">
-        <button type="button" onclick="navegarPassoMinuta(1)">Voltar</button>
+        <button type="button" onclick="navegarPassoMinuta(1)"><span class="system-icon system-icon-back" aria-hidden="true"></span>Voltar</button>
         <button class="confirm" type="button" onclick="gerarMinutaReuniao()">Montar ata</button>
       </div>
     </div>
@@ -937,6 +955,30 @@
       <button onclick="fecharModalEditar()">Cancelar</button>
       <button class="confirm" onclick="confirmarEdicao()">Salvar alterações</button>
     </div>
+  </div>
+</div>
+
+<div id="resumo-reuniao-modal-overlay" aria-hidden="true">
+  <div class="modal resumo-reuniao-modal" role="dialog" aria-modal="true" aria-labelledby="resumo-reuniao-titulo" tabindex="-1">
+    <div class="modal-head">
+      <div><div class="resumo-tabhead">Resumo da reunião</div><h3 id="resumo-reuniao-titulo">—</h3></div>
+      <button class="modal-close" type="button" onclick="fecharResumoReuniao()" aria-label="Fechar">✕</button>
+    </div>
+    <div class="resumo-reuniao-meta">
+      <div><span class="resumo-label">Data e horário</span><strong id="resumo-reuniao-data">—</strong></div>
+      <div><span class="resumo-label">Unidade</span><strong id="resumo-reuniao-unidade">—</strong></div>
+      <div><span class="resumo-label">Formato</span><strong id="resumo-reuniao-formato">—</strong></div>
+      <div><span class="resumo-label">Situação</span><strong id="resumo-reuniao-situacao">—</strong></div>
+      <div><span class="resumo-label">Acesso</span><strong id="resumo-reuniao-link">—</strong></div>
+      <div><span class="resumo-label">Participação</span><strong id="resumo-reuniao-participantes-total">—</strong></div>
+    </div>
+    <div class="resumo-reuniao-secoes">
+      <section><span class="resumo-label">Pauta</span><p id="resumo-reuniao-pauta">—</p></section>
+      <section><span class="resumo-label">Resumo registrado</span><p id="resumo-reuniao-texto">—</p></section>
+      <section><span class="resumo-label">Membros da unidade</span><p id="resumo-reuniao-membros">—</p></section>
+      <section><span class="resumo-label">Convidados</span><p id="resumo-reuniao-convidados">—</p></section>
+    </div>
+    <div class="modal-actions"><button class="confirm" type="button" onclick="fecharResumoReuniao()">Fechar</button></div>
   </div>
 </div>
 

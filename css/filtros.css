@@ -1,64 +1,183 @@
 /* Grid explícito: em telas grandes, busca/status/tipo/ano/exportar sempre
-   ficam numa única linha (evita o "flex-wrap" quebrar de forma imprevisível). */
-.toolbar{
-  display:grid;
-  grid-template-columns:minmax(200px,2fr) repeat(4,minmax(110px,1fr)) auto;
-  gap:var(--space-3);
-  align-items:center;
-  margin-bottom:var(--space-6);
+ficam numa única linha (evita o "flex-wrap" quebrar de forma imprevisível). */
+.toolbar {
+  display: grid;
+  grid-template-columns: minmax(200px,2fr) repeat(4,minmax(110px,1fr)) auto;
+  gap: var(--space-3);
+  align-items: center;
+  margin-bottom: var(--space-6);
 }
-.search-wrap{
-  position:relative;
+
+.search-wrap {
+  position: relative;
 }
-.search-wrap input[type="text"]{
-  padding-right:36px;
-  width:100%;
+
+.campo-busca-icone {
+  padding-left: 42px !important;
+  background-image: url("../assets/icons/search.svg");
+  background-repeat: no-repeat;
+  background-position: 13px center;
+  background-size: 20px 20px;
 }
-.search-wrap input[type="text"]:focus,
-.search-wrap input[type="text"]:focus-visible{
-  border-color:var(--border);
-  box-shadow:none;
-  outline:none;
+
+.search-wrap input[type="text"] {
+  width: 100%;
 }
-.search-wrap .search-icon{
-  position:absolute;
-  right:12px;
-  top:50%;
-  transform:translateY(-50%);
-  color:var(--ink-soft);
-  font-size:15px;
-  pointer-events:none;
+
+.search-wrap input[type="text"]:focus, .search-wrap input[type="text"]:focus-visible {
+  border-color: var(--border);
+  box-shadow: none;
+  outline: none;
 }
-.toolbar select{width:100%;}
-.toolbar-select-personalizado{position:relative; width:100%;}
-.toolbar-select-personalizado>select{position:absolute; width:1px; height:1px; opacity:0; pointer-events:none;}
-.toolbar-select-botao{position:relative; display:block; width:100%; height:38px; overflow:hidden; padding:0 36px 0 12px; border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--ink); font:400 14px 'Inter',sans-serif; line-height:36px; text-align:left; text-overflow:ellipsis; white-space:nowrap; cursor:pointer;}
-.toolbar-select-botao::after{content:''; position:absolute; top:50%; right:13px; width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:6px solid var(--ink-soft); transform:translateY(-50%);}
-.toolbar-select-botao:hover,.toolbar-select-botao[aria-expanded="true"]{border-color:var(--gov-blue); box-shadow:0 0 0 3px var(--gov-blue-bg);}
-.toolbar-select-opcoes{position:absolute; top:calc(100% + 4px); left:0; z-index:150; width:100%; max-height:240px; overflow-y:auto; padding:4px; border:1px solid var(--border); border-radius:8px; background:#fff; box-shadow:0 10px 28px rgba(15,35,70,.18);}
-.toolbar-select-opcoes[hidden]{display:none;}
-.toolbar-select-opcoes button{display:block; width:100%; min-height:34px; padding:8px 10px; border:0; border-radius:5px; background:#fff; color:var(--ink); font:500 13px 'Inter',sans-serif; text-align:left; cursor:pointer;}
-.toolbar-select-opcoes button:hover,.toolbar-select-opcoes button:focus,.toolbar-select-opcoes button.selecionada{background:var(--gov-blue-bg); color:var(--gov-blue); outline:none;}
-.iconbtn.export{
-  border-color:var(--gov-blue);
-  color:var(--gov-blue);
-  font-weight:700;
-  white-space:nowrap;
+
+.search-wrap .search-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-soft);
+  font-size: 15px;
+  pointer-events: none;
 }
-.iconbtn.export:hover{background:var(--gov-blue); color:#fff;}
-.export-icon{margin-left:2px;}
+
+.toolbar select {
+  width: 100%;
+}
+
+.toolbar-select-personalizado {
+  position: relative;
+  width: 100%;
+}
+
+.toolbar-select-personalizado>select {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.toolbar-select-botao {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 38px;
+  overflow: hidden;
+  padding: 0 36px 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font: 400 14px system-ui,-apple-system,"Segoe UI",sans-serif;
+  line-height: 36px;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.toolbar-select-botao::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 13px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid var(--ink-soft);
+  transform: translateY(-50%);
+}
+
+.toolbar-select-botao:hover,.toolbar-select-botao[aria-expanded="true"] {
+  border-color: var(--gov-blue);
+  box-shadow: 0 0 0 3px var(--gov-blue-bg);
+}
+
+.toolbar-select-opcoes {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 150;
+  width: 100%;
+  max-height: 240px;
+  overflow-y: auto;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 10px 28px rgba(15,35,70,.18);
+}
+
+.toolbar-select-opcoes[hidden] {
+  display: none;
+}
+
+.toolbar-select-opcoes button {
+  display: block;
+  width: 100%;
+  min-height: 34px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 5px;
+  background: #fff;
+  color: var(--ink);
+  font: 500 13px system-ui,-apple-system,"Segoe UI",sans-serif;
+  text-align: left;
+  cursor: pointer;
+}
+
+.toolbar-select-opcoes button:hover,.toolbar-select-opcoes button:focus,.toolbar-select-opcoes button.selecionada {
+  background: var(--gov-blue-bg);
+  color: var(--gov-blue);
+  outline: none;
+}
+
+.iconbtn.export {
+  border-color: var(--gov-blue);
+  color: var(--gov-blue);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.iconbtn.export:hover {
+  background: var(--gov-blue);
+  color: #fff;
+}
+
+.export-icon {
+  margin-right: 2px;
+}
 
 /* Tablet: busca ocupa a linha inteira; status/tipo/ano dividem 2 colunas; exportar ocupa a linha inteira */
-@media (max-width:900px){
-  .toolbar{grid-template-columns:1fr 1fr;}
-  .search-wrap{grid-column:1 / -1;}
-  .iconbtn.export{grid-column:1 / -1; text-align:center;}
+@media (max-width:900px) {
+  .toolbar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .search-wrap {
+    grid-column: 1 / -1;
+  }
+
+  .iconbtn.export {
+    grid-column: 1 / -1;
+    text-align: center;
+  }
 }
+
 /* Celular: tudo empilhado, uma coluna só */
-@media (max-width:560px){
-  .toolbar{grid-template-columns:1fr;}
-  .search-wrap{grid-column:auto;}
-  .iconbtn.export{grid-column:auto;}
+@media (max-width:560px) {
+  .toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .search-wrap {
+    grid-column: auto;
+  }
+
+  .iconbtn.export {
+    grid-column: auto;
+  }
 }
 
 /* ---------- LEDGER / LIST ---------- */

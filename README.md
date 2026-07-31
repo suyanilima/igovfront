@@ -1,6 +1,6 @@
-# Igov Controle
+# Norma
 
-O **Igov Controle** é um sistema voltado à organização e ao acompanhamento das atividades de governança de tecnologia da informação.
+O **Norma** é um sistema voltado à organização e ao acompanhamento das atividades de governança de tecnologia da informação.
 
 A plataforma centraliza documentos, reuniões, pautas, participantes, atas, responsáveis e prazos em um único ambiente. Dessa forma, oferece uma visão integrada das informações e facilita a consulta ao histórico das ações realizadas.
 

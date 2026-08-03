@@ -1,0 +1,282 @@
+/*
+* Hierarquia tipográfica do produto.
+* Esta folha é carregada por último para manter todos os módulos na mesma escala.
+*/
+:root {
+  --app-page-title-size: 24px;
+  --app-page-title-line: 32px;
+  --app-section-title-size: 20px;
+  --app-section-title-line: 28px;
+  --app-card-title-size: 16px;
+  --app-card-title-line: 24px;
+  --app-body-size: 14px;
+  --app-body-line: 20px;
+  --app-label-size: 14px;
+  --app-label-line: 20px;
+  --app-caption-size: 12px;
+  --app-caption-line: 16px;
+  --app-overline-size: 11px;
+  --app-overline-line: 16px;
+  --app-metric-size: 30px;
+  --app-metric-line: 38px;
+}
+
+html, body, body * {
+  font-family: system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+
+body {
+  font-size: var(--app-body-size);
+  line-height: var(--app-body-line);
+  font-weight: var(--font-medium);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Navegação e identidade */
+.brand-text h1 {
+  font-size: var(--app-section-title-size);
+  line-height: var(--app-section-title-line);
+  font-weight: var(--font-bold);
+}
+
+.tabbtn, .user-name, .toolbar-select-botao, .toolbar-select-opcoes button, .dashboard-indicador span, .documentos-unidade-escolhida, .documentos-total-texto, .paginacao-total-texto, .doc-name, .doc-responsavel, .doc-date, .doc-updated, .documentos-subunidades button b, .reuniao-tipo-resumo, .minuta-reuniao-conteudo strong, .minuta-escolha-vazia, .reunioes-vazio {
+  font-size: var(--app-label-size);
+  line-height: var(--app-label-line);
+  font-weight: var(--font-medium);
+}
+
+.user-name {
+  font-weight: var(--font-semibold);
+}
+
+.brand-text .brand-desc, .clock-pill, .user-logout {
+  font-size: var(--app-caption-size);
+  line-height: var(--app-caption-line);
+  font-weight: var(--font-medium);
+}
+
+/* Títulos principais das páginas */
+.dashboard-cabecalho h2, .documentos-contexto-bloco h2, .documentos-setores-head h2, .sobre-intro h2, .estado-card h2 {
+  font-size: var(--app-page-title-size);
+  line-height: var(--app-page-title-line);
+  font-weight: var(--font-bold);
+}
+
+/* Títulos de painéis, modais e áreas principais */
+.panel h2, .documentos-pagina-head h2, .modal h3, .minutas-historico-head h2 {
+  font-size: var(--app-section-title-size);
+  line-height: var(--app-section-title-line);
+  font-weight: var(--font-bold);
+}
+
+/* Títulos de cards, subseções e registros */
+.dashboard-card-head h3, .documentos-bloco-head h3, .documentos-setor-card-head strong, .documento-unidade-opcao>strong, .documento-unidade-identificacao>strong, .reuniao-tipo-btn strong, .reuniao-identificacao h3, .reunioes-vazio b, .sobre-bloco h3, .sobre-status h3, .relatorio-secao-head h4, .empty b, .documentos-setores-vazio strong, .editor-minuta-final .ata-titulo {
+  font-size: var(--app-card-title-size);
+  line-height: var(--app-card-title-line);
+  font-weight: var(--font-bold);
+}
+
+/* Texto padrão e descrições */
+.dashboard-cabecalho p, .panel .desc, .documentos-setores-head p, .documentos-contexto-bloco p, .documentos-bloco-head p, .dashboard-card-head p, .sobre-intro p, .sobre-bloco p, .sobre-status>.desc, .sobre-status-lista p, .sobre-reunioes-lista p, .estado-card p, .relatorio-intro, .resumo-desc-block p, .notificar-preview p, .historico-texto, .reuniao-detalhe p, .reuniao-participantes li, .participantes-lista li, .editor-texto, .relatorio-registro, .relatorio-check, .documentos-lista-card .row {
+  font-size: var(--app-body-size);
+  line-height: var(--app-body-line);
+  font-weight: var(--font-medium);
+}
+
+/* Labels, controles e ações */
+label, input, select, textarea, button, .toolbar-label, .minuta-escolha-busca label, .documentos-total, .reunioes-total, .reuniao-data, .reuniao-frequencia, .reuniao-celula, .reuniao-link-celula, .ata-situacao, .dashboard-legenda div, .dashboard-unidade-linha, .dashboard-lista-item strong, .sobre-reunioes-lista strong, .resumo-row, .relatorio-fonte-toggle, .pagina-btn {
+  font-size: var(--app-label-size);
+  line-height: var(--app-label-line);
+}
+
+label, .toolbar-label, .minuta-escolha-busca label {
+  font-weight: var(--font-medium);
+}
+
+button {
+  font-weight: var(--font-semibold);
+}
+
+button.primary, .modal-actions button, .dashboard-card-head button, .documentos-voltar-setores, .reuniao-tipo-resumo button, .minuta-voltar-reunioes, .participante-adicionar>button, .minuta-ia-barra button, .reuniao-cancelar-edicao, .reuniao-excluir, .estado-btn {
+  font-size: var(--app-label-size);
+  line-height: var(--app-label-line);
+  font-weight: var(--font-semibold);
+}
+
+/* Informações secundárias e textos auxiliares */
+.hint, .field-error, .contador-caracteres, .contador-caracteres-campo, .dashboard-atualizacao, .dashboard-indicador small, .dashboard-anel span, .dashboard-card-head p, .dashboard-lista-item span, .documento-unidade-opcao>span, .documento-unidade-opcao>small, .documento-unidade-identificacao>span, .documentos-setor-card-head span, .documentos-setor-card-head>em, .documentos-subunidades button small, .documentos-setores-vazio span, .doc-sei, .doc-type, .doc-responsavel .responsavel-setor, .doc-updated, .modal .m-sub, .historico-data, .historico-responsavel, .minutas-historico-head p, .minuta-historico-item span, .minuta-historico-item small, .minuta-historico-item p, .minuta-reuniao-data small, .ata-reuniao-pauta, .reuniao-periodicidade, .reuniao-formato, .reuniao-link, .relatorio-secao-head small, .relatorio-vazio, .stat .l, .dashboard-progresso-valor span, .participantes-lista:empty::after {
+  font-size: var(--app-caption-size);
+  line-height: var(--app-caption-line);
+  font-weight: var(--font-medium);
+}
+
+.hint, .field-error, .contador-caracteres, .contador-caracteres-campo {
+  font-weight: var(--font-medium);
+}
+
+/* Overlines, categorias e cabeçalhos tabulares */
+.dashboard-kicker, .dashboard-subtitulo, .form-block-title, .unidade-secao-titulo, .documentos-seletor-unidades .form-block-title, .documentos-setores-head>span, .documentos-breadcrumb, .sobre-kicker, .ata-lista-cabecalho, .reunioes-tabela-head, .documentos-acompanhamento .ledger-head, .documentos-lista-card .ledger-head, .reuniao-item-label, .membro-fixo label, .minuta-secao-apoio, .resumo-tabhead, .resumo-label, .relatorio-filtros label, .relatorio-campos-titulo, .estado-codigo {
+  font-size: var(--app-overline-size);
+  line-height: var(--app-overline-line);
+  font-weight: var(--font-semibold);
+  letter-spacing: .05em;
+}
+
+/* Indicadores numéricos */
+.dashboard-indicador strong, .dashboard-progresso-valor strong, .stat .n, .estado-ilustracao {
+  font-size: var(--app-metric-size);
+  line-height: var(--app-metric-line);
+  font-weight: var(--font-bold);
+}
+
+.dashboard-anel strong, .dashboard-anel-atas strong {
+  font-size: var(--app-section-title-size);
+  line-height: var(--app-section-title-line);
+  font-weight: var(--font-bold);
+}
+
+/* Estados e badges: nunca menores que a legenda padrão */
+.dashboard-lista-item em, .reuniao-situacao span, .documento-unidade-opcao>em, .documentos-subunidades button em, .minutas-historico-head>span, .relatorio-contador, .sobre-reunioes-lista span {
+  font-size: var(--app-caption-size);
+  line-height: var(--app-caption-line);
+  font-weight: var(--font-semibold);
+}
+
+/*
+* Ajuste de legibilidade:
+* navegação permanece em 500; ações sobem para 600; dados de maior
+* importância nas tabelas ficam em 600/700 sem mudar a escala de tamanhos.
+*/
+.tabbtn {
+  font-size: 16px;
+  font-weight: var(--font-semibold);
+}
+
+button:not(.tabbtn) {
+  font-weight: var(--font-semibold);
+}
+
+.reuniao-data, .reuniao-data strong, .minuta-reuniao-data strong, .doc-date, .doc-updated {
+  font-weight: var(--font-semibold);
+}
+
+.reuniao-frequencia, .minuta-reuniao-conteudo strong, .doc-name {
+  font-weight: var(--font-bold);
+}
+
+.reuniao-participantes-celula, .reuniao-participantes-celula span, .reuniao-participantes-celula .reuniao-participantes-restantes, .reuniao-participantes li {
+  font-weight: var(--font-medium);
+}
+
+.reuniao-situacao span, .ata-situacao {
+  font-weight: 600;
+}
+
+.tag, .dashboard-lista-item em {
+  font-weight: var(--font-medium);
+}
+
+/* Barras de edição, passos e menus contextuais */
+.minuta-etapas button, .editor-toolbar button, .actions-dropdown button, .cargo-sugestoes button, .seletor-unidade-opcoes button, .reuniao-unidade-acoes button, .relatorio-campos-acoes button, .relatorio-link-btn {
+  font-size: var(--app-caption-size);
+  line-height: var(--app-caption-line);
+  font-weight: var(--font-semibold);
+}
+
+/* Ações das tabelas precisam de leitura mais confortável que os demais controles compactos. */
+.actions-dropdown button, .minuta-historico-acoes button {
+  font-size: var(--app-body-size);
+  line-height: var(--app-body-line);
+}
+
+/* Conteúdo editorial mantém apenas as duas variações permitidas */
+/* Cabeçalhos de todas as tabelas e listagens estruturadas */
+th, .ledger-head, .ledger-head>div, .reunioes-tabela-head, .reunioes-tabela-head>div, .ata-lista-cabecalho, .ata-lista-cabecalho>*, .resumo-tabhead, .resumo-tabhead>* {
+  font-weight: var(--font-bold);
+}
+
+/* Filtros: destaque no título do campo, não no valor selecionado */
+.toolbar-field>.toolbar-label, .minuta-escolha-busca>label {
+  font-weight: var(--font-bold);
+}
+
+.toolbar .toolbar-field>input, .toolbar .toolbar-field>select, .toolbar-field>.toolbar-select-personalizado .toolbar-select-botao, .minuta-escolha-busca input, .minuta-escolha-busca select {
+  font-weight: var(--font-regular);
+}
+
+.toolbar-field>input::placeholder, .minuta-escolha-busca input::placeholder {
+  font-weight: var(--font-regular);
+}
+
+/*
+ * Suaviza textos pequenos em todo o produto. Mantém títulos, métricas e
+ * ações principais intactos, evitando negrito excessivo em 10–14 px.
+ */
+.dashboard-kicker, .dashboard-subtitulo, .form-block-title, .unidade-secao-titulo,
+.documentos-seletor-unidades .form-block-title, .documentos-setores-head>span,
+.documentos-breadcrumb, .sobre-kicker, .reuniao-item-label, .membro-fixo label,
+.minuta-secao-apoio, .resumo-tabhead, .resumo-label, .relatorio-filtros label,
+.relatorio-campos-titulo, .estado-codigo, .toolbar-field>.toolbar-label,
+.minuta-escolha-busca>label {
+  font-weight: 600;
+  letter-spacing: .035em;
+}
+
+.dashboard-atualizacao, .dashboard-indicador small, .dashboard-anel span,
+.dashboard-card-head p, .dashboard-lista-item span, .documento-unidade-opcao>span,
+.documento-unidade-opcao>small, .documento-unidade-identificacao>span,
+.documentos-setor-card-head span, .documentos-setor-card-head>em,
+.documentos-subunidades button small, .documentos-setores-vazio span,
+.doc-sei, .doc-type, .doc-responsavel .responsavel-setor, .doc-updated,
+.modal .m-sub, .historico-data, .historico-responsavel, .minutas-historico-head p,
+.minuta-historico-item span, .minuta-historico-item small, .minuta-historico-item p,
+.minuta-reuniao-data small, .ata-reuniao-pauta, .reuniao-periodicidade,
+.reuniao-formato, .reuniao-link, .relatorio-secao-head small, .relatorio-vazio,
+.stat .l, .dashboard-progresso-valor span, .participantes-lista:empty::after {
+  color: color-mix(in srgb,currentColor 82%,transparent);
+  font-weight: 500;
+}
+
+.ata-lista-cabecalho, .ata-lista-cabecalho>*, .reunioes-tabela-head,
+.reunioes-tabela-head>*, .documentos-acompanhamento .ledger-head,
+.documentos-lista-card .ledger-head, th, .ledger-head, .ledger-head>div,
+.resumo-tabhead, .resumo-tabhead>* {
+  font-weight: 600;
+}
+
+.dashboard-lista-item em, .reuniao-situacao span, .ata-situacao,
+.documento-unidade-opcao>em, .documentos-subunidades button em,
+.minutas-historico-head>span, .relatorio-contador, .sobre-reunioes-lista span,
+.tag {
+  font-weight: 500;
+}
+
+.minuta-etapas button, .editor-toolbar button, .actions-dropdown button,
+.cargo-sugestoes button, .seletor-unidade-opcoes button,
+.reuniao-unidade-acoes button, .relatorio-campos-acoes button,
+.relatorio-link-btn, .pagina-btn {
+  font-weight: 600;
+}
+
+.hint, .field-error, .contador-caracteres, .contador-caracteres-campo {
+  opacity: .82;
+  font-weight: 500;
+}
+
+.editor-texto .texto-menor {
+  font-size: var(--app-caption-size);
+  line-height: var(--app-caption-line);
+}
+
+.editor-texto .texto-maior {
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-line);
+}
+
+@media (max-width:640px) {
+  .dashboard-cabecalho h2, .documentos-contexto-bloco h2, .documentos-setores-head h2, .sobre-intro h2, .estado-card h2 {
+    font-size: var(--app-section-title-size);
+    line-height: var(--app-section-title-line);
+  }
+}

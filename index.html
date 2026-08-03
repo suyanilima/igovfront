@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Norma · Gestão de documentos e reuniões</title>
+<link href="css/base.css" rel="stylesheet"/>
+<link href="css/layout-formularios.css" rel="stylesheet"/>
+<link href="css/filtros.css" rel="stylesheet"/>
+<link href="css/documentos.css" rel="stylesheet"/>
+<link href="css/modais-feedback.css" rel="stylesheet"/>
+<link href="css/reunioes.css" rel="stylesheet"/>
+<link href="css/relatorios.css" rel="stylesheet"/>
+<link href="css/dashboard.css" rel="stylesheet"/>
+<link href="css/estados.css" rel="stylesheet"/>
+<link href="css/tipografia.css" rel="stylesheet"/>
+</head>
+<body>
+
+<header class="main">
+  <div class="header-inner">
+    <div class="brandblock">
+      <div class="brand-text">
+        <h1><a class="brand-home" href="#dashboard" onclick="setTab('dashboard'); return false;"><img class="brand-logo" src="assets/norma-logo.png" alt="Norma"/></a></h1>
+      </div>
+    </div>
+    <nav class="tabbar navbar" role="tablist" aria-label="Navegação principal">
+      <button class="tabbtn active" id="tab-dashboard" role="tab" aria-selected="true" aria-controls="view-dashboard" tabindex="0" onclick="setTab('dashboard')">Dashboard</button>
+      <button class="tabbtn" id="tab-acompanhamento" role="tab" aria-selected="false" aria-controls="view-acompanhamento" tabindex="-1" onclick="setTab('acompanhamento')">Documentos</button>
+      <button class="tabbtn" id="tab-reunioes" role="tab" aria-selected="false" aria-controls="view-reunioes" tabindex="-1" onclick="setTab('reunioes')">Reuniões</button>
+      <button class="tabbtn" id="tab-minutas" role="tab" aria-selected="false" aria-controls="view-minutas" tabindex="-1" onclick="setTab('minutas')">Atas</button>
+      <button class="tabbtn" id="tab-cadastro" role="tab" aria-selected="false" aria-controls="view-cadastro" tabindex="-1" onclick="setTab('cadastro')">Cadastros</button>
+      <button class="tabbtn" id="tab-sobre" role="tab" aria-selected="false" aria-controls="view-sobre" tabindex="-1" onclick="setTab('sobre')">Sobre</button>
+    </nav>
+    <div class="user-block">
+      <div class="user-avatar"></div>
+      <div class="user-info">
+        <div class="user-name">Usuário</div>
+        <a href="#" class="user-logout" onclick="return false;">Sair do sistema</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="estado-sistema" class="estado-sistema" aria-hidden="true" hidden>
+  <div class="estado-card" role="alert" aria-live="assertive">
+    <div class="estado-ilustracao" id="estado-ilustracao" aria-hidden="true">!</div>
+    <div class="estado-codigo" id="estado-codigo">Erro</div>
+    <h2 id="estado-titulo">Não foi possível abrir esta página</h2>
+    <p id="estado-mensagem">Ocorreu um problema inesperado. Tente novamente.</p>
+    <div class="estado-acoes">
+      <button type="button" class="estado-btn secundario" id="estado-voltar"><span class="system-icon system-icon-back" aria-hidden="true"></span>Voltar</button>
+      <button type="button" class="estado-btn primario" id="estado-tentar">Tentar novamente</button>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <!-- VIEW: DASHBOARD -->
+  <div class="view active" id="view-dashboard">
+    <section class="dashboard-cabecalho">
+      <div>
+        <h2>Painel de acompanhamento</h2>
+        <p>Documentos, reuniões e atas reunidos em uma única visão.</p>
+      </div>
+      <div class="dashboard-atualizacao" id="dashboard-atualizacao"></div>
+    </section>
+
+    <div class="dashboard-indicadores">
+      <button class="dashboard-indicador documentos" type="button" onclick="setTab('acompanhamento')">
+        <span>Documentos</span><strong id="dashboard-total-documentos">0</strong><small id="dashboard-documentos-detalhe">Acompanhe prazos e responsáveis</small>
+      </button>
+      <button class="dashboard-indicador documentos-vencidos" type="button" onclick="setTab('acompanhamento')">
+        <span>Documentos vencidos</span><strong id="dashboard-total-documentos-vencidos">0</strong><small>Exigem atenção</small>
+      </button>
+      <button class="dashboard-indicador reunioes" type="button" onclick="setTab('reunioes')">
+        <span>Reuniões</span><strong id="dashboard-total-reunioes">0</strong><small id="dashboard-reunioes-detalhe">Nenhuma reunião</small>
+      </button>
+      <button class="dashboard-indicador minutas" type="button" onclick="setTab('minutas')">
+        <span>Atas criadas</span><strong id="dashboard-total-minutas">0</strong><small id="dashboard-minutas-detalhe">Nenhuma ata</small>
+      </button>
+      <button class="dashboard-indicador pendencias" type="button" onclick="setTab('minutas')">
+        <span>Atas pendentes</span><strong id="dashboard-reunioes-sem-minuta">0</strong><small>Requerem acompanhamento</small>
+      </button>
+    </div>
+
+    <div class="dashboard-grid">
+      <section class="dashboard-card dashboard-situacao">
+        <div class="dashboard-card-head"><div><h3>Situação dos documentos</h3><p>Distribuição por prazo de validade</p></div><button type="button" onclick="setTab('acompanhamento')">Ver documentos</button></div>
+        <div class="dashboard-situacao-corpo">
+          <div class="dashboard-anel" id="dashboard-anel-documentos"><strong id="dashboard-percentual-vigentes">0%</strong><span>vigentes</span></div>
+          <div class="dashboard-legenda">
+            <div><i class="vigente"></i><span>Vigentes</span><strong id="dashboard-doc-vigentes">0</strong></div>
+            <div><i class="alerta"></i><span>A vencer</span><strong id="dashboard-doc-alerta">0</strong></div>
+            <div><i class="vencido"></i><span>Vencidos</span><strong id="dashboard-doc-vencidos">0</strong></div>
+            <div><i class="sem-normativo"></i><span>Documentos sem normativos</span><strong id="dashboard-doc-sem-normativo">0</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard-card dashboard-documentos-atencao-card">
+        <div class="dashboard-card-head"><div><h3>Documentos que exigem atenção</h3><p>Vencidos ou próximos do vencimento</p></div><button type="button" onclick="setTab('acompanhamento')">Abrir lista</button></div>
+        <div class="dashboard-lista" id="dashboard-documentos-atencao"></div>
+      </section>
+
+      <section class="dashboard-card dashboard-reunioes-card">
+        <div class="dashboard-card-head"><div><h3>Situação das reuniões</h3><p>Acompanhamento dos registros</p></div><button type="button" onclick="setTab('reunioes')">Ver reuniões</button></div>
+        <div class="dashboard-lista" id="dashboard-reunioes-recentes"></div>
+      </section>
+
+      <section class="dashboard-card dashboard-atas">
+        <div class="dashboard-card-head"><div><h3>Acompanhamento das Atas</h3><p>Situação geral e conclusão por unidade</p></div><button type="button" onclick="setTab('minutas')">Ver atas</button></div>
+        <div class="dashboard-atas-grid">
+          <div class="dashboard-atas-situacao">
+            <div class="dashboard-situacao-corpo">
+              <div class="dashboard-anel dashboard-anel-atas" id="dashboard-anel-atas"><strong id="dashboard-percentual-atas-concluidas">0%</strong><span>concluídas</span></div>
+              <div class="dashboard-legenda">
+                <div><i class="concluida"></i><span>Concluídas</span><strong id="dashboard-atas-concluidas">0</strong></div>
+                <div><i class="em-andamento"></i><span>Em andamento</span><strong id="dashboard-atas-andamento">0</strong></div>
+                <div><i class="pendente"></i><span>Pendentes</span><strong id="dashboard-atas-pendentes">0</strong></div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="dashboard-subtitulo">Acompanhamento por unidade</div>
+            <div class="dashboard-unidades dashboard-atas-unidades" id="dashboard-unidades"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- VIEW: ACOMPANHAMENTO (principal) -->
+  <div class="view" id="view-acompanhamento">
+    <section class="panel documentos-setores-view" id="documentos-setores-view" aria-labelledby="documentos-setores-titulo">
+      <div class="documentos-pagina-head">
+        <h2>Acompanhamento de documentos</h2>
+      </div>
+      <div class="documentos-seletor-unidades">
+        <div class="form-block-title" id="documentos-setores-titulo">Escolha a unidade</div>
+        <div class="reuniao-tipo-opcoes documentos-setores-grid" id="documentos-setores-grid"></div>
+      </div>
+    </section>
+
+    <section class="documentos-acompanhamento oculto" id="documentos-acompanhamento">
+      <div class="panel documentos-contexto-bloco" aria-labelledby="documentos-lista-titulo">
+        <button class="documentos-voltar-setores" type="button" onclick="voltarParaSetoresDocumentos()"><span class="system-icon system-icon-back" aria-hidden="true"></span>Trocar unidade</button>
+        <div class="documentos-breadcrumb" id="documentos-breadcrumb">Setor</div>
+        <h2 id="documentos-lista-titulo">Documentos cadastrados</h2>
+      </div>
+
+      <div class="panel documentos-filtros-bloco">
+        <div class="documentos-bloco-head">
+          <div>
+            <div class="documentos-filtros-titulo">
+              <h3>Filtros</h3>
+            </div>
+            <p>Refine os documentos da unidade selecionada.</p>
+          </div>
+        </div>
+    <div class="toolbar">
+      <div class="toolbar-field">
+        <label class="toolbar-label" for="busca-nome">Buscar</label>
+        <div class="search-wrap">
+          <input class="campo-busca-icone" type="text" id="busca-nome" placeholder="Buscar documento..." maxlength="50" oninput="render()">
+        </div>
+      </div>
+
+      <div class="toolbar-field">
+        <label class="toolbar-label" for="filtro-status">Status</label>
+        <select id="filtro-status" class="filtro-status" onchange="render()">
+          <option value="todos">Todos</option>
+          <option value="Vigente">Vigente</option>
+          <option value="Alerta">A vencer</option>
+          <option value="Vencido">Vencido</option>
+        </select>
+      </div>
+
+      <div class="toolbar-field">
+        <label class="toolbar-label" for="filtro-tipo">Tipo de documento</label>
+        <select id="filtro-tipo" onchange="render()">
+          <option value="">Todos</option>
+          <option value="Projeto">Projeto</option>
+          <option value="Plano">Plano</option>
+          <option value="Planilha">Planilha</option>
+          <option value="Processo">Processo</option>
+          <option value="Normativo">Normativo</option>
+          <option value="Sem normativo">Sem normativo</option>
+        </select>
+      </div>
+
+      <div class="toolbar-field">
+        <label class="toolbar-label" for="filtro-ano">Ano</label>
+        <select id="filtro-ano" onchange="render()">
+          <option value="">Todos</option>
+        </select>
+      </div>
+
+      <div class="toolbar-field">
+        <label class="toolbar-label" for="itens-por-pagina">Documentos por página</label>
+        <select id="itens-por-pagina" onchange="alterarItensPorPagina(this.value)">
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+
+      <div class="toolbar-field documentos-exportar-campo">
+        <button class="documentos-exportar-filtro" type="button" onclick="prepararRelatorioDocumentosFiltrados()"><span class="export-icon system-icon system-icon-output" aria-hidden="true"></span>Exportar relatório</button>
+      </div>
+
+    </div>
+      </div>
+
+    <section class="panel documentos-lista-card">
+    <div class="ledger">
+      <div class="ledger-head">
+        <div class="selecao-coluna"><input id="selecionar-documentos-visiveis" type="checkbox" onchange="selecionarTodosDocumentosVisiveis(this.checked)" aria-label="Selecionar todos os documentos visíveis"></div>
+        <div>Documento</div>
+        <div>Responsável</div>
+        <div>Tipo</div>
+        <div>Últ. atualização</div>
+        <div>Vencimento</div>
+        <div>Situação</div>
+        <div style="text-align:right">Ações</div>
+      </div>
+      <div id="lista"></div>
+    </div>
+    <div class="paginacao-rodape">
+      <div class="documentos-total-texto" id="documentos-total">0 documentos</div>
+      <div id="paginacao" class="paginacao"></div>
+    </div>
+    </section>
+    </section>
+  </div>
+
+  <!-- VIEW: CADASTRO (aba separada) -->
+  <div class="view" id="view-cadastro">
+    <div class="form-view-wrap">
+      <div class="panel">
+        <h2>Categoria</h2>
+        <div class="desc">Selecione uma categoria e preencha as informações para realizar o cadastro.</div>
+
+        <div class="cadastro-modo">
+          <button type="button" id="modo-documento" class="cadastro-modo-btn active" onclick="selecionarModoCadastro('documento')">
+            <span class="cadastro-modo-numero">01</span><span><strong>Documento</strong><small>Cadastre documentos com prazo, SEI e acompanhamento de vigência.</small></span>
+          </button>
+          <button type="button" id="modo-sem-normativo" class="cadastro-modo-btn" onclick="selecionarModoCadastro('semNormativo')">
+            <span class="cadastro-modo-numero">02</span><span><strong>Documento sem normativo</strong><small>Registre documentos que não possuem vigência ou fundamentação normativa.</small></span>
+          </button>
+          <button type="button" id="modo-reuniao" class="cadastro-modo-btn" onclick="selecionarModoCadastro('reuniao')">
+            <span class="cadastro-modo-numero">03</span><span><strong>Reunião</strong><small>Agende reuniões com unidade, pauta, participantes, data e horário.</small></span>
+          </button>
+        </div>
+
+        <div id="cadastro-documento-form" class="oculto">
+        <div class="form-blocks-row" id="documento-form-blocks">
+          <div class="form-block">
+            <div class="form-block-title">Documento</div>
+
+            <label>Nome do documento <span class="required-mark">*</span></label>
+            <input id="f-nome" type="text" maxlength="70" placeholder="Ex: Plano Diretor 2026" required>
+
+            <div id="campos-prazo">
+              <div class="field-row">
+                <div>
+                  <label>Data de vigência <span class="required-mark">*</span></label>
+                  <input id="f-data-vigencia" type="date" min="1900-01-01" max="9999-12-31" required>
+                </div>
+                <div>
+                  <label>Validade (anos) <span class="required-mark">*</span></label>
+                  <div class="numero-invertido">
+                    <input id="f-validade" type="number" inputmode="numeric" min="1" max="99" step="1" value="1" placeholder="Ex: 3" title="Informe a quantidade de anos" required>
+                    <div class="numero-invertido-acoes">
+                      <button type="button" onclick="ajustarNumeroInvertido('f-validade',-1)" aria-label="Diminuir validade">▲</button>
+                      <button type="button" onclick="ajustarNumeroInvertido('f-validade',1)" aria-label="Aumentar validade">▼</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="hint" id="f-vencimento-preview"></div>
+            </div>
+
+            <div class="field-row" id="campos-tipo-sei">
+              <div>
+                <label>Tipo <span class="required-mark">*</span></label>
+                <select id="f-tipo" required onchange="atualizarObrigatoriedadeFundamentacaoCadastro()">
+                  <option value="Projeto">Projeto</option>
+                  <option value="Plano">Plano</option>
+                  <option value="Planilha">Planilha</option>
+                  <option value="Processo">Processo</option>
+                  <option value="Normativo">Normativo</option>
+                </select>
+              </div>
+              <div>
+                <label>N° SEI <span class="required-mark">*</span></label>
+                <input id="f-sei" type="text" inputmode="numeric" maxlength="25" pattern="[0-9]{7}-[0-9]{2}\.[0-9]{4}\.6\.01\.8000" placeholder="0000864-87.2025.6.01.8000" title="Digite os 13 primeiros algarismos; 6.01.8000 é preenchido automaticamente" required>
+              </div>
+            </div>
+
+            <div class="field-row" id="campos-normativos">
+              <div>
+                <label>Fundamentação legal <span class="required-mark" id="f-baselegal-required" hidden>*</span></label>
+                <select id="f-baselegal">
+                  <option value="">Não informada</option>
+                  <option value="Portaria">Portaria</option>
+                  <option value="Regimento interno">Regimento interno</option>
+                  <option value="Resolução">Resolução</option>
+                </select>
+              </div>
+              <div>
+                <label>N° <span class="required-mark" id="f-baselegal-num-required" hidden>*</span></label>
+                <input id="f-baselegal-num" type="text" maxlength="50" placeholder="Ex: 123/2026">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-block">
+            <div class="form-block-title">Gestor responsável</div>
+
+            <div class="gestor-fields">
+              <div>
+                <label>Nome do gestor <span class="required-mark">*</span></label>
+                <input id="f-gestor-nome" type="text" maxlength="50" placeholder="Nome do gestor responsável" required>
+              </div>
+              <div>
+                <label>Setor do responsável <span class="required-mark">*</span></label>
+                <div class="setor-busca-wrap">
+                  <input id="f-gestor-setor" class="setor-autocomplete" type="text" maxlength="30" placeholder="Digite a sigla do setor" autocomplete="off" required>
+                  <div id="f-gestor-setor-sugestoes" class="setor-sugestoes" role="listbox" hidden></div>
+                </div>
+              </div>
+              <div>
+                <label>E-mail do gestor <span class="required-mark">*</span></label>
+                <input id="f-gestor-email" type="email" maxlength="50" placeholder="gestor@tre-ac.jus.br" required>
+              </div>
+              <div>
+                <label>WhatsApp ou telefone <span class="required-mark">*</span></label>
+                <input id="f-gestor-whatsapp" type="text" inputmode="tel" maxlength="16" placeholder="(68) 99999-9999" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-block">
+            <div class="form-block-title">Descrição</div>
+
+            <label>Descrição breve <span class="required-mark">*</span></label>
+            <textarea id="f-desc" rows="8" maxlength="300" placeholder="Do que se trata este documento..." required></textarea>
+          </div>
+        </div>
+
+          <button class="primary" onclick="cadastrar()">Salvar documento</button>
+        </div>
+
+        <div id="cadastro-reuniao-form" class="oculto">
+          <div class="reuniao-tipo-etapa" id="reuniao-tipo-etapa">
+            <div class="form-block-title">Escolha a unidade</div>
+            <div class="reuniao-tipo-opcoes">
+              <div class="reuniao-unidade-card"><button type="button" class="reuniao-tipo-btn" data-tipo="CGTIC" onclick="selecionarTipoReuniao('CGTIC')"><strong id="unidade-fixa-nome-CGTIC">CGTIC</strong><span id="unidade-fixa-periodicidade-CGTIC">Reuniões quinzenais</span></button><div class="reuniao-unidade-acoes"><button type="button" onclick="editarUnidade('CGTIC')">Editar</button></div></div>
+              <div class="reuniao-unidade-card"><button type="button" class="reuniao-tipo-btn" data-tipo="CGOVTIC" onclick="selecionarTipoReuniao('CGOVTIC')"><strong id="unidade-fixa-nome-CGOVTIC">CGOVTIC</strong><span id="unidade-fixa-periodicidade-CGOVTIC">Reuniões bimestrais</span></button><div class="reuniao-unidade-acoes"><button type="button" onclick="editarUnidade('CGOVTIC')">Editar</button></div></div>
+              <div id="reuniao-unidades-personalizadas" class="reuniao-unidades-personalizadas"></div>
+              <button type="button" class="reuniao-tipo-btn reuniao-tipo-adicionar" onclick="abrirCadastroUnidade()"><strong>+ Cadastrar unidade</strong><span>Adicione membros e seus cargos</span></button>
+            </div>
+          </div>
+          <div id="reuniao-dados-etapa" class="oculto">
+          <div class="reuniao-tipo-resumo"><span id="reuniao-tipo-selecionado">—</span><button type="button" onclick="alterarTipoReuniao()">Alterar unidade</button></div>
+          <div class="form-blocks-row reuniao-form-blocks">
+            <div class="form-block">
+              <div class="form-block-title">Reunião</div>
+              <div class="field-row">
+                <div>
+                  <label for="r-data">Data <span class="required-mark">*</span></label>
+                  <input id="r-data" type="date" min="1900-01-01" max="9999-12-31" required>
+                </div>
+                <div>
+                  <label for="r-horario">Horário <span class="required-mark">*</span></label>
+                  <input id="r-horario" type="time" required>
+                </div>
+              </div>
+              <input id="r-frequencia" type="hidden">
+              <label for="r-formato">Formato da reunião <span class="required-mark">*</span></label>
+              <select id="r-formato" onchange="alterarFormatoReuniao('r')" required>
+                <option value="Online">On-line</option>
+                <option value="Presencial">Presencial</option>
+              </select>
+              <div id="r-link-grupo" class="reuniao-link-grupo">
+                <label for="r-link">Link da reunião</label>
+                <input id="r-link" type="url" maxlength="500" placeholder="https://teams.microsoft.com/...">
+              </div>
+              <label for="r-pauta">Pauta <span class="required-mark">*</span></label>
+              <textarea id="r-pauta" rows="8" maxlength="200" placeholder="Assuntos que serão tratados" oninput="atualizarContadorPauta()" required></textarea>
+              <div class="contador-caracteres" id="r-pauta-contador" aria-live="polite">0/200</div>
+            </div>
+
+            <div class="form-block">
+              <div class="form-block-title">Membros da unidade</div>
+              <div class="hint">Os cargos são fixos. Você pode editar o nome de quem ocupa cada cargo nesta reunião.</div>
+              <div id="r-membros-lista" class="membros-fixos"></div>
+              <div class="participantes-subtitulo">Convidados</div>
+              <div class="participante-adicionar">
+                <input id="r-participante-input" type="text" maxlength="80" aria-label="Nome do convidado" placeholder="Nome do convidado">
+                <div class="setor-busca-wrap">
+                  <input id="r-participante-setor" class="setor-autocomplete" type="text" maxlength="30" placeholder="Setor" aria-label="Digite a sigla do setor do convidado" autocomplete="off">
+                  <div id="r-participante-setor-sugestoes" class="setor-sugestoes" role="listbox" hidden></div>
+                </div>
+                <button type="button" onclick="adicionarParticipanteReuniao()">Adicionar</button>
+              </div>
+              <ul id="r-participantes-lista" class="participantes-lista" aria-live="polite"></ul>
+            </div>
+
+          </div>
+          <button class="primary" id="btn-salvar-reuniao" type="button" onclick="cadastrarReuniao()">Salvar reunião</button>
+          <button class="reuniao-cancelar-edicao oculto" id="btn-cancelar-edicao-reuniao" type="button" onclick="cancelarEdicaoReuniao()">Cancelar edição</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW: REUNIÕES -->
+  <div class="view" id="view-reunioes">
+    <div class="reunioes-blocos">
+      <section class="panel reunioes-intro-card" aria-labelledby="reunioes-lista-titulo">
+        <div><h2 id="reunioes-lista-titulo">Reuniões cadastradas</h2><div class="desc">Histórico e agenda de reuniões</div></div>
+        <div class="reunioes-visualizacao" role="group" aria-label="Modo de visualização">
+          <button id="reunioes-modo-lista" class="active" type="button" onclick="alterarVisualizacaoReunioes('lista')">Lista</button>
+          <button id="reunioes-modo-calendario" type="button" onclick="alterarVisualizacaoReunioes('calendario')">Calendário</button>
+        </div>
+      </section>
+      <section class="panel reunioes-filtros-card" aria-label="Filtros de reuniões">
+        <div class="toolbar reunioes-filtros">
+          <div class="toolbar-field">
+            <label class="toolbar-label" for="reuniao-busca">Buscar</label>
+            <input class="campo-busca-icone" id="reuniao-busca" type="text" maxlength="100" placeholder="Pauta, participante ou resumo..." oninput="filtrarReunioes()">
+          </div>
+          <div class="toolbar-field">
+            <label class="toolbar-label" for="reuniao-filtro-tipo">Tipo de reunião</label>
+            <select id="reuniao-filtro-tipo" onchange="filtrarReunioes()">
+              <option value="">Todas</option>
+              <option value="CGOVTIC">CGOVTIC</option>
+              <option value="CGTIC">CGTIC</option>
+            </select>
+          </div>
+          <div class="toolbar-field">
+            <label class="toolbar-label" for="reuniao-filtro-ano">Ano</label>
+            <select id="reuniao-filtro-ano" onchange="filtrarReunioes()"><option value="">Todos</option></select>
+          </div>
+          <div class="toolbar-field">
+            <label class="toolbar-label" for="reuniao-itens-pagina">Reuniões por página</label>
+            <select id="reuniao-itens-pagina" onchange="alterarItensReunioes(this.value)">
+              <option value="10">10</option><option value="20">20</option><option value="50">50</option>
+            </select>
+          </div>
+          <div class="toolbar-field toolbar-action reunioes-exportar-campo">
+            <span class="toolbar-label toolbar-label-spacer">Ação</span>
+            <button class="documentos-exportar-filtro" type="button" onclick="exportarRelatorioReunioes()"><span class="export-icon system-icon system-icon-output" aria-hidden="true"></span>Exportar relatório</button>
+          </div>
+        </div>
+      </section>
+      <section class="panel reunioes-lista-card" id="reunioes-visualizacao-lista" aria-labelledby="reunioes-lista-titulo">
+        <div class="reunioes-tabela">
+          <div class="reunioes-tabela-head">
+            <div class="selecao-coluna"><input id="selecionar-reunioes-visiveis" type="checkbox" onchange="selecionarTodasReunioesVisiveis(this.checked)" aria-label="Selecionar todas as reuniões visíveis"></div>
+            <div>Data e horário</div>
+            <div>Reunião</div>
+            <div>Link</div>
+            <div>Pauta</div>
+            <div>Participantes</div>
+            <div>Situação</div>
+            <div style="text-align:right">Ações</div>
+          </div>
+          <div id="reunioes-lista"></div>
+        </div>
+        <div class="paginacao-rodape">
+          <div class="paginacao-total-texto" id="reunioes-total">0 reuniões</div>
+          <div id="reunioes-paginacao" class="paginacao reunioes-paginacao"></div>
+        </div>
+      </section>
+      <section class="panel reunioes-calendario-card" id="reunioes-visualizacao-calendario" aria-label="Calendário de reuniões" hidden>
+        <div class="reunioes-calendario-toolbar">
+          <button type="button" onclick="navegarCalendarioReunioes(-1)" aria-label="Mês anterior">‹</button>
+          <h3 id="reunioes-calendario-titulo"></h3>
+          <button type="button" onclick="navegarCalendarioReunioes(1)" aria-label="Próximo mês">›</button>
+          <button class="reunioes-calendario-hoje" type="button" onclick="irHojeCalendarioReunioes()">Hoje</button>
+        </div>
+        <div class="reunioes-calendario-legenda" aria-label="Legenda">
+          <span><i class="agendada"></i>Agendada</span><span><i class="reagendada"></i>Reagendada</span><span><i class="concluida"></i>Concluída</span><span><i class="cancelada"></i>Cancelada</span>
+        </div>
+        <div class="reunioes-calendario-semana" aria-hidden="true"><span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span></div>
+        <div class="reunioes-calendario-grade" id="reunioes-calendario-grade"></div>
+        <div class="reunioes-calendario-agenda" id="reunioes-calendario-agenda"></div>
+      </section>
+    </div>
+  </div>
+
+  <!-- VIEW: MINUTAS -->
+  <div class="view" id="view-minutas">
+    <div id="minuta-pagina-vazia" class="minuta-pagina-vazia">
+      <section class="panel ata-intro-card">
+        <h2>Escolha uma reunião</h2>
+        <div class="desc">Clique em uma reunião abaixo para abrir diretamente a geração da ata.</div>
+      </section>
+      <section class="panel ata-filtros-card">
+        <div class="minuta-escolha-filtros">
+          <div class="minuta-escolha-busca">
+            <label for="minuta-busca-reuniao">Buscar reunião</label>
+            <input class="campo-busca-icone" id="minuta-busca-reuniao" type="search" maxlength="100" placeholder="Busque por pauta, unidade ou data" oninput="filtrarAtas()">
+          </div>
+          <div class="minuta-escolha-busca">
+            <label for="minuta-filtro-ano">Ano</label>
+            <select id="minuta-filtro-ano" onchange="filtrarAtas()"><option value="">Todos</option></select>
+          </div>
+          <div class="minuta-escolha-busca">
+            <label for="minuta-filtro-unidade">Unidade</label>
+            <select id="minuta-filtro-unidade" onchange="filtrarAtas()"><option value="">Todas</option></select>
+          </div>
+          <div class="minuta-escolha-busca">
+            <label for="ata-filtro-situacao">Situação da ata</label>
+            <select id="ata-filtro-situacao" onchange="filtrarAtas()">
+              <option value="">Todas</option>
+              <option value="gerada">Gerada</option>
+              <option value="nao-concluida">Não concluída</option>
+              <option value="pendente">Pendente</option>
+            </select>
+          </div>
+          <div class="minuta-escolha-busca">
+            <label for="ata-itens-pagina">Atas por página</label>
+            <select id="ata-itens-pagina" onchange="alterarItensAtas(this.value)">
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+          </div>
+        </div>
+      </section>
+      <section class="panel ata-tabela-card">
+        <div class="ata-lista-cabecalho" aria-hidden="true">
+          <span>Data</span>
+          <span>Reunião</span>
+          <span>Pauta</span>
+          <span>Situação da ata</span>
+          <span>Ações</span>
+        </div>
+        <div id="minuta-reunioes-disponiveis" class="minuta-reunioes-disponiveis"></div>
+        <div class="paginacao-rodape">
+          <div class="paginacao-total-texto" id="atas-total">0 atas</div>
+          <div id="atas-paginacao" class="paginacao"></div>
+        </div>
+      </section>
+    </div>
+    <div id="minuta-pagina-conteudo"></div>
+  </div>
+
+  <!-- VIEW: SOBRE -->
+  <div class="view" id="view-sobre">
+    <section class="sobre-card" aria-labelledby="sobre-titulo">
+      <div class="sobre-intro">
+        <span class="sobre-kicker">Norma</span>
+        <h2 id="sobre-titulo">Sobre o sistema</h2>
+        <p>O Norma centraliza o cadastro e o acompanhamento de documentos, responsáveis, prazos de vigência, unidades, reuniões de governança e atas. A Dashboard apresenta os principais indicadores desse fluxo em um único lugar.</p>
+        <button class="sobre-apresentacao-btn" type="button" onclick="abrirApresentacaoNorma(true)">Ver apresentação inicial</button>
+      </div>
+
+      <div class="sobre-grid">
+        <article class="sobre-bloco">
+          <span class="sobre-numero">1</span>
+          <div><h3>Cadastre</h3><p>Acesse <strong>Cadastros</strong> para incluir documentos, reuniões e novas unidades. Configure a periodicidade e os cargos de cada unidade; depois informe data, horário, link, pauta, membros e convidados da reunião.</p></div>
+        </article>
+        <article class="sobre-bloco">
+          <span class="sobre-numero">2</span>
+          <div><h3>Acompanhe</h3><p>Use a <strong>Dashboard</strong> para acompanhar documentos, reuniões, atas e pendências. Nas telas detalhadas, aplique filtros, consulte participantes e gerencie os registros.</p></div>
+        </article>
+        <article class="sobre-bloco">
+          <span class="sobre-numero">3</span>
+          <div><h3>Gere atas</h3><p>Na aba <strong>Atas</strong>, escolha uma reunião e cole a transcrição, as anotações ou o resumo. A formatação da origem é removida e o conteúdo segue para revisão com ou sem auxílio da IA.</p></div>
+        </article>
+        <article class="sobre-bloco">
+          <span class="sobre-numero">4</span>
+          <div><h3>Edite e exporte</h3><p>Revise pauta, deliberações e providências; aplique listas, destaques e tabelas; salve as alterações e baixe a ata em Word ou PDF. Em Documentos e Reuniões, use <strong>Exportar relatório</strong>.</p></div>
+        </article>
+      </div>
+
+      <div class="sobre-status">
+        <h3>Unidades e reuniões de governança</h3>
+        <div class="sobre-reunioes-lista">
+          <div><strong>CGOVTIC e CGTIC</strong><span>Unidades iniciais</span><p>As unidades iniciais mantêm suas periodicidades e cargos, mas os nomes dos membros podem ser atualizados em cada reunião.</p></div>
+          <div><strong>Unidades personalizadas</strong><span>Cadastro flexível</span><p>Cadastre, edite ou exclua unidades, defina a periodicidade e escolha os cargos. O filtro de reuniões inclui automaticamente todas as unidades disponíveis.</p></div>
+        </div>
+        <p class="desc">Cada reunião pode ser identificada como <strong>On-line</strong> ou <strong>Presencial</strong>, e o formato é levado automaticamente para a ata. Convidados podem ser vinculados a um setor, exibido pela sigla na identificação resumida.</p>
+      </div>
+
+      <div class="sobre-status">
+        <h3>Atas</h3>
+        <div class="sobre-reunioes-lista">
+          <div><strong>Prosseguir sem IA</strong><span>Conteúdo pronto</span><p>Use esta opção quando já possuir um resumo ou uma descrição. O texto colado é limpo e segue diretamente para o editor.</p></div>
+          <div><strong>Editar com IA</strong><span>Transcrição bruta</span><p>Use esta opção para organizar a transcrição em linguagem formal antes da revisão. A integração depende da configuração do serviço de IA.</p></div>
+        </div>
+        <p class="desc">O editor permite formatar textos, criar listas e tabelas e ajustar pauta, deliberações e providências. Reuniões com ata são identificadas como <strong>Ata gerada</strong> e oferecem ações para editar, baixar em Word ou PDF e excluir.</p>
+      </div>
+
+      <div class="sobre-status">
+        <h3>Entenda as situações</h3>
+        <div class="sobre-status-lista">
+          <div><span class="tag valido">Vigente</span><p>Documento dentro do prazo de validade.</p></div>
+          <div><span class="tag alerta">A vencer</span><p>Documento dentro do período de alerta.</p></div>
+          <div><span class="tag vencido">Vencido</span><p>Documento com a data de vencimento ultrapassada.</p></div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<div id="modal-overlay" aria-hidden="true">
+  <div class="modal renovar-modal" role="dialog" aria-modal="true" aria-labelledby="renovar-titulo" tabindex="-1">
+    <h3 id="renovar-titulo">Renovar vigência</h3>
+    <div class="m-sub" id="modal-doc-nome">—</div>
+
+    <label>Data atual do documento</label>
+    <input id="modal-data-atual" type="text" readonly>
+
+    <label>Validade (anos) <span class="required-mark">*</span></label>
+    <div class="numero-invertido">
+      <input id="modal-validade" type="number" inputmode="numeric" min="1" max="99" step="1" placeholder="Ex: 3" title="Informe a quantidade de anos" oninput="selecionarPrazoRenovacao(this.value)" required>
+      <div class="numero-invertido-acoes">
+        <button type="button" onclick="ajustarNumeroInvertido('modal-validade',-1)" aria-label="Diminuir validade">▲</button>
+        <button type="button" onclick="ajustarNumeroInvertido('modal-validade',1)" aria-label="Aumentar validade">▼</button>
+      </div>
+    </div>
+    <div class="hint" id="modal-vencimento-preview"></div>
+    <div class="field-error" id="erro-modal-validade"></div>
+
+    <label>Responsável pela renovação <span class="required-mark">*</span></label>
+    <input id="modal-responsavel" type="text" maxlength="50" placeholder="Ex: Carlos Oliveira" required>
+    <div class="field-error" id="erro-modal-responsavel"></div>
+
+    <label>Motivo da renovação <span class="required-mark">*</span></label>
+    <textarea id="modal-motivo" rows="3" maxlength="300" placeholder="Ex: Atualização do documento" required></textarea>
+    <div class="field-error" id="erro-modal-motivo"></div>
+
+    <div class="modal-actions">
+      <button onclick="fecharModal()">Cancelar</button>
+      <button class="confirm" onclick="confirmarRenovacao()">Confirmar renovação</button>
+    </div>
+  </div>
+</div>
+
+<div id="delete-modal-overlay" aria-hidden="true">
+  <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="excluir-titulo" tabindex="-1">
+    <h3 id="excluir-titulo">Excluir documento?</h3>
+    <div class="m-sub">Tem certeza que deseja excluir <b id="delete-doc-nome">—</b>? Essa ação não pode ser desfeita.</div>
+    <div class="modal-actions">
+      <button onclick="fecharModalExcluir()">Cancelar</button>
+      <button class="confirm danger" onclick="confirmarExclusao()">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<div id="delete-reuniao-modal-overlay" aria-hidden="true">
+  <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="excluir-reuniao-titulo" tabindex="-1">
+    <h3 id="excluir-reuniao-titulo">Excluir reunião?</h3>
+    <div class="m-sub">Tem certeza que deseja excluir a reunião com a pauta <b id="delete-reuniao-pauta">—</b>? Essa ação não pode ser desfeita.</div>
+    <div class="modal-actions">
+      <button type="button" onclick="fecharModalExcluirReuniao()">Cancelar</button>
+      <button class="confirm danger" type="button" onclick="confirmarExclusaoReuniao()">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<div id="delete-minuta-modal-overlay" aria-hidden="true">
+  <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="excluir-minuta-titulo" tabindex="-1">
+    <h3 id="excluir-minuta-titulo">Excluir ata?</h3>
+    <div class="m-sub">Tem certeza que deseja excluir a ata da reunião <b id="delete-minuta-identificacao">—</b>? Esta ação não pode ser desfeita.</div>
+    <div class="modal-actions">
+      <button type="button" onclick="fecharModalExcluirMinuta()">Cancelar</button>
+      <button class="confirm danger" type="button" onclick="confirmarExclusaoMinuta()">Excluir ata</button>
+    </div>
+  </div>
+</div>
+
+<div id="minuta-reuniao-modal-overlay" aria-hidden="true">
+  <div class="modal minuta-reuniao-modal" role="dialog" aria-modal="true" aria-labelledby="minuta-reuniao-titulo" tabindex="-1">
+    <div class="modal-head">
+      <h3 id="minuta-reuniao-titulo">Gerar ata</h3>
+      <button class="modal-close" type="button" onclick="fecharModalMinutaReuniao()" aria-label="Fechar">✕</button>
+    </div>
+    <div class="m-sub" id="minuta-reuniao-identificacao">—</div>
+    <div class="minuta-etapas" aria-label="Etapas da ata">
+      <button type="button" class="active" data-minuta-passo="1" onclick="navegarPassoMinuta(1)">1. Conteúdo da reunião</button>
+      <button type="button" data-minuta-passo="2" onclick="navegarPassoMinuta(2)" disabled>2. Editar conteúdo</button>
+      <button type="button" data-minuta-passo="3" onclick="navegarPassoMinuta(3)" disabled>3. Visualizar documento</button>
+    </div>
+    <div id="minuta-passo-transcricao">
+      <label for="minuta-reuniao-transcricao">Transcrição, anotações ou resumo da reunião <span class="required-mark">*</span></label>
+      <textarea id="minuta-reuniao-transcricao" rows="12" maxlength="20000" placeholder="Cole aqui a transcrição, as anotações ou um resumo do que foi tratado." onpaste="colarTextoSimplesEditor(event)"></textarea>
+      <div class="field-error" id="erro-minuta-reuniao-transcricao"></div>
+      <div id="minuta-ia-status" class="hint">Se o texto for uma transcrição, use “Editar com IA”. Se já for um resumo ou uma descrição, clique em “Prosseguir”.</div>
+      <div class="modal-actions">
+        <button type="button" onclick="fecharModalMinutaReuniao()">Cancelar</button>
+        <button id="btn-gerar-descricao-ia" type="button" onclick="gerarDescricaoReuniaoComIA()">Editar com IA</button>
+        <button class="confirm" type="button" onclick="iniciarRevisaoManualMinuta()">Prosseguir</button>
+      </div>
+    </div>
+    <div id="minuta-passo-revisao" class="oculto">
+      <div id="minuta-revisao-aviso" class="minuta-revisao-aviso"></div>
+      <div class="minuta-conteudo-blocos">
+        <section class="minuta-conteudo-bloco">
+          <div class="form-block-title">Pauta</div>
+          <label for="minuta-reuniao-pauta">Assuntos tratados na reunião</label>
+          <div class="editor-toolbar" aria-label="Formatação da pauta"><button type="button" onmousedown="event.preventDefault()" onclick="formatarEditorMinuta('bold')"><strong>N</strong></button><button type="button" onmousedown="event.preventDefault()" onclick="formatarEditorMinuta('italic')"><em>I</em></button><button type="button" onmousedown="event.preventDefault()" onclick="formatarEditorMinuta('underline')"><u>S</u></button><button type="button" onmousedown="event.preventDefault()" onclick="formatarEditorMinuta('insertUnorderedList')">• Lista</button><button type="button" onmousedown="event.preventDefault()" onclick="aplicarClasseTextoMinuta('texto-marcado','mark')">Grifar</button><button type="button" onmousedown="event.preventDefault()" onclick="aplicarClasseTextoMinuta('texto-menor')">A−</button><button type="button" onmousedown="event.preventDefault()" onclick="aplicarClasseTextoMinuta('texto-maior')">A+</button><button type="button" onmousedown="event.preventDefault()" onclick="inserirTabelaEditorMinuta()">Tabela</button></div>
+          <div id="minuta-reuniao-pauta" class="editor-texto" contenteditable="true" role="textbox" aria-multiline="true" data-maxlength="2000" oninput="atualizarContadorEditorMinuta(this)" onfocus="definirEditorMinutaAtivo(this)" onkeydown="tratarEnterEditorMinuta(event)" onpaste="colarTextoSimplesEditor(event)"></div>
+          <div class="contador-caracteres-campo" id="contador-minuta-reuniao-pauta">0/2000</div>
+        </section>
+        <section class="minuta-conteudo-bloco">
+          <div class="form-block-title">Descrição e deliberações</div>
+          <label for="minuta-reuniao-descricao">Descrição dos problemas / solicitações / deliberações</label>
+          <div class="editor-toolbar" aria-label="Formatação da descrição"><button type="button" onmousedown="event.preventDefault()" onclick="formatarEditorMinuta('bold')"><strong>N</strong></button><button type="button" onmousedown="event.preventDefault()" onclick="formatarEditorMinuta('italic')"><em>I</em></button><button type="button" onmousedown="event.preventDefault()" onclick="formatarEditorMinuta('underline')"><u>S</u></button><button type="button" onmousedown="event.preventDefault()" onclick="formatarEditorMinuta('insertUnorderedList')">• Lista</button><button type="button" onmousedown="event.preventDefault()" onclick="aplicarClasseTextoMinuta('texto-marcado','mark')">Grifar</button><button type="button" onmousedown="event.preventDefault()" onclick="aplicarClasseTextoMinuta('texto-menor')">A−</button><button type="button" onmousedown="event.preventDefault()" onclick="aplicarClasseTextoMinuta('texto-maior')">A+</button><button type="button" onmousedown="event.preventDefault()" onclick="inserirTabelaEditorMinuta()">Tabela</button></div>
+          <div id="minuta-reuniao-descricao" class="editor-texto" contenteditable="true" role="textbox" aria-multiline="true" data-maxlength="5000" oninput="atualizarContadorEditorMinuta(this)" onfocus="definirEditorMinutaAtivo(this)" onkeydown="tratarEnterEditorMinuta(event)" onpaste="colarTextoSimplesEditor(event)"></div>
+          <div class="contador-caracteres-campo" id="contador-minuta-reuniao-descricao">0/5000</div>
+          <div class="field-error" id="erro-minuta-reuniao-descricao"></div>
+        </section>
+        <section class="minuta-conteudo-bloco">
+          <div class="form-block-title">Providências</div>
+          <label for="minuta-reuniao-providencias">Providências</label>
+          <div class="editor-toolbar" aria-label="Formatação das providências"><button type="button" onmousedown="event.preventDefault()" onclick="formatarEditorMinuta('bold')"><strong>N</strong></button><button type="button" onmousedown="event.preventDefault()" onclick="formatarEditorMinuta('italic')"><em>I</em></button><button type="button" onmousedown="event.preventDefault()" onclick="formatarEditorMinuta('underline')"><u>S</u></button><button type="button" onmousedown="event.preventDefault()" onclick="formatarEditorMinuta('insertUnorderedList')">• Lista</button><button type="button" onmousedown="event.preventDefault()" onclick="aplicarClasseTextoMinuta('texto-marcado','mark')">Grifar</button><button type="button" onmousedown="event.preventDefault()" onclick="aplicarClasseTextoMinuta('texto-menor')">A−</button><button type="button" onmousedown="event.preventDefault()" onclick="aplicarClasseTextoMinuta('texto-maior')">A+</button><button type="button" onmousedown="event.preventDefault()" onclick="inserirTabelaEditorMinuta()">Tabela</button></div>
+          <div id="minuta-reuniao-providencias" class="editor-texto" contenteditable="true" role="textbox" aria-multiline="true" data-maxlength="3000" oninput="atualizarContadorEditorMinuta(this)" onfocus="definirEditorMinutaAtivo(this)" onkeydown="tratarEnterEditorMinuta(event)" onpaste="colarTextoSimplesEditor(event)"></div>
+          <div class="contador-caracteres-campo" id="contador-minuta-reuniao-providencias">0/3000</div>
+        </section>
+      </div>
+      <div class="modal-actions">
+        <button type="button" onclick="navegarPassoMinuta(1)"><span class="system-icon system-icon-back" aria-hidden="true"></span>Voltar</button>
+        <button class="confirm" type="button" onclick="gerarMinutaReuniao()">Montar ata</button>
+      </div>
+    </div>
+    <div id="minuta-reuniao-resultado" class="oculto">
+      <label for="minuta-reuniao-texto">Visualização da ata</label>
+      <div id="minuta-reuniao-texto" class="editor-texto editor-minuta-final minuta-somente-leitura" aria-label="Visualização da ata"></div>
+      <div class="modal-actions ata-finalizacao-acoes">
+        <button class="btn-voltar-revisao" type="button" onclick="navegarPassoMinuta(2)">Editar conteúdo</button>
+        <button type="button" onclick="abrirModalExportarAta()">Exportar</button>
+        <button class="confirm" type="button" onclick="concluirAta()">Concluir</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="exportar-ata-modal-overlay" aria-hidden="true">
+  <div class="modal exportar-ata-modal" role="dialog" aria-modal="true" aria-labelledby="exportar-ata-titulo" tabindex="-1">
+    <div class="modal-head">
+      <h3 id="exportar-ata-titulo">Exportar ata</h3>
+      <button class="modal-close" type="button" onclick="fecharModalExportarAta()" aria-label="Fechar">✕</button>
+    </div>
+    <div class="m-sub">Escolha o formato do arquivo.</div>
+    <div class="modal-actions exportar-ata-opcoes">
+      <button class="export-docs" type="button" onclick="exportarAta('word')">Word / Docs</button>
+      <button class="export-pdf" type="button" onclick="exportarAta('pdf')">PDF</button>
+    </div>
+  </div>
+</div>
+
+<div id="tabela-minuta-modal-overlay" aria-hidden="true">
+  <div class="modal tabela-minuta-modal" role="dialog" aria-modal="true" aria-labelledby="tabela-minuta-titulo" tabindex="-1">
+    <div class="modal-head"><h3 id="tabela-minuta-titulo">Configurar tabela</h3><button class="modal-close" type="button" onclick="fecharConfiguracaoTabelaMinuta()" aria-label="Fechar">✕</button></div>
+    <div class="field-row tabela-minuta-dimensoes">
+      <div><label for="tabela-minuta-linhas">Linhas</label><div class="tabela-numero-controle"><input id="tabela-minuta-linhas" type="number" min="1" max="20" step="1" value="2"><span class="tabela-numero-setas"><button type="button" onclick="ajustarDimensaoTabela('tabela-minuta-linhas',-1)" aria-label="Diminuir linhas">▲</button><button type="button" onclick="ajustarDimensaoTabela('tabela-minuta-linhas',1)" aria-label="Aumentar linhas">▼</button></span></div></div>
+      <div><label for="tabela-minuta-colunas">Colunas</label><div class="tabela-numero-controle"><input id="tabela-minuta-colunas" type="number" min="1" max="10" step="1" value="2"><span class="tabela-numero-setas"><button type="button" onclick="ajustarDimensaoTabela('tabela-minuta-colunas',-1)" aria-label="Diminuir colunas">▲</button><button type="button" onclick="ajustarDimensaoTabela('tabela-minuta-colunas',1)" aria-label="Aumentar colunas">▼</button></span></div></div>
+    </div>
+    <label class="tabela-minuta-check"><input id="tabela-minuta-cabecalho" type="checkbox" checked><span>Usar a primeira linha como cabeçalho</span></label>
+    <div class="modal-actions"><button type="button" onclick="fecharConfiguracaoTabelaMinuta()">Cancelar</button><button class="confirm" type="button" onclick="confirmarInsercaoTabelaMinuta()">Inserir tabela</button></div>
+  </div>
+</div>
+
+<div id="unidade-modal-overlay" aria-hidden="true">
+  <div class="modal unidade-modal" role="dialog" aria-modal="true" aria-labelledby="unidade-modal-titulo" tabindex="-1">
+    <div class="modal-head"><h3 id="unidade-modal-titulo">Cadastrar unidade</h3><button class="modal-close" type="button" onclick="fecharCadastroUnidade()" aria-label="Fechar">✕</button></div>
+    <label for="unidade-nome">Nome da unidade <span class="required-mark">*</span></label>
+    <input id="unidade-nome" type="text" maxlength="50" placeholder="Ex.: Comissão de Contratações" required>
+    <label for="unidade-periodicidade">Periodicidade <span class="required-mark">*</span></label>
+    <div class="seletor-unidade-wrap">
+      <input id="unidade-periodicidade" type="text" placeholder="Selecione..." readonly required aria-haspopup="listbox" aria-expanded="false" onclick="alternarOpcoesPeriodicidadeUnidade()" onkeydown="tratarTecladoPeriodicidadeUnidade(event)">
+      <div id="unidade-periodicidade-opcoes" class="seletor-unidade-opcoes" role="listbox" hidden>
+        <button type="button" role="option" onclick="selecionarPeriodicidadeUnidade('Semanal')">Semanal</button>
+        <button type="button" role="option" onclick="selecionarPeriodicidadeUnidade('Quinzenal')">Quinzenal</button>
+        <button type="button" role="option" onclick="selecionarPeriodicidadeUnidade('Mensal')">Mensal</button>
+        <button type="button" role="option" onclick="selecionarPeriodicidadeUnidade('Bimestral')">Bimestral</button>
+        <button type="button" role="option" onclick="selecionarPeriodicidadeUnidade('Trimestral')">Trimestral</button>
+        <button type="button" role="option" onclick="selecionarPeriodicidadeUnidade('Semestral')">Semestral</button>
+        <button type="button" role="option" onclick="selecionarPeriodicidadeUnidade('Anual')">Anual</button>
+        <button type="button" role="option" onclick="selecionarPeriodicidadeUnidade('Sob demanda')">Sob demanda</button>
+        <button type="button" role="option" onclick="selecionarPeriodicidadeUnidade('Outra')">Outra</button>
+      </div>
+    </div>
+    <input id="unidade-periodicidade-outra" class="oculto" type="text" maxlength="30" placeholder="Informe a periodicidade">
+    <div class="unidade-secao-titulo">Membros e cargos</div>
+    <div id="unidade-membros-lista"></div>
+    <button class="unidade-adicionar-btn" type="button" onclick="adicionarMembroNovaUnidade()">+ Adicionar membro</button>
+    <div class="modal-actions"><button type="button" onclick="fecharCadastroUnidade()">Cancelar</button><button class="confirm" id="unidade-salvar-btn" type="button" onclick="cadastrarUnidade()">Salvar unidade</button></div>
+  </div>
+</div>
+
+<div id="delete-unidade-modal-overlay" aria-hidden="true">
+  <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="delete-unidade-titulo" tabindex="-1">
+    <h3 id="delete-unidade-titulo">Excluir unidade?</h3>
+    <div class="m-sub">A unidade <strong id="delete-unidade-nome">—</strong> deixará de aparecer para novas reuniões. As reuniões já cadastradas serão preservadas.</div>
+    <div class="modal-actions"><button type="button" onclick="fecharExclusaoUnidade()">Cancelar</button><button class="confirm danger" type="button" onclick="confirmarExclusaoUnidade()">Excluir unidade</button></div>
+  </div>
+</div>
+
+<div id="edit-reuniao-modal-overlay" aria-hidden="true">
+  <div class="modal edit-reuniao-modal" role="dialog" aria-modal="true" aria-labelledby="editar-reuniao-titulo" tabindex="-1">
+    <div class="modal-head">
+      <h3 id="editar-reuniao-titulo">Editar reunião</h3>
+      <button class="modal-close" type="button" onclick="fecharModalEditarReuniao()" aria-label="Fechar">✕</button>
+    </div>
+
+    <div class="edit-reuniao-grid">
+      <div class="form-block">
+        <div class="form-block-title">Reunião</div>
+        <div class="field-row">
+          <div><label for="edit-r-data">Data</label><input id="edit-r-data" type="date" min="1900-01-01" max="9999-12-31"></div>
+          <div><label for="edit-r-horario">Horário</label><input id="edit-r-horario" type="time"></div>
+        </div>
+        <label for="edit-r-frequencia">Frequência</label>
+        <select id="edit-r-frequencia" onchange="alterarTipoEdicaoReuniao(this.value)">
+          <option value="CGOVTIC">CGOVTIC — Bimestral</option>
+          <option value="CGTIC">CGTIC — Quinzenal</option>
+        </select>
+        <label for="edit-r-formato">Formato da reunião</label>
+        <select id="edit-r-formato" onchange="alterarFormatoReuniao('edit-r')" required>
+          <option value="Online">On-line</option>
+          <option value="Presencial">Presencial</option>
+        </select>
+        <div id="edit-r-link-grupo" class="reuniao-link-grupo">
+          <label for="edit-r-link">Link da reunião</label>
+          <input id="edit-r-link" type="url" maxlength="500" placeholder="https://teams.microsoft.com/...">
+        </div>
+        <label for="edit-r-pauta">Pauta</label>
+        <textarea id="edit-r-pauta" rows="4" maxlength="200"></textarea>
+      </div>
+
+      <div class="form-block">
+        <div class="form-block-title">Membros da unidade</div>
+        <label>Membros da unidade</label>
+        <div id="edit-r-membros-lista" class="membros-fixos"></div>
+      </div>
+
+      <div class="form-block">
+        <div class="form-block-title">Convidados</div>
+        <div class="participante-adicionar">
+          <input id="edit-r-participante-input" type="text" maxlength="80" aria-label="Nome do convidado" placeholder="Nome do convidado">
+          <div class="setor-busca-wrap">
+            <input id="edit-r-participante-setor" class="setor-autocomplete" type="text" maxlength="30" placeholder="Setor" aria-label="Digite a sigla do setor do convidado" autocomplete="off">
+            <div id="edit-r-participante-setor-sugestoes" class="setor-sugestoes" role="listbox" hidden></div>
+          </div>
+          <button type="button" onclick="adicionarParticipanteEdicaoReuniao()">Adicionar</button>
+        </div>
+        <ul id="edit-r-participantes-lista" class="participantes-lista participantes-lista-edicao" aria-live="polite"></ul>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" onclick="fecharModalEditarReuniao()">Cancelar</button>
+      <button class="confirm" type="button" onclick="confirmarEdicaoReuniao()">Salvar alterações</button>
+    </div>
+  </div>
+</div>
+
+<div id="remarcar-reuniao-modal-overlay" aria-hidden="true">
+  <div class="modal remarcar-reuniao-modal" role="dialog" aria-modal="true" aria-labelledby="remarcar-reuniao-titulo" tabindex="-1">
+    <div class="modal-head">
+      <h3 id="remarcar-reuniao-titulo">Remarcar reunião</h3>
+      <button class="modal-close" type="button" onclick="fecharRemarcacaoReuniao()" aria-label="Fechar">✕</button>
+    </div>
+    <div class="m-sub" id="remarcar-reuniao-identificacao">Escolha a nova data da reunião.</div>
+    <label for="remarcar-reuniao-data">Nova data</label>
+    <input id="remarcar-reuniao-data" type="date" min="1900-01-01" max="9999-12-31" required>
+    <div class="modal-actions">
+      <button type="button" onclick="fecharRemarcacaoReuniao()">Cancelar</button>
+      <button class="confirm" type="button" onclick="confirmarRemarcacaoReuniao()">Confirmar nova data</button>
+    </div>
+  </div>
+</div>
+
+<div id="cancelar-reuniao-modal-overlay" aria-hidden="true">
+  <div class="modal cancelar-reuniao-modal" role="alertdialog" aria-modal="true" aria-labelledby="cancelar-reuniao-titulo" tabindex="-1">
+    <div class="modal-head">
+      <h3 id="cancelar-reuniao-titulo">Cancelar reunião?</h3>
+      <button class="modal-close" type="button" onclick="fecharCancelamentoReuniao()" aria-label="Fechar">✕</button>
+    </div>
+    <div class="cancelar-reuniao-alerta" aria-hidden="true">!</div>
+    <p class="cancelar-reuniao-mensagem">Esta ação marcará a reunião como cancelada.</p>
+    <div class="cancelar-reuniao-resumo">
+      <strong id="cancelar-reuniao-identificacao">—</strong>
+      <span id="cancelar-reuniao-pauta">—</span>
+    </div>
+    <p class="cancelar-reuniao-aviso">O registro será preservado no histórico.</p>
+    <div class="modal-actions">
+      <button type="button" onclick="fecharCancelamentoReuniao()">Voltar</button>
+      <button class="confirm danger" type="button" onclick="confirmarCancelamentoReuniao()">Confirmar cancelamento</button>
+    </div>
+  </div>
+</div>
+
+<div id="edit-modal-overlay" aria-hidden="true">
+  <div class="modal edit-modal" role="dialog" aria-modal="true" aria-labelledby="editar-titulo" tabindex="-1">
+    <h3 id="editar-titulo">Editar documento</h3>
+
+    <div class="form-blocks-row">
+      <div class="form-block">
+        <div class="form-block-title">Documento</div>
+
+        <label>Nome do documento</label>
+        <input id="edit-nome" type="text" maxlength="70" required>
+
+        <div id="edit-campos-prazo">
+          <label>Data de vigência <span class="opt">(ou data da última renovação)</span></label>
+          <input id="edit-data-vigencia" type="date" min="1900-01-01" max="9999-12-31" required>
+
+          <label>Validade (anos)</label>
+          <div class="numero-invertido">
+            <input id="edit-validade" type="number" inputmode="numeric" min="1" max="99" step="1" value="1" placeholder="Ex: 3" title="Informe a quantidade de anos" required>
+            <div class="numero-invertido-acoes">
+              <button type="button" onclick="ajustarNumeroInvertido('edit-validade',-1)" aria-label="Diminuir validade">▲</button>
+              <button type="button" onclick="ajustarNumeroInvertido('edit-validade',1)" aria-label="Aumentar validade">▼</button>
+            </div>
+          </div>
+          <div class="hint" id="edit-vencimento-preview"></div>
+        </div>
+
+        <div class="field-row" id="edit-campos-tipo-sei">
+          <div>
+            <label>Tipo</label>
+            <select id="edit-tipo" onchange="atualizarObrigatoriedadeFundamentacaoEdicao()">
+              <option value="Projeto">Projeto</option>
+              <option value="Plano">Plano</option>
+              <option value="Planilha">Planilha</option>
+              <option value="Processo">Processo</option>
+              <option value="Normativo">Normativo</option>
+            </select>
+          </div>
+          <div>
+            <label>N° SEI</label>
+            <input id="edit-sei" type="text" inputmode="numeric" maxlength="25" pattern="[0-9]{7}-[0-9]{2}\.[0-9]{4}\.6\.01\.8000" placeholder="0000864-87.2025.6.01.8000" title="Digite os 13 primeiros algarismos; 6.01.8000 é preenchido automaticamente" required>
+          </div>
+        </div>
+
+        <div class="field-row" id="edit-campos-normativos">
+          <div>
+            <label>Fundamentação legal <span class="required-mark" id="edit-baselegal-required" hidden>*</span></label>
+            <select id="edit-baselegal">
+              <option value="">Não informada</option>
+              <option value="Portaria">Portaria</option>
+              <option value="Regimento interno">Regimento interno</option>
+              <option value="Resolução">Resolução</option>
+            </select>
+          </div>
+          <div>
+            <label>N° <span class="required-mark" id="edit-baselegal-num-required" hidden>*</span></label>
+            <input id="edit-baselegal-num" type="text" maxlength="50" placeholder="Ex: 123/2026">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-block">
+        <div class="form-block-title">Gestor responsável</div>
+
+        <label>Nome do gestor</label>
+        <input id="edit-gestor-nome" type="text" maxlength="50" placeholder="Nome do gestor responsável" required>
+
+        <label>Setor do responsável</label>
+        <div class="setor-busca-wrap">
+          <input id="edit-gestor-setor" class="setor-autocomplete" type="text" maxlength="30" placeholder="Digite a sigla do setor" autocomplete="off" required>
+          <div id="edit-gestor-setor-sugestoes" class="setor-sugestoes" role="listbox" hidden></div>
+        </div>
+
+        <label>E-mail do gestor</label>
+        <input id="edit-gestor-email" type="email" maxlength="50" placeholder="gestor@tre-ac.jus.br" required>
+
+        <label>WhatsApp ou telefone</label>
+        <input id="edit-gestor-whatsapp" type="text" inputmode="tel" maxlength="16" placeholder="(68) 99999-9999" required>
+      </div>
+
+      <div class="form-block">
+        <div class="form-block-title">Descrição</div>
+
+        <label>Descrição breve</label>
+        <textarea id="edit-desc" rows="8" maxlength="300" placeholder="Do que se trata este documento..." required></textarea>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button onclick="fecharModalEditar()">Cancelar</button>
+      <button class="confirm" onclick="confirmarEdicao()">Salvar alterações</button>
+    </div>
+  </div>
+</div>
+
+<div id="resumo-reuniao-modal-overlay" aria-hidden="true">
+  <div class="modal resumo-reuniao-modal" role="dialog" aria-modal="true" aria-labelledby="resumo-reuniao-titulo" tabindex="-1">
+    <div class="modal-head">
+      <div><div class="resumo-tabhead">Resumo da reunião</div><h3 id="resumo-reuniao-titulo">—</h3></div>
+      <button class="modal-close" type="button" onclick="fecharResumoReuniao()" aria-label="Fechar">✕</button>
+    </div>
+    <div class="resumo-reuniao-meta">
+      <div><span class="resumo-label">Data e horário</span><strong id="resumo-reuniao-data">—</strong></div>
+      <div><span class="resumo-label">Unidade</span><strong id="resumo-reuniao-unidade">—</strong></div>
+      <div><span class="resumo-label">Formato</span><strong id="resumo-reuniao-formato">—</strong></div>
+      <div><span class="resumo-label">Situação</span><strong id="resumo-reuniao-situacao">—</strong></div>
+      <div><span class="resumo-label">Acesso</span><strong id="resumo-reuniao-link">—</strong></div>
+      <div><span class="resumo-label">Participação</span><strong id="resumo-reuniao-participantes-total">—</strong></div>
+    </div>
+    <div class="resumo-reuniao-secoes">
+      <section><span class="resumo-label">Pauta</span><p id="resumo-reuniao-pauta">—</p></section>
+      <section><span class="resumo-label">Resumo registrado</span><p id="resumo-reuniao-texto">—</p></section>
+      <section><span class="resumo-label">Membros da unidade</span><p id="resumo-reuniao-membros">—</p></section>
+      <section><span class="resumo-label">Convidados</span><p id="resumo-reuniao-convidados">—</p></section>
+    </div>
+    <div class="modal-actions"><button class="confirm" type="button" onclick="fecharResumoReuniao()">Fechar</button></div>
+  </div>
+</div>
+
+<div id="resumo-modal-overlay" aria-hidden="true">
+  <div class="modal resumo-modal" role="dialog" aria-modal="true" aria-labelledby="resumo-nome" tabindex="-1">
+    <h3 id="resumo-nome">—</h3>
+    <div class="resumo-tabhead">Resumo do documento</div>
+    <div class="resumo-body">
+      <div class="resumo-row"><span class="resumo-label">Tipo</span><span id="resumo-tipo">—</span></div>
+      <div class="resumo-row"><span class="resumo-label">Nº SEI</span><span id="resumo-sei">—</span></div>
+      <div class="resumo-row"><span class="resumo-label">Fundamentação legal</span><span id="resumo-baselegal">—</span></div>
+      <div class="resumo-row"><span class="resumo-label">Vencimento</span><span id="resumo-venc">—</span></div>
+      <div class="resumo-row"><span class="resumo-label">Status</span><span id="resumo-situacao">—</span></div>
+      <div class="resumo-row"><span class="resumo-label">Gestor responsável</span><span id="resumo-gestor">—</span></div>
+      <div class="resumo-row"><span class="resumo-label">Setor</span><span id="resumo-setor">—</span></div>
+      <div class="resumo-desc-block">
+        <span class="resumo-label">Descrição</span>
+        <p id="resumo-desc">Nenhuma descrição cadastrada.</p>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button onclick="fecharModalResumo()">Fechar</button>
+      <button class="confirm" onclick="fecharModalResumo(); notificarGestor(resumoAtualId)">Notificar gestor</button>
+    </div>
+  </div>
+</div>
+
+<div id="notificar-modal-overlay" aria-hidden="true">
+  <div class="modal notificar-modal" role="dialog" aria-modal="true" aria-labelledby="notificar-titulo" tabindex="-1">
+    <div class="modal-head">
+      <h3 id="notificar-titulo">Notificar gestor</h3>
+      <button class="modal-close" onclick="fecharModalNotificar()" aria-label="Fechar">✕</button>
+    </div>
+    <div class="m-sub" id="notificar-doc-nome">—</div>
+
+    <div class="notificar-preview">
+      <span class="resumo-label">Prévia da mensagem</span>
+      <p id="notificar-mensagem">—</p>
+    </div>
+
+    <div id="notificar-sem-contato" class="notificar-aviso">
+      Nenhum contato do gestor cadastrado. Edite o documento para adicionar e-mail ou WhatsApp.
+    </div>
+
+    <div class="modal-actions notificar-actions">
+      <button id="btn-notificar-email" class="minimal-btn email" onclick="abrirEmailGestor()">Enviar por e-mail</button>
+      <button id="btn-notificar-whatsapp" class="minimal-btn whatsapp" onclick="abrirWhatsappGestor()">Enviar por WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<div id="historico-modal-overlay" aria-hidden="true">
+  <div class="modal historico-modal" role="dialog" aria-modal="true" aria-labelledby="historico-titulo" tabindex="-1">
+    <div class="modal-head">
+      <h3 id="historico-titulo">Histórico de edições</h3>
+      <button class="modal-close" onclick="fecharModalHistorico()" aria-label="Fechar">✕</button>
+    </div>
+    <div class="m-sub" id="historico-doc-nome">—</div>
+
+    <div class="historico-timeline" id="historico-lista">
+    </div>
+
+    <div class="modal-actions">
+      <button onclick="fecharModalHistorico()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<div id="apresentacao-norma-overlay" aria-hidden="true">
+  <div class="apresentacao-norma" role="dialog" aria-modal="true" aria-labelledby="apresentacao-norma-titulo" tabindex="-1">
+    <button class="apresentacao-fechar" type="button" onclick="pularApresentacaoNorma()" aria-label="Fechar apresentação">✕</button>
+    <div class="apresentacao-marca">NORMA</div>
+    <div class="apresentacao-etapas" aria-label="Progresso da apresentação">
+      <span class="ativo"></span><span></span><span></span>
+    </div>
+    <div class="apresentacao-conteudo" aria-live="polite">
+      <div class="apresentacao-icone" id="apresentacao-norma-icone" aria-hidden="true">01</div>
+      <span class="apresentacao-kicker" id="apresentacao-norma-kicker">Documentos</span>
+      <h2 id="apresentacao-norma-titulo">Controle prazos e responsáveis</h2>
+      <p id="apresentacao-norma-texto">Cadastre documentos, acompanhe a vigência e identifique rapidamente os itens vencidos ou que exigem atenção.</p>
+    </div>
+    <label class="apresentacao-nao-mostrar"><input id="apresentacao-nao-mostrar" type="checkbox" checked> Não mostrar novamente</label>
+    <div class="apresentacao-acoes">
+      <button class="apresentacao-pular" type="button" onclick="pularApresentacaoNorma()">Pular</button>
+      <div>
+        <button id="apresentacao-voltar" type="button" onclick="voltarApresentacaoNorma()" disabled>Voltar</button>
+        <button id="apresentacao-avancar" class="confirm" type="button" onclick="avancarApresentacaoNorma()">Próximo</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/vendor/jspdf.umd.min.js"></script>
+<script src="js/core.js"></script>
+<script src="js/tabs.js"></script>
+<script src="js/documentos/unidades.js"></script>
+<script src="js/documentos/cadastro.js"></script>
+<script src="js/documentos/controle.js"></script>
+<script src="js/documentos/modais.js"></script>
+<script src="js/reunioes/core.js"></script>
+<script src="js/reunioes/unidades.js"></script>
+<script src="js/reunioes/cadastro.js"></script>
+<script src="js/reunioes/listagem.js"></script>
+<script src="js/relatorios.js"></script>
+<script src="js/minutas/editor.js"></script>
+<script src="js/minutas/formatacao.js"></script>
+<script src="js/minutas/historico.js"></script>
+<script src="js/minutas/ia.js"></script>
+<script src="js/minutas/fluxo.js"></script>
+<script src="js/minutas/exportacao.js"></script>
+<script src="js/estados.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/apresentacao.js"></script>
+<script src="js/init.js"></script>
+</body>
+</html>

@@ -7,8 +7,10 @@
   --bg: #F7F8FA;
   --card: #FFFFFF;
   --border: #E3E6EC;
-  --ink: #0C326F;
-  --ink-soft: #5C6675;
+  --ink: #5B5B5B;
+  --ink-soft: rgba(91,91,91,.8);
+  --title-color: #5B5B5B;
+  --subtitle-color: rgba(91,91,91,.8);
   --green: #168821;
   --green-bg: #E7F5E8;
   --amber: #946200;
@@ -178,7 +180,7 @@ header.main {
 }
 
 .header-inner {
-  max-width: 1180px;
+  max-width: 1380px;
   margin: 0 auto;
   padding: 0 var(--space-6);
   min-height: 72px;
@@ -281,7 +283,7 @@ header.main {
 .wrap {
   width: 100%;
   min-width: 0;
-  max-width: 1180px;
+  max-width: 1380px;
   margin: 0 auto;
   padding: var(--space-6) var(--space-6) var(--space-7);
 }

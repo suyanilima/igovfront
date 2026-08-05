@@ -16,3 +16,23 @@ Por meio de painéis, filtros, indicadores e relatórios, o Norma ajuda as unida
 - unidades e responsáveis envolvidos.
 
 O objetivo é fortalecer o controle das informações, preservar o histórico institucional e oferecer suporte à tomada de decisões e à continuidade das ações de governança.
+
+## Executar o protótipo
+
+O Norma é um protótipo front-end sem dependências externas. Abra `index.html` diretamente no navegador ou sirva a pasta com um servidor HTTP local.
+
+Os dados cadastrados ficam somente no armazenamento local do navegador.
+
+## Verificações
+
+Com Node.js instalado, execute:
+
+```bash
+npm test
+```
+
+Para gerar ou atualizar `prototipo-norma.html`, a versão HTML independente:
+
+```bash
+npm run build
+```

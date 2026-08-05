@@ -70,10 +70,13 @@
 
     <div class="dashboard-indicadores">
       <button class="dashboard-indicador documentos" type="button" onclick="setTab('acompanhamento')">
-        <span>Documentos</span><strong id="dashboard-total-documentos">0</strong><small id="dashboard-documentos-detalhe">Acompanhe prazos e responsáveis</small>
+        <span>Documentos</span><strong id="dashboard-total-documentos">0</strong><small id="dashboard-documentos-detalhe">Acompanhe prazos</small>
       </button>
       <button class="dashboard-indicador documentos-vencidos" type="button" onclick="setTab('acompanhamento')">
         <span>Documentos vencidos</span><strong id="dashboard-total-documentos-vencidos">0</strong><small>Exigem atenção</small>
+      </button>
+      <button class="dashboard-indicador documentos-sem-normativo" type="button" onclick="abrirDocumentosSemNormativo()">
+        <span>Sem normativo</span><strong id="dashboard-total-documentos-sem-normativo">0</strong><small>Documentos cadastrados</small>
       </button>
       <button class="dashboard-indicador reunioes" type="button" onclick="setTab('reunioes')">
         <span>Reuniões</span><strong id="dashboard-total-reunioes">0</strong><small id="dashboard-reunioes-detalhe">Nenhuma reunião</small>
@@ -101,7 +104,7 @@
       </section>
 
       <section class="dashboard-card dashboard-documentos-atencao-card">
-        <div class="dashboard-card-head"><div><h3>Documentos que exigem atenção</h3><p>Vencidos ou próximos do vencimento</p></div><button type="button" onclick="setTab('acompanhamento')">Abrir lista</button></div>
+        <div class="dashboard-card-head"><div><h3>Documentos que exigem atenção</h3><p>Vencidos, próximos do vencimento ou sem normativo</p></div><button type="button" onclick="abrirDocumentosAtencao()">Abrir lista</button></div>
         <div class="dashboard-lista" id="dashboard-documentos-atencao"></div>
       </section>
 
@@ -152,14 +155,6 @@
       </div>
 
       <div class="panel documentos-filtros-bloco">
-        <div class="documentos-bloco-head">
-          <div>
-            <div class="documentos-filtros-titulo">
-              <h3>Filtros</h3>
-            </div>
-            <p>Refine os documentos da unidade selecionada.</p>
-          </div>
-        </div>
     <div class="toolbar">
       <div class="toolbar-field">
         <label class="toolbar-label" for="busca-nome">Buscar</label>
@@ -172,6 +167,7 @@
         <label class="toolbar-label" for="filtro-status">Status</label>
         <select id="filtro-status" class="filtro-status" onchange="render()">
           <option value="todos">Todos</option>
+          <option value="atencao">Exigem atenção</option>
           <option value="Vigente">Vigente</option>
           <option value="Alerta">A vencer</option>
           <option value="Vencido">Vencido</option>
@@ -205,6 +201,10 @@
           <option value="20">20</option>
           <option value="50">50</option>
         </select>
+      </div>
+
+      <div class="toolbar-field documentos-limpar-campo">
+        <button class="documentos-limpar-filtros" type="button" onclick="limparFiltrosDocumentos()">Limpar filtros</button>
       </div>
 
       <div class="toolbar-field documentos-exportar-campo">
@@ -421,12 +421,12 @@
 
   <!-- VIEW: REUNIÕES -->
   <div class="view" id="view-reunioes">
-    <div class="reunioes-blocos">
+    <div class="reunioes-blocos modo-calendario">
       <section class="panel reunioes-intro-card" aria-labelledby="reunioes-lista-titulo">
         <div><h2 id="reunioes-lista-titulo">Reuniões cadastradas</h2><div class="desc">Histórico e agenda de reuniões</div></div>
         <div class="reunioes-visualizacao" role="group" aria-label="Modo de visualização">
-          <button id="reunioes-modo-lista" class="active" type="button" onclick="alterarVisualizacaoReunioes('lista')">Lista</button>
-          <button id="reunioes-modo-calendario" type="button" onclick="alterarVisualizacaoReunioes('calendario')">Calendário</button>
+          <button id="reunioes-modo-calendario" class="active" type="button" onclick="alterarVisualizacaoReunioes('calendario')">Calendário</button>
+          <button id="reunioes-modo-lista" type="button" onclick="alterarVisualizacaoReunioes('lista')">Lista</button>
         </div>
       </section>
       <section class="panel reunioes-filtros-card" aria-label="Filtros de reuniões">
@@ -453,13 +453,16 @@
               <option value="10">10</option><option value="20">20</option><option value="50">50</option>
             </select>
           </div>
+          <div class="toolbar-field reunioes-limpar-campo">
+            <button class="documentos-limpar-filtros" type="button" onclick="limparFiltrosReunioes()">Limpar filtros</button>
+          </div>
           <div class="toolbar-field toolbar-action reunioes-exportar-campo">
             <span class="toolbar-label toolbar-label-spacer">Ação</span>
             <button class="documentos-exportar-filtro" type="button" onclick="exportarRelatorioReunioes()"><span class="export-icon system-icon system-icon-output" aria-hidden="true"></span>Exportar relatório</button>
           </div>
         </div>
       </section>
-      <section class="panel reunioes-lista-card" id="reunioes-visualizacao-lista" aria-labelledby="reunioes-lista-titulo">
+      <section class="panel reunioes-lista-card" id="reunioes-visualizacao-lista" aria-labelledby="reunioes-lista-titulo" hidden>
         <div class="reunioes-tabela">
           <div class="reunioes-tabela-head">
             <div class="selecao-coluna"><input id="selecionar-reunioes-visiveis" type="checkbox" onchange="selecionarTodasReunioesVisiveis(this.checked)" aria-label="Selecionar todas as reuniões visíveis"></div>
@@ -478,18 +481,18 @@
           <div id="reunioes-paginacao" class="paginacao reunioes-paginacao"></div>
         </div>
       </section>
-      <section class="panel reunioes-calendario-card" id="reunioes-visualizacao-calendario" aria-label="Calendário de reuniões" hidden>
+      <section class="panel reunioes-calendario-card" id="reunioes-visualizacao-calendario" aria-label="Calendário de reuniões">
         <div class="reunioes-calendario-toolbar">
-          <button type="button" onclick="navegarCalendarioReunioes(-1)" aria-label="Mês anterior">‹</button>
+          <button type="button" onclick="navegarCalendarioReunioes(-1)" aria-label="Mês anterior"><span class="system-icon system-icon-chevron-back" aria-hidden="true"></span></button>
           <h3 id="reunioes-calendario-titulo"></h3>
-          <button type="button" onclick="navegarCalendarioReunioes(1)" aria-label="Próximo mês">›</button>
+          <button type="button" onclick="navegarCalendarioReunioes(1)" aria-label="Próximo mês"><span class="system-icon system-icon-chevron-forward" aria-hidden="true"></span></button>
           <button class="reunioes-calendario-hoje" type="button" onclick="irHojeCalendarioReunioes()">Hoje</button>
-        </div>
-        <div class="reunioes-calendario-legenda" aria-label="Legenda">
-          <span><i class="agendada"></i>Agendada</span><span><i class="reagendada"></i>Reagendada</span><span><i class="concluida"></i>Concluída</span><span><i class="cancelada"></i>Cancelada</span>
         </div>
         <div class="reunioes-calendario-semana" aria-hidden="true"><span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span></div>
         <div class="reunioes-calendario-grade" id="reunioes-calendario-grade"></div>
+        <div class="reunioes-calendario-legenda" aria-label="Legenda">
+          <span><i class="agendada"></i>Agendada</span><span><i class="reagendada"></i>Reagendada</span><span><i class="concluida"></i>Concluída</span><span><i class="cancelada"></i>Cancelada</span>
+        </div>
         <div class="reunioes-calendario-agenda" id="reunioes-calendario-agenda"></div>
       </section>
     </div>
@@ -532,6 +535,9 @@
               <option value="20">20</option>
               <option value="50">50</option>
             </select>
+          </div>
+          <div class="minuta-escolha-busca ata-limpar-campo">
+            <button class="documentos-limpar-filtros" type="button" onclick="limparFiltrosAtas()">Limpar filtros</button>
           </div>
         </div>
       </section>

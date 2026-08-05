@@ -120,16 +120,25 @@ function concluirAta(){
   toast('Ata concluída com sucesso.', 'valido');
 }
 
-function abrirModalExportarAta(){
+let minutaExportacaoHistoricoId = null;
+
+function abrirModalExportarAta(idHistorico = null){
+  minutaExportacaoHistoricoId = idHistorico;
   abrirModalElemento('exportar-ata-modal-overlay');
 }
 
 function fecharModalExportarAta(){
   fecharModalElemento('exportar-ata-modal-overlay');
+  minutaExportacaoHistoricoId = null;
 }
 
 function exportarAta(formato){
+  const idHistorico = minutaExportacaoHistoricoId;
   fecharModalExportarAta();
+  if(idHistorico){
+    baixarMinutaHistorico(idHistorico, formato);
+    return;
+  }
   if(formato === 'pdf') imprimirMinutaPdf();
   else baixarMinutaWord();
 }

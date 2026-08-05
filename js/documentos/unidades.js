@@ -208,6 +208,36 @@ function abrirUnidadeDocumentos(codigo){
   render();
 }
 
+function abrirDocumentosAtencao(){
+  setTab('acompanhamento');
+  const filtros={
+    'busca-nome':'',
+    'filtro-status':'atencao',
+    'filtro-tipo':'',
+    'filtro-ano':''
+  };
+  Object.entries(filtros).forEach(([id,valor])=>{
+    const campo=document.getElementById(id);
+    if(campo) campo.value=valor;
+  });
+  abrirUnidadeDocumentos('SETOR:TODAS');
+}
+
+function abrirDocumentosSemNormativo(){
+  setTab('acompanhamento');
+  const filtros={
+    'busca-nome':'',
+    'filtro-status':'todos',
+    'filtro-tipo':'Sem normativo',
+    'filtro-ano':''
+  };
+  Object.entries(filtros).forEach(([id,valor])=>{
+    const campo=document.getElementById(id);
+    if(campo) campo.value=valor;
+  });
+  abrirUnidadeDocumentos('SETOR:TODAS');
+}
+
 function definirContextoDocumentos(){
   const contexto=localizarUnidadeDocumento(unidadeSelecionadaDocumentos);
   if(!contexto) return;

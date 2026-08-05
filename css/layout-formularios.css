@@ -53,6 +53,13 @@
   display: none;
 }
 
+.wrap > .view {
+  width: 100%;
+  max-width: 1300px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
 .view.active {
   display: block;
   min-width: 0;
@@ -147,13 +154,13 @@
 
 .sobre-intro h2 {
   margin: 0;
-  color: var(--gov-blue-dark);
+  color: var(--title-color);
   font-size: clamp(22px,3vw,30px);
 }
 
 .sobre-intro p {
   margin: 12px 0 0;
-  color: var(--ink-soft);
+  color: var(--subtitle-color);
   font-size: 15px;
   line-height: 1.65;
 }
@@ -192,13 +199,13 @@
 
 .sobre-bloco h3,.sobre-status h3 {
   margin: 0;
-  color: var(--gov-blue-dark);
+  color: var(--title-color);
   font-size: 15px;
 }
 
 .sobre-bloco p {
   margin: 6px 0 0;
-  color: var(--ink-soft);
+  color: var(--subtitle-color);
   font-size: 13px;
   line-height: 1.55;
   overflow-wrap: anywhere;
@@ -218,7 +225,7 @@
   padding: 12px 14px;
   border-radius: 9px;
   background: var(--gov-blue-bg);
-  color: var(--ink-soft);
+  color: var(--subtitle-color);
   font-size: 12px;
   line-height: 1.55;
 }
@@ -235,11 +242,12 @@
   padding: 14px;
   border: 1px solid var(--border);
   border-radius: 10px;
+  background: var(--bg);
 }
 
 .sobre-status-lista p {
   margin: 10px 0 0;
-  color: var(--ink-soft);
+  color: var(--subtitle-color);
   font-size: 12px;
   line-height: 1.5;
 }
@@ -256,11 +264,11 @@
   padding: 16px;
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: #FAFBFC;
+  background: var(--bg);
 }
 
 .sobre-reunioes-lista strong {
-  color: var(--gov-blue-dark);
+  color: var(--title-color);
   font-size: 14px;
 }
 
@@ -277,7 +285,7 @@
 
 .sobre-reunioes-lista p {
   margin: 10px 0 0;
-  color: var(--ink-soft);
+  color: var(--subtitle-color);
   font-size: 12px;
   line-height: 1.5;
 }
@@ -300,7 +308,7 @@
 
 .form-view-wrap .panel {
   width: 100%;
-  max-width: 1100px;
+  max-width: 1300px;
 }
 
 /* seções (Documento / Gestor responsável / Descrição) lado a lado */

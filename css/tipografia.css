@@ -269,6 +269,69 @@ th, .ledger-head, .ledger-head>div, .reunioes-tabela-head, .reunioes-tabela-head
   line-height: var(--app-caption-line);
 }
 
+/* Identidade cromática global de títulos e subtítulos */
+h1,h2,h3,h4,h5,h6,
+.documentos-setor-card-head strong,.documento-unidade-opcao>strong,
+.documento-unidade-identificacao>strong,.reuniao-tipo-btn strong,
+.reunioes-vazio b,.empty b,.documentos-setores-vazio strong,
+.editor-minuta-final .ata-titulo,
+.dashboard-kicker,.form-block-title,.unidade-secao-titulo,
+.documentos-seletor-unidades .form-block-title,
+.documentos-setores-head>span,.documentos-breadcrumb,.sobre-kicker,
+.ata-lista-cabecalho,.ata-lista-cabecalho>*,.reunioes-tabela-head,
+.reunioes-tabela-head>*,.documentos-acompanhamento .ledger-head,
+.documentos-lista-card .ledger-head,.ledger-head,.ledger-head>*,
+.reuniao-item-label,.membro-fixo label,.minuta-secao-apoio,
+.resumo-tabhead,.resumo-tabhead>*,.resumo-label,
+.relatorio-filtros label,.relatorio-campos-titulo,
+.relatorio-secao-head h4,.estado-codigo,th,thead td,legend,
+.modal-head h3,.toolbar-label,.minuta-escolha-busca>label,
+.documentos-filtros-titulo,.documentos-filtros-titulo>*,
+.participantes-subtitulo,.cadastro-modo-btn strong,
+.cadastro-modo-btn .cadastro-modo-titulo {
+  color: var(--title-color) !important;
+}
+
+.dashboard-cabecalho p,.dashboard-subtitulo,.panel .desc,
+.documentos-setores-head p,.documentos-contexto-bloco p,
+.documentos-bloco-head p,.dashboard-card-head p,.sobre-intro p,
+.sobre-bloco p,.sobre-status>.desc,.estado-card p,.modal .m-sub,
+.hint,.minutas-historico-head p,.relatorio-intro,
+.relatorio-secao-head small,.documentos-setores-vazio span,
+.documento-unidade-opcao>span,.documento-unidade-opcao>small,
+.documento-unidade-identificacao>span,.documentos-setor-card-head span,
+.minuta-historico-item p,.minuta-historico-item small,
+.minuta-reuniao-data small,.ata-reuniao-pauta,
+.dashboard-atualizacao,.dashboard-indicador small,.dashboard-anel span,
+.dashboard-lista-item span,.documentos-setor-card-head>em,
+.documentos-subunidades button small,.doc-sei,
+.doc-responsavel .responsavel-setor,.reuniao-periodicidade,
+.reuniao-formato,.relatorio-vazio,.participantes-lista:empty::after {
+  color: var(--subtitle-color);
+}
+
+/* Cor uniforme em todas as tabelas e listagens tabulares */
+table,thead,tbody,tr,th,td,
+.ledger-head,.ledger-head>div,.row,
+.doc-name,.doc-responsavel,.doc-responsavel .responsavel-nome,
+.doc-type,.doc-date,.doc-updated,
+.reunioes-tabela-head,.reunioes-tabela-head>div,.reuniao-item,
+.reuniao-data,.reuniao-data strong,.reuniao-frequencia,
+.reuniao-celula,.reuniao-link-celula,
+.ata-lista-cabecalho,.ata-lista-cabecalho>span,
+.minuta-reuniao-opcao,.minuta-reuniao-data strong,
+.minuta-reuniao-conteudo strong,.ata-reuniao-pauta,
+.relatorio-registro,.relatorio-registro strong {
+  color: var(--title-color);
+}
+
+.doc-sei,.doc-responsavel .responsavel-setor,
+.doc-responsavel .sem-responsavel,
+.minuta-reuniao-data small,.reuniao-periodicidade,
+.reuniao-formato,.relatorio-registro small {
+  color: var(--subtitle-color);
+}
+
 .editor-texto .texto-maior {
   font-size: var(--type-body-size);
   line-height: var(--type-body-line);

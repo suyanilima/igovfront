@@ -42,10 +42,8 @@
 }
 
 .dashboard-indicador.documentos,
-.dashboard-indicador.documentos-vencidos {
-  grid-column: span 3;
-}
-
+.dashboard-indicador.documentos-vencidos,
+.dashboard-indicador.documentos-sem-normativo,
 .dashboard-indicador.reunioes,
 .dashboard-indicador.minutas,
 .dashboard-indicador.pendencias {
@@ -78,6 +76,14 @@
 
 .dashboard-indicador.documentos-vencidos strong {
   color: #A32020
+}
+
+.dashboard-indicador.documentos-sem-normativo {
+  --indicador-cor: #64748B
+}
+
+.dashboard-indicador.documentos-sem-normativo strong {
+  color: #475569
 }
 
 .dashboard-indicador.minutas {
@@ -448,6 +454,11 @@
   color: #855A00
 }
 
+.dashboard-lista-item em.sem-normativo {
+  background: #EEF2F6;
+  color: #475569
+}
+
 .dashboard-lista-item em.completa {
   background: #E5F6EC;
   color: #176636
@@ -585,6 +596,7 @@
 
   .dashboard-indicador.documentos,
   .dashboard-indicador.documentos-vencidos,
+  .dashboard-indicador.documentos-sem-normativo,
   .dashboard-indicador.reunioes,
   .dashboard-indicador.minutas,
   .dashboard-indicador.pendencias {

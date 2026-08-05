@@ -801,9 +801,15 @@ button.export-docs:hover,button.export-docs:focus-visible {
   display: grid;
   grid-template-columns: repeat(3,minmax(0,1fr));
   gap: 14px;
-  margin: 22px 0 18px;
-  padding-bottom: 20px;
+  margin: 22px 0 12px;
+  padding-bottom: 12px;
   border-bottom: 1px solid var(--border);
+}
+
+.cadastro-modo:has(+ #cadastro-documento-form.oculto + #cadastro-reuniao-form.oculto) {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: 0
 }
 
 .cadastro-modo-btn {
@@ -811,8 +817,8 @@ button.export-docs:hover,button.export-docs:focus-visible {
   align-items: flex-start;
   gap: 12px;
   min-width: 0;
-  min-height: 116px;
-  padding: 18px;
+  min-height: 100px;
+  padding: 16px 18px;
   border: 1px solid var(--border);
   border-radius: 12px;
   background: #fff;
@@ -850,17 +856,17 @@ button.export-docs:hover,button.export-docs:focus-visible {
 
 .cadastro-modo-btn strong {
   color: var(--gov-blue-dark);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 1.35;
 }
 
 .cadastro-modo-btn small {
-  margin-top: 7px;
+  margin-top: 6px;
   color: rgba(92,102,117,.86);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
-  line-height: 1.45;
+  line-height: 1.4;
 }
 
 .cadastro-modo-numero {

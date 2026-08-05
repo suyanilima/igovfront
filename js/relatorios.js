@@ -1,6 +1,6 @@
 /* ===== CONFIGURADOR DE RELATÓRIOS ===== */
 const RELATORIO_CAMPOS_DOCUMENTOS=[['setorPai','Setor'],['unidade','Unidade escolhida'],['nome','Documento'],['tipo','Tipo'],['baseLegal','Fundamentação legal'],['sei','Nº SEI'],['dataVigencia','Data de vigência'],['validade','Prazo de validade'],['data','Vencimento'],['status','Situação'],['ultimaAtualizacao','Última atualização'],['gestorNome','Gestor responsável'],['gestorSetor','Setor do gestor'],['gestorEmail','E-mail do gestor'],['gestorWhatsapp','WhatsApp do gestor'],['descricao','Descrição']];
-const RELATORIO_CAMPOS_REUNIOES=[['data','Data'],['horario','Horário'],['frequencia','Unidade'],['periodicidade','Periodicidade'],['formato','Formato'],['situacao','Situação'],['link','Link'],['pauta','Pauta'],['membros','Membros'],['convidados','Convidados'],['resumo','Resumo'],['minuta','Situação da ata']];
+const RELATORIO_CAMPOS_REUNIOES=[['data','Data'],['horario','Horário'],['frequencia','Unidade'],['periodicidade','Periodicidade'],['formato','Formato'],['situacao','Situação'],['link','Link'],['pauta','Pauta'],['membros','Membros'],['convidados','Convidados'],['minuta','Situação da ata']];
 let relatorioSelecao={documentos:new Set(),reunioes:new Set()};
 let relatorioVisiveis={documentos:[],reunioes:[]};
 let relatorioFocoAnterior=null;
@@ -26,7 +26,7 @@ function garantirModalRelatorio(){
   document.getElementById('relatorio-doc-ano').innerHTML=opcoesRelatorio([...new Set(docs.map(item=>(item.dataVigencia||item.dataCriacao||item.data||'').slice(0,4)).filter(Boolean))].sort((a,b)=>b.localeCompare(a)));
 }
 function secaoRelatorio(tipo,titulo,filtros,campos){return `<section class="relatorio-secao" id="relatorio-secao-${tipo}"><div class="relatorio-secao-head"><div><h4>Campos do relatório</h4><small>Marque somente as informações necessárias.</small></div><div class="relatorio-campos-acoes"><button type="button" onclick="marcarCamposRelatorio('${tipo}',true)">Selecionar todos</button><button type="button" onclick="marcarCamposRelatorio('${tipo}',false)">Limpar</button></div></div><div class="relatorio-campos">${camposRelatorio(tipo,campos)}</div></section>`;}
-function abrirRelatorio(origem='documentos'){
+function abrirRelatorio(origem='documentos', contexto=null){
   garantirModalRelatorio();relatorioFocoAnterior=document.activeElement;
   if(!relatorioSelecao[origem].size){toast(`Selecione ao menos um ${origem==='documentos'?'documento':'registro de reunião'} antes de exportar.`,'alerta');return;}
   relatorioOrigemAtual=origem;
@@ -37,7 +37,13 @@ function abrirRelatorio(origem='documentos'){
   const quantidade=relatorioSelecao[origem].size;
   const rotulo=origem==='documentos'?(quantidade===1?'documento':'documentos'):(quantidade===1?'reunião':'reuniões');
   document.getElementById('relatorio-titulo').textContent=`Exportar relatório de ${origem==='documentos'?'documentos':'reuniões'}`;
-  document.getElementById('relatorio-intro').innerHTML=`<strong>${quantidade} ${rotulo} selecionado${quantidade===1?'':'s'}.</strong> Escolha abaixo quais informações devem aparecer no arquivo.`;
+  const resumoPeriodo=quantidade===1
+    ? `A reunião de ${escapeHtml(contexto?.periodo)} será exportada.`
+    : `Todas as ${quantidade} reuniões de ${escapeHtml(contexto?.periodo)} serão exportadas.`;
+  const introducao=contexto?.periodo
+    ? `<strong>${resumoPeriodo}</strong> Escolha abaixo quais informações devem aparecer no arquivo.`
+    : `<strong>${quantidade} ${rotulo} selecionado${quantidade===1?'':'s'}.</strong> Escolha abaixo quais informações devem aparecer no arquivo.`;
+  document.getElementById('relatorio-intro').innerHTML=introducao;
   document.getElementById('relatorio-exportar-pdf').hidden=false;
   ['documentos','reunioes'].forEach(t=>{alternarFonteRelatorio(t);atualizarContadorRelatorio(t);});
   const overlay=document.getElementById('relatorio-modal-overlay');overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');overlay.querySelector('.relatorio-modal').focus();
@@ -114,7 +120,11 @@ function gerarRelatorioSelecionado(formato='csv'){
   });
   if(!total){toast('Marque ao menos um registro e um campo em uma das seções.','alerta');return;}
   if(formato==='pdf'){
-    gerarRelatorioPdf(cabecalhos,linhas,total,relatorioOrigemAtual);
+    if(relatorioOrigemAtual==='reunioes'){
+      const campos=[...document.querySelectorAll('[data-campo="reunioes"]:checked')].map(i=>i.value);
+      const itens=reunioes.filter(i=>relatorioSelecao.reunioes.has(i.id));
+      gerarRelatorioPdfReunioes(itens,campos);
+    }else gerarRelatorioPdf(cabecalhos,linhas,total,relatorioOrigemAtual);
     fecharRelatorio();return;
   }
   const escaparCsv=v=>{let texto=String(v??'');if(/^[=+@]/.test(texto))texto=`'${texto}`;return `"${texto.replace(/"/g,'""')}"`;};
@@ -123,61 +133,144 @@ function gerarRelatorioSelecionado(formato='csv'){
   link.href=url;link.download=`relatorio_${relatorioOrigemAtual}_${todayStr()}.csv`;document.body.appendChild(link);link.click();link.remove();URL.revokeObjectURL(url);fecharRelatorio();toast(`<b>Relatório CSV exportado</b> — ${total} registro${total===1?'':'s'}.`,'valido');
 }
 
+function gerarRelatorioPdfReunioes(itens,campos){
+  const JsPdf=window.jspdf?.jsPDF;
+  if(!JsPdf){toast('Não foi possível carregar o gerador de PDF.','vencido');return;}
+  const pdf=new JsPdf({orientation:'portrait',unit:'mm',format:'a4',compress:true});
+  const larguraPagina=210,margem=8,larguraUtil=larguraPagina-(margem*2),limitePagina=282,logo=obterLogoNormaDataUrl();
+  const selecionado=new Set(campos),azul=[28,65,108],cinza=[82,82,82],borda=[190,190,190],fundo=[242,242,242];
+  const texto=(valor,padrao='Não informado')=>String(valor||padrao);
+  let pagina=1,y=35;
+  function cabecalho(){
+    if(logo){try{pdf.addImage(logo,'PNG',margem,6,42,10);}catch(e){}}
+    else{pdf.setTextColor(...azul);pdf.setFontSize(15);pdf.setFont('helvetica','bold');pdf.text('NORMA',margem,14);}
+    pdf.setTextColor(35,35,35);pdf.setFontSize(14);pdf.setFont('helvetica','bold');pdf.text('Relatório de reuniões',margem,23);
+    pdf.setTextColor(...cinza);pdf.setFontSize(6.5);pdf.setFont('helvetica','normal');
+    pdf.text(`Emitido em ${new Date().toLocaleString('pt-BR')}`,margem,28);
+    pdf.text(`Página ${pagina}`,larguraPagina-margem,23,{align:'right'});
+    pdf.setDrawColor(160,160,160);pdf.setLineWidth(.25);pdf.line(margem,31,larguraPagina-margem,31);
+    pdf.text(`Página ${pagina}`,larguraPagina/2,291,{align:'center'});
+    y=35;
+  }
+  function novaPagina(){pdf.addPage('a4','portrait');pagina++;cabecalho();}
+  function linhasValor(valor,w,maximo=8){return pdf.splitTextToSize(texto(valor),w-4).slice(0,maximo);}
+  function alturaValor(valor,w,maximo=8){return Math.max(7,3+(linhasValor(valor,w,maximo).length*3.2));}
+  function secao(rotulo,valor,maximo=8){
+    const linhas=linhasValor(valor,larguraUtil,maximo),altura=Math.max(7,3+(linhas.length*3.2));
+    pdf.setFillColor(...fundo);pdf.setDrawColor(...borda);pdf.rect(margem,y,larguraUtil,6,'FD');
+    pdf.setTextColor(...cinza);pdf.setFontSize(7);pdf.setFont('helvetica','bold');pdf.text(rotulo,margem+2,y+4.1);y+=6;
+    pdf.setFillColor(255,255,255);pdf.rect(margem,y,larguraUtil,altura,'FD');
+    pdf.setTextColor(40,40,40);pdf.setFontSize(7);pdf.setFont('helvetica','normal');pdf.text(linhas,margem+2,y+4.4);y+=altura;
+  }
+  cabecalho();
+  itens.forEach(reuniao=>{
+    const unidade=unidadesPersonalizadas.find(u=>u.codigo===reuniao.frequencia)?.nome||reuniao.frequencia;
+    const membros=normalizarMembros(reuniao.membros,reuniao.frequencia).filter(m=>m.nome);
+    const convidados=normalizarParticipantes(reuniao.convidados??reuniao.participantes);
+    const participantes=membros.length+convidados.length;
+    const metas=[];
+    if(selecionado.has('data')||selecionado.has('horario'))metas.push(['Data e horário',[
+      selecionado.has('data')?(reuniao.data?fmtData(reuniao.data):'Data não informada'):'',
+      selecionado.has('horario')?(reuniao.horario?`às ${reuniao.horario}`:'Horário não informado'):''
+    ].filter(Boolean).join(' ')]);
+    if(selecionado.has('frequencia')||selecionado.has('periodicidade'))metas.push(['Unidade',[
+      selecionado.has('frequencia')?texto(unidade):'',
+      selecionado.has('periodicidade')?texto(FREQUENCIAS_REUNIAO[reuniao.frequencia],'Periodicidade não informada'):''
+    ].filter(Boolean).join(' · ')]);
+    if(selecionado.has('formato'))metas.push(['Formato',rotuloFormatoReuniao(reuniao.formato)]);
+    if(selecionado.has('situacao')||selecionado.has('minuta'))metas.push(['Situação',[
+      selecionado.has('situacao')?(typeof obterSituacaoReuniao==='function'?obterSituacaoReuniao(reuniao):texto(reuniao.situacao,'Agendada')):'',
+      selecionado.has('minuta')?(minutasHistorico.some(m=>m.reuniao?.id===reuniao.id)?'Ata gerada':'Sem ata'):''
+    ].filter(Boolean).join(' · ')]);
+    if(selecionado.has('link'))metas.push(['Acesso',reuniao.link||'Não informado']);
+    if(selecionado.has('membros')||selecionado.has('convidados'))metas.push(['Participação',`${participantes} ${participantes===1?'participante':'participantes'}`]);
+    const linhasMeta=[];for(let i=0;i<metas.length;i+=3)linhasMeta.push(metas.slice(i,i+3));
+    let alturaBloco=8;
+    linhasMeta.forEach(linha=>{const w=larguraUtil/linha.length;alturaBloco+=6+Math.max(...linha.map(([,valor])=>alturaValor(valor,w,3)));});
+    if(selecionado.has('pauta'))alturaBloco+=6+alturaValor(reuniao.pauta||'Nenhuma pauta cadastrada.',larguraUtil,8);
+    if(selecionado.has('membros'))alturaBloco+=6+alturaValor(membros.map(m=>`${m.nome} - ${m.cargo}`).join('\n')||'Nenhum membro informado.',larguraUtil,10);
+    if(selecionado.has('convidados'))alturaBloco+=6+alturaValor(convidados.join('\n')||'Nenhum convidado informado.',larguraUtil,10);
+    alturaBloco+=4;
+    if(y+alturaBloco>limitePagina)novaPagina();
+    pdf.setFillColor(211,225,242);pdf.setDrawColor(...borda);pdf.rect(margem,y,larguraUtil,8,'FD');
+    pdf.setTextColor(...azul);pdf.setFontSize(8);pdf.setFont('helvetica','bold');
+    pdf.text(`Reunião: ${texto(reuniao.pauta,'Sem pauta')}`,margem+2,y+5.3,{maxWidth:larguraUtil-4});y+=8;
+    linhasMeta.forEach(linha=>{
+      const w=larguraUtil/linha.length,altura=Math.max(...linha.map(([,valor])=>alturaValor(valor,w,3)));
+      linha.forEach(([rotulo],i)=>{pdf.setFillColor(230,230,230);pdf.setDrawColor(...borda);pdf.rect(margem+i*w,y,w,6,'FD');pdf.setTextColor(45,45,45);pdf.setFontSize(7);pdf.setFont('helvetica','bold');pdf.text(rotulo,margem+i*w+2,y+4.1);});y+=6;
+      linha.forEach(([,valor],i)=>{pdf.setFillColor(255,255,255);pdf.rect(margem+i*w,y,w,altura,'FD');pdf.setTextColor(40,40,40);pdf.setFontSize(7);pdf.setFont('helvetica','normal');pdf.text(linhasValor(valor,w,3),margem+i*w+2,y+4.3);});y+=altura;
+    });
+    if(selecionado.has('pauta'))secao('Pauta',reuniao.pauta||'Nenhuma pauta cadastrada.');
+    if(selecionado.has('membros'))secao('Membros da unidade',membros.map(m=>`${m.nome} - ${m.cargo}`).join('\n')||'Nenhum membro informado.',10);
+    if(selecionado.has('convidados'))secao('Convidados',convidados.join('\n')||'Nenhum convidado informado.',10);
+    y+=4;
+  });
+  pdf.save(`relatorio_norma_reunioes_${todayStr()}.pdf`);
+  toast(`<b>PDF Norma exportado</b> — ${itens.length} reunião${itens.length===1?'':'ões'}.`,'valido');
+}
+
 function gerarRelatorioPdf(cabecalhos,linhas,total,tipo='documentos'){
   const JsPdf=window.jspdf?.jsPDF;
   if(!JsPdf){toast('Não foi possível carregar o gerador de PDF.','vencido');return;}
-  const pdf=new JsPdf({orientation:'landscape',unit:'mm',format:'a4',compress:true});
-  const larguraPagina=297,margem=10,larguraUtil=larguraPagina-(margem*2),alturaLimite=196;
-  const colunas=4,espaco=2,larguraCelula=(larguraUtil-(espaco*(colunas-1)))/colunas;
-  const emitido=new Date().toLocaleString('pt-BR');
-  const logo=obterLogoNormaDataUrl();
-  const reunioesRelatorio=tipo==='reunioes';
-  const tituloRelatorio=reunioesRelatorio?'Relatório de reuniões':'Relatório de documentos';
-  const rotuloRegistro=reunioesRelatorio?'Reunião':'Documento';
-  let pagina=1,y=0;
+  const pdf=new JsPdf({orientation:'portrait',unit:'mm',format:'a4',compress:true});
+  const larguraPagina=210,margem=8,larguraUtil=194,limitePagina=282,logo=obterLogoNormaDataUrl();
+  const azul=[28,65,108],cinza=[82,82,82],borda=[190,190,190],fundo=[242,242,242];
+  let pagina=1,y=35;
   function cabecalhoPagina(){
-    if(logo){try{pdf.addImage(logo,'PNG',margem,7,46,11);}catch(e){}}
-    else{pdf.setTextColor(12,50,111);pdf.setFontSize(16);pdf.setFont('helvetica','bold');pdf.text('NORMA',margem,16);}
-    pdf.setTextColor(12,50,111);pdf.setFontSize(14);pdf.setFont('helvetica','bold');pdf.text(tituloRelatorio,margem,27);
-    pdf.setTextColor(92,102,117);pdf.setFontSize(7);pdf.setFont('helvetica','normal');pdf.text(`${total} registro${total===1?'':'s'} · Emitido em ${emitido}`,margem,32);
-    pdf.setDrawColor(12,50,111);pdf.setLineWidth(.7);pdf.line(margem,35,larguraPagina-margem,35);
-    y=40;
+    if(logo){try{pdf.addImage(logo,'PNG',margem,6,42,10);}catch(e){}}
+    else{pdf.setTextColor(...azul);pdf.setFontSize(15);pdf.setFont('helvetica','bold');pdf.text('NORMA',margem,14);}
+    pdf.setTextColor(35,35,35);pdf.setFontSize(14);pdf.setFont('helvetica','bold');pdf.text('Relatório de documentos',margem,23);
+    pdf.setTextColor(...cinza);pdf.setFontSize(6.5);pdf.setFont('helvetica','normal');pdf.text(`Emitido em ${new Date().toLocaleString('pt-BR')}`,margem,28);
+    pdf.text(`Página ${pagina}`,larguraPagina-margem,23,{align:'right'});pdf.text(`Página ${pagina}`,larguraPagina/2,291,{align:'center'});
+    pdf.setDrawColor(160,160,160);pdf.setLineWidth(.25);pdf.line(margem,31,larguraPagina-margem,31);y=35;
   }
-  function rodapePagina(){pdf.setTextColor(92,102,117);pdf.setFontSize(6);pdf.text(`Norma · Página ${pagina}`,larguraPagina-margem,204,{align:'right'});}
-  function novaPagina(){rodapePagina();pdf.addPage('a4','landscape');pagina++;cabecalhoPagina();}
+  function novaPagina(){pdf.addPage('a4','portrait');pagina++;cabecalhoPagina();}
+  function linhasValor(valor,w,maximo=8){return pdf.splitTextToSize(String(valor||'—'),w-4).slice(0,maximo);}
+  function alturaValor(valor,w,maximo=8){return Math.max(7,3+(linhasValor(valor,w,maximo).length*3.2));}
+  function desenharSecao(rotulo,valor){
+    const linhasTexto=linhasValor(valor,larguraUtil,10),altura=Math.max(7,3+(linhasTexto.length*3.2));
+    pdf.setFillColor(...fundo);pdf.setDrawColor(...borda);pdf.rect(margem,y,larguraUtil,6,'FD');
+    pdf.setTextColor(...cinza);pdf.setFontSize(7);pdf.setFont('helvetica','bold');pdf.text(rotulo,margem+2,y+4.1);y+=6;
+    pdf.setFillColor(255,255,255);pdf.rect(margem,y,larguraUtil,altura,'FD');pdf.setTextColor(40,40,40);pdf.setFont('helvetica','normal');pdf.text(linhasTexto,margem+2,y+4.4);y+=altura;
+  }
   cabecalhoPagina();
   linhas.forEach((linha,indiceLinha)=>{
-    const indiceNome=cabecalhos.findIndex(item=>item===(reunioesRelatorio?'Pauta':'Documento'));
-    const nome=indiceNome>=0?linha[indiceNome]:`${rotuloRegistro} ${indiceLinha+1}`;
-    const campos=cabecalhos.map((rotulo,indice)=>({rotulo,valor:linha[indice]})).filter((_,indice)=>indice!==indiceNome);
+    const indiceNome=cabecalhos.indexOf('Documento'),indiceDescricao=cabecalhos.indexOf('Descrição');
+    const nome=indiceNome>=0?linha[indiceNome]:`Documento ${indiceLinha+1}`;
+    const descricao=indiceDescricao>=0?linha[indiceDescricao]:'';
+    const campos=cabecalhos.map((rotulo,indice)=>({rotulo,valor:linha[indice]})).filter((_,indice)=>indice!==indiceNome&&indice!==indiceDescricao);
     const grupos=[];
-    for(let indice=0;indice<campos.length;indice+=colunas)grupos.push(campos.slice(indice,indice+colunas));
-    const alturas=grupos.map(grupo=>Math.max(14,...grupo.map(campo=>{
-      const valor=pdf.splitTextToSize(String(campo.valor||'—'),larguraCelula-4).slice(0,4);
-      return 8+(valor.length*3.1);
-    })));
-    const alturaBloco=10+alturas.reduce((soma,altura)=>soma+altura,0)+6;
-    if(y+Math.min(alturaBloco,alturaLimite-40)>alturaLimite)novaPagina();
-    pdf.setFillColor(210,224,243);pdf.setDrawColor(170,191,220);pdf.rect(margem,y,larguraUtil,10,'FD');
-    pdf.setTextColor(12,50,111);pdf.setFontSize(9);pdf.setFont('helvetica','bold');
-    pdf.text(`${rotuloRegistro}: ${String(nome||'—')}`,margem+3,y+6.4,{maxWidth:larguraUtil-6});y+=10;
-    grupos.forEach((grupo,indiceGrupo)=>{
-      const altura=alturas[indiceGrupo];
-      if(y+altura>alturaLimite){novaPagina();pdf.setFillColor(233,240,249);pdf.rect(margem,y,larguraUtil,7,'F');pdf.setTextColor(12,50,111);pdf.setFontSize(7);pdf.setFont('helvetica','bold');pdf.text(`${String(nome||'—')} — continuação`,margem+2,y+4.7);y+=7;}
-      grupo.forEach((campo,indiceCampo)=>{
-        const x=margem+(indiceCampo*(larguraCelula+espaco));
-        pdf.setFillColor(242,244,247);pdf.setDrawColor(195,202,212);pdf.rect(x,y,larguraCelula,6,'FD');
-        pdf.setTextColor(32,48,72);pdf.setFontSize(6.5);pdf.setFont('helvetica','bold');pdf.text(String(campo.rotulo),x+2,y+4,{maxWidth:larguraCelula-4});
-        pdf.setFillColor(255,255,255);pdf.rect(x,y+6,larguraCelula,altura-6,'FD');
-        pdf.setTextColor(40,49,63);pdf.setFontSize(7);pdf.setFont('helvetica','normal');
-        const valor=pdf.splitTextToSize(String(campo.valor||'—'),larguraCelula-4).slice(0,4);pdf.text(valor,x+2,y+10);
-      });
-      y+=altura;
+    for(let indice=0;indice<campos.length;indice+=3)grupos.push(campos.slice(indice,indice+3));
+    let alturaBloco=8+4;
+    grupos.forEach(grupo=>{const w=larguraUtil/grupo.length;alturaBloco+=6+Math.max(...grupo.map(campo=>alturaValor(campo.valor,w,4)));});
+    if(indiceDescricao>=0)alturaBloco+=6+alturaValor(descricao,larguraUtil,10);
+    if(y+alturaBloco>limitePagina)novaPagina();
+    pdf.setFillColor(211,225,242);pdf.setDrawColor(...borda);pdf.rect(margem,y,larguraUtil,8,'FD');pdf.setTextColor(...azul);pdf.setFontSize(8);pdf.setFont('helvetica','bold');
+    pdf.text(`Documento: ${String(nome||'—')}`,margem+2,y+5.3,{maxWidth:larguraUtil-4});y+=8;
+    grupos.forEach(grupo=>{
+      const w=larguraUtil/grupo.length,altura=Math.max(...grupo.map(campo=>alturaValor(campo.valor,w,4)));
+      grupo.forEach((campo,i)=>{pdf.setFillColor(230,230,230);pdf.setDrawColor(...borda);pdf.rect(margem+i*w,y,w,6,'FD');pdf.setTextColor(45,45,45);pdf.setFontSize(7);pdf.setFont('helvetica','bold');pdf.text(campo.rotulo,margem+i*w+2,y+4.1,{maxWidth:w-4});});y+=6;
+      grupo.forEach((campo,i)=>{pdf.setFillColor(255,255,255);pdf.rect(margem+i*w,y,w,altura,'FD');pdf.setTextColor(40,40,40);pdf.setFontSize(7);pdf.setFont('helvetica','normal');pdf.text(linhasValor(campo.valor,w,4),margem+i*w+2,y+4.3);});y+=altura;
     });
-    y+=6;
+    if(indiceDescricao>=0)desenharSecao('Descrição',descricao);
+    y+=4;
   });
-  rodapePagina();pdf.save(`relatorio_norma_${tipo}_${todayStr()}.pdf`);toast(`<b>PDF Norma exportado</b> — ${total} registro${total===1?'':'s'}.`,'valido');
+  pdf.save(`relatorio_norma_${tipo}_${todayStr()}.pdf`);toast(`<b>PDF Norma exportado</b> — ${total} registro${total===1?'':'s'}.`,'valido');
 }
 function exportarRelatorio(){abrirRelatorio('documentos');}
-function exportarRelatorioReunioes(){abrirRelatorio('reunioes');}
+function exportarRelatorioReunioes(){
+  let contexto=null;
+  if(typeof visualizacaoReunioes!=='undefined' && visualizacaoReunioes==='calendario' && typeof calendarioReunioesMes!=='undefined'){
+    const mesSelecionado=`${calendarioReunioesMes.getFullYear()}-${String(calendarioReunioesMes.getMonth()+1).padStart(2,'0')}`;
+    const reunioesDoMes=reunioes.filter(reuniao=>(reuniao.data||'').startsWith(mesSelecionado));
+    const rotuloMes=calendarioReunioesMes.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+    if(!reunioesDoMes.length){
+      toast(`Não há reuniões em ${rotuloMes} para exportar.`,'alerta');
+      return;
+    }
+    relatorioSelecao.reunioes=new Set(reunioesDoMes.map(reuniao=>reuniao.id));
+    contexto={periodo:rotuloMes};
+  }
+  abrirRelatorio('reunioes',contexto);
+}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('relatorio-modal-overlay')?.classList.contains('open'))fecharRelatorio();});

@@ -14,6 +14,7 @@ function elemento(id = '') {
       style: {},
       classList: { add() {}, remove() {}, toggle() {}, contains() { return false; } },
       setAttribute() {},
+      toggleAttribute() {},
       addEventListener() {},
       focus() {},
       select() {},
@@ -65,6 +66,7 @@ contexto.globalThis = contexto;
 const arquivosDaAplicacao = [
   'js/core.js',
   'js/tabs.js',
+  'js/documentos/unidades.js',
   'js/documentos/cadastro.js',
   'js/documentos/controle.js',
   'js/documentos/modais.js',
@@ -89,7 +91,7 @@ globalThis.__regras = {
   somarMeses, calcularVencimento, calcularStatus, obterAnosValidade, normalizarValidadeAnos, salvar, carregar, escapeHtml,
   formatarSomenteNumeros, formatarNumeroSei, normalizarNumeroSei, numeroSeiValido, limitarTexto, normalizarParticipantes,
   normalizarLinkReuniao, normalizarMembros, normalizarFormatoReuniao, rotuloFormatoReuniao, formatarConvidadoComSetor, resumirConvidadoParaExibicao, gerarTextoMinuta, gerarHtmlDocumentoAta, carregarReunioes, cadastrarReuniao,
-  obterReunioesFiltradas, normalizarQuebrasTextoColado, documentoPertenceAoSetor, obterUnidadeDoDocumento, situacaoAtualReuniao,
+  obterReunioesFiltradas, normalizarQuebrasTextoColado, localizarUnidadeDocumento, documentoPertenceUnidadeSelecionada, obterSituacaoReuniao,
   frequenciasReuniao: FREQUENCIAS_REUNIAO,
   getReunioes: () => reunioes,
   setParticipantesCadastro: valor => { participantesReuniaoCadastro = valor; },
@@ -137,26 +139,22 @@ assert.equal(regras.normalizarLinkReuniao('javascript:alert(1)'), '');
 assert.equal(regras.normalizarFormatoReuniao('Presencial'), 'Presencial');
 assert.equal(regras.normalizarFormatoReuniao('valor antigo'), 'Online');
 assert.equal(regras.rotuloFormatoReuniao('Online'), 'On-line');
-assert.equal(regras.situacaoAtualReuniao({ situacao: 'Remarcada' }), 'Remarcada');
-assert.equal(regras.situacaoAtualReuniao({ data: '2099-01-01', horario: '10:00' }), 'Agendada');
-assert.equal(regras.situacaoAtualReuniao({ situacao: 'Remarcada', data: '2000-01-01', horario: '10:00' }), 'Concluída');
-assert.equal(regras.situacaoAtualReuniao({ situacao: 'Cancelada', data: '2000-01-01', horario: '10:00' }), 'Cancelada');
+assert.equal(regras.obterSituacaoReuniao({ situacao: 'Reagendada', data: '2099-01-01', horario: '10:00' }), 'Reagendada');
+assert.equal(regras.obterSituacaoReuniao({ data: '2099-01-01', horario: '10:00' }), 'Agendada');
+assert.equal(regras.obterSituacaoReuniao({ situacao: 'Reagendada', data: '2000-01-01', horario: '10:00' }), 'Concluída');
+assert.equal(regras.obterSituacaoReuniao({ situacao: 'Cancelada', data: '2000-01-01', horario: '10:00' }), 'Cancelada');
 assert.equal(regras.normalizarLinkReuniao('ftp://servidor/reuniao'), '');
 assert.equal(regras.normalizarMembros([], 'CGTIC').length, 3);
 assert.equal(regras.normalizarMembros([], 'CGTIC')[0].nome, 'Edcley da Silva Firmino');
 assert.equal(regras.normalizarMembros([{ cargo: 'STI', nome: 'Ana' }], 'CGTIC')[0].nome, 'Ana');
 assert.equal(regras.normalizarMembros([], 'CGTIC')[0].cargo, 'Secretaria de Tecnologia da Informação');
 assert.equal(regras.normalizarMembros([], 'CGOVTIC').length, 5);
-assert.equal(regras.documentoPertenceAoSetor({ gestorSetor: 'STI' }, 'STI'), true);
-assert.equal(regras.documentoPertenceAoSetor({ gestorSetor: 'ASPGOVTI' }, 'STI'), true);
-assert.equal(regras.documentoPertenceAoSetor({ gestorSetor: 'GSTI' }, 'STI'), true);
-assert.equal(regras.documentoPertenceAoSetor({ gestorSetor: 'GSTI — Gabinete da Secretaria de Tecnologia da Informação' }, 'STI'), true);
-assert.equal(regras.documentoPertenceAoSetor({ gestorSetor: 'Gabinete da Secretaria de Tecnologia da Informação (GSTI)' }, 'STI'), true);
-assert.equal(regras.documentoPertenceAoSetor({ gestorSetor: 'SDBD' }, 'STI'), true);
-assert.equal(regras.documentoPertenceAoSetor({ gestorSetor: 'ASJUR' }, 'STI'), false);
-assert.equal(regras.obterUnidadeDoDocumento({ gestorSetor: 'STI' }, 'STI'), 'STI');
-assert.equal(regras.obterUnidadeDoDocumento({ gestorSetor: 'GSTI' }, 'STI'), 'GSTI');
-assert.equal(regras.obterUnidadeDoDocumento({ gestorSetor: 'Gabinete da Secretaria de Tecnologia da Informação (GSTI)' }, 'STI'), 'GSTI');
+assert.equal(regras.localizarUnidadeDocumento('STI').setor.codigo, 'STI');
+assert.equal(regras.localizarUnidadeDocumento('ASPGOVTI').setor.codigo, 'STI');
+assert.equal(regras.localizarUnidadeDocumento('GSTI').codigo, 'GSTI');
+assert.equal(regras.localizarUnidadeDocumento('SDBD').setor.codigo, 'STI');
+assert.equal(regras.localizarUnidadeDocumento('ASJUR').setor.codigo, 'PRES');
+assert.equal(regras.localizarUnidadeDocumento('INEXISTENTE'), null);
 
 // Migração automática de GOVTIC para CGOVTIC e corte de dados antigos.
 armazenados.set('igov:reunioes', JSON.stringify([{

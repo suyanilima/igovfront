@@ -50,36 +50,58 @@
 }
 
 .reunioes-calendario-toolbar {
+  position: relative;
   display: grid;
-  grid-template-columns: 38px auto 38px 1fr;
+  grid-template-columns: 42px 42px 1fr auto;
   align-items: center;
   gap: 8px;
+  min-height: 36px;
   margin-bottom: 12px;
 }
 
 .reunioes-calendario-toolbar h3 {
+  position: absolute;
+  left: 50%;
   min-width: 190px;
   margin: 0;
   color: var(--gov-blue-dark);
   font-size: 19px;
   text-align: center;
   text-transform: capitalize;
+  transform: translateX(-50%);
+}
+
+.reunioes-calendario-toolbar > button:nth-of-type(2) {
+  grid-column: 2
 }
 
 .reunioes-calendario-toolbar button {
-  height: 36px;
+  display: grid;
+  width: 42px;
+  height: 40px;
+  place-items: center;
+  padding: 0;
   border: 1px solid #B9CCE7;
   border-radius: 9px;
   background: #fff;
   color: var(--gov-blue);
-  font-size: 20px;
+  font-size: 24px;
+  line-height: 1;
   font-weight: 800;
   cursor: pointer;
 }
 
+.reunioes-calendario-toolbar > button:nth-of-type(-n+2) .system-icon {
+  width: 20px;
+  height: 20px;
+  flex-basis: 20px
+}
+
 .reunioes-calendario-toolbar .reunioes-calendario-hoje {
+  grid-column: 4;
   justify-self: end;
   width: auto;
+  height: 36px;
   padding: 0 16px;
   font-size: 12px;
 }
@@ -87,10 +109,12 @@
 .reunioes-calendario-legenda {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 12px 18px;
-  margin: 0 0 14px;
+  margin: 20px 0 10px;
   color: rgba(92,102,117,.82);
-  font-size: 11px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .reunioes-calendario-legenda span {
@@ -100,8 +124,8 @@
 }
 
 .reunioes-calendario-legenda i {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
 }
 
@@ -124,7 +148,7 @@
 }
 
 .reunioes-calendario-semana span {
-  padding: 9px 5px;
+  padding: 6px 5px;
   color: rgba(92,102,117,.78);
   font-size: 11px;
   font-weight: 600;
@@ -139,8 +163,8 @@
 
 .calendario-dia {
   min-width: 0;
-  min-height: 112px;
-  padding: 7px;
+  min-height: 82px;
+  padding: 5px;
   border: 0;
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
@@ -157,8 +181,8 @@
 .calendario-dia.hoje .calendario-dia-numero {
   display: grid;
   place-items: center;
-  width: 25px;
-  height: 25px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: var(--gov-blue);
   color: #fff;
@@ -170,7 +194,7 @@
 
 .calendario-dia-numero {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 3px;
   font-size: 12px;
   font-weight: 600;
   opacity: .82;
@@ -179,11 +203,10 @@
 .calendario-evento {
   display: block;
   width: 100%;
-  margin-top: 4px;
-  padding: 5px 6px;
+  margin-top: 2px;
+  padding: 3px 9px;
   overflow: hidden;
   border: 0;
-  border-left: 3px solid var(--evento-cor);
   border-radius: 5px;
   background: color-mix(in srgb,var(--evento-cor) 11%,white);
   color: var(--gov-blue-dark);
@@ -197,7 +220,7 @@
 
 .calendario-eventos-restantes {
   display: block;
-  margin-top: 5px;
+  margin-top: 3px;
   color: rgba(19,81,180,.78);
   font-size: 10px;
   font-weight: 600;
@@ -290,12 +313,18 @@
   }
 
   .reunioes-calendario-toolbar {
-    grid-template-columns: 36px 1fr 36px;
+    grid-template-columns: 42px 1fr 42px;
   }
 
   .reunioes-calendario-toolbar h3 {
+    position: static;
     min-width: 0;
     font-size: 16px;
+    transform: none;
+  }
+
+  .reunioes-calendario-toolbar > button:nth-of-type(2) {
+    grid-column: auto
   }
 
   .reunioes-calendario-toolbar .reunioes-calendario-hoje {
@@ -961,9 +990,13 @@
 .minuta-escolha-filtros {
   display: grid;
   width: 100%;
-  grid-template-columns: minmax(220px,1.8fr) repeat(4,minmax(125px,1fr));
+  grid-template-columns: minmax(220px,1.8fr) repeat(4,minmax(125px,1fr)) minmax(125px,auto);
   gap: 14px;
   margin: 0;
+}
+
+.ata-limpar-campo,.reunioes-limpar-campo {
+  align-self: end;
 }
 
 .minuta-escolha-busca {
@@ -1000,13 +1033,17 @@
   border-radius: 0;
 }
 
-.ata-lista-cabecalho {
+.ata-lista-cabecalho,.minuta-reuniao-opcao {
   display: grid;
-  grid-template-columns: 120px 165px 350px 200px 64px;
-  column-gap: 40px;
+  grid-template-columns: 120px 165px minmax(260px,1fr) 200px 64px;
+  column-gap: clamp(20px,3vw,40px);
   align-items: center;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+.ata-lista-cabecalho {
   min-height: 45px;
-  padding: 0 20px;
   border: 1px solid var(--border);
   border-radius: 12px 12px 0 0;
   background: #FAFBFC;
@@ -1024,13 +1061,10 @@
 
 .minuta-reuniao-opcao {
   position: relative;
-  display: grid;
-  grid-template-columns: 120px 165px 350px 200px 64px;
-  column-gap: 40px;
-  align-items: start;
   width: 100%;
   min-height: 88px;
-  padding: 16px 20px;
+  padding-top: 16px;
+  padding-bottom: 16px;
   border: 0;
   border-bottom: 1px solid var(--border);
   border-radius: 0;
@@ -1168,8 +1202,40 @@
   width: min(440px,calc(100vw - 32px));
 }
 
+.exportar-ata-modal .modal-head {
+  align-items: center;
+}
+
+.exportar-ata-modal .modal-head h3 {
+  color: var(--title-color);
+  line-height: 1.25;
+}
+
+.exportar-ata-modal .m-sub {
+  margin-top: 2px;
+  color: var(--subtitle-color);
+}
+
+.exportar-ata-opcoes {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 12px;
+  align-items: stretch;
+  margin-top: 18px;
+}
+
 .exportar-ata-opcoes button {
+  width: 100%;
   min-height: 46px;
+  margin: 0;
+  padding: 12px 16px;
+  line-height: 20px;
+}
+
+@media(max-width:480px) {
+  .exportar-ata-opcoes {
+    grid-template-columns: 1fr;
+  }
 }
 
 #exportar-ata-modal-overlay {
@@ -1825,8 +1891,23 @@
   min-width: 0;
 }
 
+.reunioes-blocos.modo-calendario .reunioes-filtros-card {
+  position: relative;
+  z-index: 1;
+  border-bottom: 0;
+  border-radius: var(--radius) var(--radius) 0 0;
+  box-shadow: 0 5px 14px rgba(15,35,70,.035)
+}
+
+.reunioes-blocos.modo-calendario .reunioes-calendario-card {
+  margin-top: -16px;
+  padding-top: 18px;
+  border-radius: 0 0 var(--radius) var(--radius);
+  box-shadow: 0 8px 22px rgba(15,35,70,.05)
+}
+
 .reunioes-filtros {
-  grid-template-columns: minmax(220px,1.8fr) repeat(3,minmax(130px,1fr)) auto;
+  grid-template-columns: minmax(220px,1.8fr) repeat(3,minmax(130px,1fr)) minmax(125px,auto) auto;
   margin: 0;
 }
 

@@ -15,8 +15,10 @@
   --bg: #F7F8FA;
   --card: #FFFFFF;
   --border: #E3E6EC;
-  --ink: #0C326F;
-  --ink-soft: #5C6675;
+  --ink: #5B5B5B;
+  --ink-soft: rgba(91,91,91,.8);
+  --title-color: #5B5B5B;
+  --subtitle-color: rgba(91,91,91,.8);
   --green: #168821;
   --green-bg: #E7F5E8;
   --amber: #946200;
@@ -186,7 +188,7 @@ header.main {
 }
 
 .header-inner {
-  max-width: 1180px;
+  max-width: 1380px;
   margin: 0 auto;
   padding: 0 var(--space-6);
   min-height: 72px;
@@ -289,7 +291,7 @@ header.main {
 .wrap {
   width: 100%;
   min-width: 0;
-  max-width: 1180px;
+  max-width: 1380px;
   margin: 0 auto;
   padding: var(--space-6) var(--space-6) var(--space-7);
 }
@@ -457,6 +459,13 @@ header.main {
   display: none;
 }
 
+.wrap > .view {
+  width: 100%;
+  max-width: 1300px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
 .view.active {
   display: block;
   min-width: 0;
@@ -551,13 +560,13 @@ header.main {
 
 .sobre-intro h2 {
   margin: 0;
-  color: var(--gov-blue-dark);
+  color: var(--title-color);
   font-size: clamp(22px,3vw,30px);
 }
 
 .sobre-intro p {
   margin: 12px 0 0;
-  color: var(--ink-soft);
+  color: var(--subtitle-color);
   font-size: 15px;
   line-height: 1.65;
 }
@@ -596,13 +605,13 @@ header.main {
 
 .sobre-bloco h3,.sobre-status h3 {
   margin: 0;
-  color: var(--gov-blue-dark);
+  color: var(--title-color);
   font-size: 15px;
 }
 
 .sobre-bloco p {
   margin: 6px 0 0;
-  color: var(--ink-soft);
+  color: var(--subtitle-color);
   font-size: 13px;
   line-height: 1.55;
   overflow-wrap: anywhere;
@@ -622,7 +631,7 @@ header.main {
   padding: 12px 14px;
   border-radius: 9px;
   background: var(--gov-blue-bg);
-  color: var(--ink-soft);
+  color: var(--subtitle-color);
   font-size: 12px;
   line-height: 1.55;
 }
@@ -639,11 +648,12 @@ header.main {
   padding: 14px;
   border: 1px solid var(--border);
   border-radius: 10px;
+  background: var(--bg);
 }
 
 .sobre-status-lista p {
   margin: 10px 0 0;
-  color: var(--ink-soft);
+  color: var(--subtitle-color);
   font-size: 12px;
   line-height: 1.5;
 }
@@ -660,11 +670,11 @@ header.main {
   padding: 16px;
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: #FAFBFC;
+  background: var(--bg);
 }
 
 .sobre-reunioes-lista strong {
-  color: var(--gov-blue-dark);
+  color: var(--title-color);
   font-size: 14px;
 }
 
@@ -681,7 +691,7 @@ header.main {
 
 .sobre-reunioes-lista p {
   margin: 10px 0 0;
-  color: var(--ink-soft);
+  color: var(--subtitle-color);
   font-size: 12px;
   line-height: 1.5;
 }
@@ -704,7 +714,7 @@ header.main {
 
 .form-view-wrap .panel {
   width: 100%;
-  max-width: 1100px;
+  max-width: 1300px;
 }
 
 /* seções (Documento / Gestor responsável / Descrição) lado a lado */
@@ -1326,7 +1336,7 @@ ficam numa única linha (evita o "flex-wrap" quebrar de forma imprevisível). */
 
 .documentos-setores-view {
   width: 100%;
-  max-width: 1200px;
+  max-width: none;
   min-width: 0;
   margin: 0 auto;
   padding: var(--space-5)
@@ -1788,7 +1798,7 @@ ficam numa única linha (evita o "flex-wrap" quebrar de forma imprevisível). */
 }
 
 .documentos-filtros-bloco>.toolbar {
-  margin: 16px 0 0
+  margin: 0
 }
 
 .gestor-unidade-campo {
@@ -1860,8 +1870,29 @@ ficam numa única linha (evita o "flex-wrap" quebrar de forma imprevisível). */
 }
 
 .documentos-filtros-bloco>.toolbar {
-  grid-template-columns: minmax(240px,2fr) minmax(120px,.85fr) minmax(145px,1fr) minmax(120px,.85fr) minmax(155px,1fr) minmax(155px,auto);
+  grid-template-columns: minmax(200px,2fr) minmax(120px,.85fr) minmax(145px,1fr) minmax(100px,.7fr) minmax(140px,1fr) minmax(125px,auto) minmax(155px,auto);
   align-items: end
+}
+
+.documentos-limpar-filtros {
+  width: 100%;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid #BDD0EA;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--gov-blue);
+  font: var(--font-semibold) 12px system-ui,-apple-system,"Segoe UI",sans-serif;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .15s ease,border-color .15s ease,box-shadow .15s ease
+}
+
+.documentos-limpar-filtros:hover,.documentos-limpar-filtros:focus-visible {
+  border-color: var(--gov-blue);
+  background: var(--gov-blue-bg);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--gov-blue-bg)
 }
 
 .documentos-exportar-filtro {
@@ -1934,7 +1965,7 @@ ficam numa única linha (evita o "flex-wrap" quebrar de forma imprevisível). */
     grid-template-columns: 1fr 1fr
   }
 
-  .documentos-exportar-campo {
+  .documentos-limpar-campo,.documentos-exportar-campo {
     grid-column: 1/-1
   }
 }
@@ -1944,7 +1975,7 @@ ficam numa única linha (evita o "flex-wrap" quebrar de forma imprevisível). */
     grid-template-columns: 1fr
   }
 
-  .documentos-exportar-campo {
+  .documentos-limpar-campo,.documentos-exportar-campo {
     grid-column: auto
   }
 }
@@ -3397,9 +3428,15 @@ button.export-docs:hover,button.export-docs:focus-visible {
   display: grid;
   grid-template-columns: repeat(3,minmax(0,1fr));
   gap: 14px;
-  margin: 22px 0 18px;
-  padding-bottom: 20px;
+  margin: 22px 0 12px;
+  padding-bottom: 12px;
   border-bottom: 1px solid var(--border);
+}
+
+.cadastro-modo:has(+ #cadastro-documento-form.oculto + #cadastro-reuniao-form.oculto) {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: 0
 }
 
 .cadastro-modo-btn {
@@ -3407,8 +3444,8 @@ button.export-docs:hover,button.export-docs:focus-visible {
   align-items: flex-start;
   gap: 12px;
   min-width: 0;
-  min-height: 116px;
-  padding: 18px;
+  min-height: 100px;
+  padding: 16px 18px;
   border: 1px solid var(--border);
   border-radius: 12px;
   background: #fff;
@@ -3446,17 +3483,17 @@ button.export-docs:hover,button.export-docs:focus-visible {
 
 .cadastro-modo-btn strong {
   color: var(--gov-blue-dark);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 1.35;
 }
 
 .cadastro-modo-btn small {
-  margin-top: 7px;
+  margin-top: 6px;
   color: rgba(92,102,117,.86);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
-  line-height: 1.45;
+  line-height: 1.4;
 }
 
 .cadastro-modo-numero {
@@ -3545,36 +3582,58 @@ button.export-docs:hover,button.export-docs:focus-visible {
 }
 
 .reunioes-calendario-toolbar {
+  position: relative;
   display: grid;
-  grid-template-columns: 38px auto 38px 1fr;
+  grid-template-columns: 42px 42px 1fr auto;
   align-items: center;
   gap: 8px;
+  min-height: 36px;
   margin-bottom: 12px;
 }
 
 .reunioes-calendario-toolbar h3 {
+  position: absolute;
+  left: 50%;
   min-width: 190px;
   margin: 0;
   color: var(--gov-blue-dark);
   font-size: 19px;
   text-align: center;
   text-transform: capitalize;
+  transform: translateX(-50%);
+}
+
+.reunioes-calendario-toolbar > button:nth-of-type(2) {
+  grid-column: 2
 }
 
 .reunioes-calendario-toolbar button {
-  height: 36px;
+  display: grid;
+  width: 42px;
+  height: 40px;
+  place-items: center;
+  padding: 0;
   border: 1px solid #B9CCE7;
   border-radius: 9px;
   background: #fff;
   color: var(--gov-blue);
-  font-size: 20px;
+  font-size: 24px;
+  line-height: 1;
   font-weight: 800;
   cursor: pointer;
 }
 
+.reunioes-calendario-toolbar > button:nth-of-type(-n+2) .system-icon {
+  width: 20px;
+  height: 20px;
+  flex-basis: 20px
+}
+
 .reunioes-calendario-toolbar .reunioes-calendario-hoje {
+  grid-column: 4;
   justify-self: end;
   width: auto;
+  height: 36px;
   padding: 0 16px;
   font-size: 12px;
 }
@@ -3582,10 +3641,12 @@ button.export-docs:hover,button.export-docs:focus-visible {
 .reunioes-calendario-legenda {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 12px 18px;
-  margin: 0 0 14px;
+  margin: 20px 0 10px;
   color: rgba(92,102,117,.82);
-  font-size: 11px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .reunioes-calendario-legenda span {
@@ -3595,8 +3656,8 @@ button.export-docs:hover,button.export-docs:focus-visible {
 }
 
 .reunioes-calendario-legenda i {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
 }
 
@@ -3619,7 +3680,7 @@ button.export-docs:hover,button.export-docs:focus-visible {
 }
 
 .reunioes-calendario-semana span {
-  padding: 9px 5px;
+  padding: 6px 5px;
   color: rgba(92,102,117,.78);
   font-size: 11px;
   font-weight: 600;
@@ -3634,8 +3695,8 @@ button.export-docs:hover,button.export-docs:focus-visible {
 
 .calendario-dia {
   min-width: 0;
-  min-height: 112px;
-  padding: 7px;
+  min-height: 82px;
+  padding: 5px;
   border: 0;
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
@@ -3652,8 +3713,8 @@ button.export-docs:hover,button.export-docs:focus-visible {
 .calendario-dia.hoje .calendario-dia-numero {
   display: grid;
   place-items: center;
-  width: 25px;
-  height: 25px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: var(--gov-blue);
   color: #fff;
@@ -3665,7 +3726,7 @@ button.export-docs:hover,button.export-docs:focus-visible {
 
 .calendario-dia-numero {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 3px;
   font-size: 12px;
   font-weight: 600;
   opacity: .82;
@@ -3674,11 +3735,10 @@ button.export-docs:hover,button.export-docs:focus-visible {
 .calendario-evento {
   display: block;
   width: 100%;
-  margin-top: 4px;
-  padding: 5px 6px;
+  margin-top: 2px;
+  padding: 3px 9px;
   overflow: hidden;
   border: 0;
-  border-left: 3px solid var(--evento-cor);
   border-radius: 5px;
   background: color-mix(in srgb,var(--evento-cor) 11%,white);
   color: var(--gov-blue-dark);
@@ -3692,7 +3752,7 @@ button.export-docs:hover,button.export-docs:focus-visible {
 
 .calendario-eventos-restantes {
   display: block;
-  margin-top: 5px;
+  margin-top: 3px;
   color: rgba(19,81,180,.78);
   font-size: 10px;
   font-weight: 600;
@@ -3785,12 +3845,18 @@ button.export-docs:hover,button.export-docs:focus-visible {
   }
 
   .reunioes-calendario-toolbar {
-    grid-template-columns: 36px 1fr 36px;
+    grid-template-columns: 42px 1fr 42px;
   }
 
   .reunioes-calendario-toolbar h3 {
+    position: static;
     min-width: 0;
     font-size: 16px;
+    transform: none;
+  }
+
+  .reunioes-calendario-toolbar > button:nth-of-type(2) {
+    grid-column: auto
   }
 
   .reunioes-calendario-toolbar .reunioes-calendario-hoje {
@@ -4456,9 +4522,13 @@ button.export-docs:hover,button.export-docs:focus-visible {
 .minuta-escolha-filtros {
   display: grid;
   width: 100%;
-  grid-template-columns: minmax(220px,1.8fr) repeat(4,minmax(125px,1fr));
+  grid-template-columns: minmax(220px,1.8fr) repeat(4,minmax(125px,1fr)) minmax(125px,auto);
   gap: 14px;
   margin: 0;
+}
+
+.ata-limpar-campo,.reunioes-limpar-campo {
+  align-self: end;
 }
 
 .minuta-escolha-busca {
@@ -4495,13 +4565,17 @@ button.export-docs:hover,button.export-docs:focus-visible {
   border-radius: 0;
 }
 
-.ata-lista-cabecalho {
+.ata-lista-cabecalho,.minuta-reuniao-opcao {
   display: grid;
-  grid-template-columns: 120px 165px 350px 200px 64px;
-  column-gap: 40px;
+  grid-template-columns: 120px 165px minmax(260px,1fr) 200px 64px;
+  column-gap: clamp(20px,3vw,40px);
   align-items: center;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+.ata-lista-cabecalho {
   min-height: 45px;
-  padding: 0 20px;
   border: 1px solid var(--border);
   border-radius: 12px 12px 0 0;
   background: #FAFBFC;
@@ -4519,13 +4593,10 @@ button.export-docs:hover,button.export-docs:focus-visible {
 
 .minuta-reuniao-opcao {
   position: relative;
-  display: grid;
-  grid-template-columns: 120px 165px 350px 200px 64px;
-  column-gap: 40px;
-  align-items: start;
   width: 100%;
   min-height: 88px;
-  padding: 16px 20px;
+  padding-top: 16px;
+  padding-bottom: 16px;
   border: 0;
   border-bottom: 1px solid var(--border);
   border-radius: 0;
@@ -4663,8 +4734,40 @@ button.export-docs:hover,button.export-docs:focus-visible {
   width: min(440px,calc(100vw - 32px));
 }
 
+.exportar-ata-modal .modal-head {
+  align-items: center;
+}
+
+.exportar-ata-modal .modal-head h3 {
+  color: var(--title-color);
+  line-height: 1.25;
+}
+
+.exportar-ata-modal .m-sub {
+  margin-top: 2px;
+  color: var(--subtitle-color);
+}
+
+.exportar-ata-opcoes {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 12px;
+  align-items: stretch;
+  margin-top: 18px;
+}
+
 .exportar-ata-opcoes button {
+  width: 100%;
   min-height: 46px;
+  margin: 0;
+  padding: 12px 16px;
+  line-height: 20px;
+}
+
+@media(max-width:480px) {
+  .exportar-ata-opcoes {
+    grid-template-columns: 1fr;
+  }
 }
 
 #exportar-ata-modal-overlay {
@@ -5320,8 +5423,23 @@ button.export-docs:hover,button.export-docs:focus-visible {
   min-width: 0;
 }
 
+.reunioes-blocos.modo-calendario .reunioes-filtros-card {
+  position: relative;
+  z-index: 1;
+  border-bottom: 0;
+  border-radius: var(--radius) var(--radius) 0 0;
+  box-shadow: 0 5px 14px rgba(15,35,70,.035)
+}
+
+.reunioes-blocos.modo-calendario .reunioes-calendario-card {
+  margin-top: -16px;
+  padding-top: 18px;
+  border-radius: 0 0 var(--radius) var(--radius);
+  box-shadow: 0 8px 22px rgba(15,35,70,.05)
+}
+
 .reunioes-filtros {
-  grid-template-columns: minmax(220px,1.8fr) repeat(3,minmax(130px,1fr)) auto;
+  grid-template-columns: minmax(220px,1.8fr) repeat(3,minmax(130px,1fr)) minmax(125px,auto) auto;
   margin: 0;
 }
 
@@ -6580,10 +6698,8 @@ button.export-docs:hover,button.export-docs:focus-visible {
 }
 
 .dashboard-indicador.documentos,
-.dashboard-indicador.documentos-vencidos {
-  grid-column: span 3;
-}
-
+.dashboard-indicador.documentos-vencidos,
+.dashboard-indicador.documentos-sem-normativo,
 .dashboard-indicador.reunioes,
 .dashboard-indicador.minutas,
 .dashboard-indicador.pendencias {
@@ -6616,6 +6732,14 @@ button.export-docs:hover,button.export-docs:focus-visible {
 
 .dashboard-indicador.documentos-vencidos strong {
   color: #A32020
+}
+
+.dashboard-indicador.documentos-sem-normativo {
+  --indicador-cor: #64748B
+}
+
+.dashboard-indicador.documentos-sem-normativo strong {
+  color: #475569
 }
 
 .dashboard-indicador.minutas {
@@ -6986,6 +7110,11 @@ button.export-docs:hover,button.export-docs:focus-visible {
   color: #855A00
 }
 
+.dashboard-lista-item em.sem-normativo {
+  background: #EEF2F6;
+  color: #475569
+}
+
 .dashboard-lista-item em.completa {
   background: #E5F6EC;
   color: #176636
@@ -7123,6 +7252,7 @@ button.export-docs:hover,button.export-docs:focus-visible {
 
   .dashboard-indicador.documentos,
   .dashboard-indicador.documentos-vencidos,
+  .dashboard-indicador.documentos-sem-normativo,
   .dashboard-indicador.reunioes,
   .dashboard-indicador.minutas,
   .dashboard-indicador.pendencias {
@@ -7667,6 +7797,69 @@ th, .ledger-head, .ledger-head>div, .reunioes-tabela-head, .reunioes-tabela-head
   line-height: var(--app-caption-line);
 }
 
+/* Identidade cromática global de títulos e subtítulos */
+h1,h2,h3,h4,h5,h6,
+.documentos-setor-card-head strong,.documento-unidade-opcao>strong,
+.documento-unidade-identificacao>strong,.reuniao-tipo-btn strong,
+.reunioes-vazio b,.empty b,.documentos-setores-vazio strong,
+.editor-minuta-final .ata-titulo,
+.dashboard-kicker,.form-block-title,.unidade-secao-titulo,
+.documentos-seletor-unidades .form-block-title,
+.documentos-setores-head>span,.documentos-breadcrumb,.sobre-kicker,
+.ata-lista-cabecalho,.ata-lista-cabecalho>*,.reunioes-tabela-head,
+.reunioes-tabela-head>*,.documentos-acompanhamento .ledger-head,
+.documentos-lista-card .ledger-head,.ledger-head,.ledger-head>*,
+.reuniao-item-label,.membro-fixo label,.minuta-secao-apoio,
+.resumo-tabhead,.resumo-tabhead>*,.resumo-label,
+.relatorio-filtros label,.relatorio-campos-titulo,
+.relatorio-secao-head h4,.estado-codigo,th,thead td,legend,
+.modal-head h3,.toolbar-label,.minuta-escolha-busca>label,
+.documentos-filtros-titulo,.documentos-filtros-titulo>*,
+.participantes-subtitulo,.cadastro-modo-btn strong,
+.cadastro-modo-btn .cadastro-modo-titulo {
+  color: var(--title-color) !important;
+}
+
+.dashboard-cabecalho p,.dashboard-subtitulo,.panel .desc,
+.documentos-setores-head p,.documentos-contexto-bloco p,
+.documentos-bloco-head p,.dashboard-card-head p,.sobre-intro p,
+.sobre-bloco p,.sobre-status>.desc,.estado-card p,.modal .m-sub,
+.hint,.minutas-historico-head p,.relatorio-intro,
+.relatorio-secao-head small,.documentos-setores-vazio span,
+.documento-unidade-opcao>span,.documento-unidade-opcao>small,
+.documento-unidade-identificacao>span,.documentos-setor-card-head span,
+.minuta-historico-item p,.minuta-historico-item small,
+.minuta-reuniao-data small,.ata-reuniao-pauta,
+.dashboard-atualizacao,.dashboard-indicador small,.dashboard-anel span,
+.dashboard-lista-item span,.documentos-setor-card-head>em,
+.documentos-subunidades button small,.doc-sei,
+.doc-responsavel .responsavel-setor,.reuniao-periodicidade,
+.reuniao-formato,.relatorio-vazio,.participantes-lista:empty::after {
+  color: var(--subtitle-color);
+}
+
+/* Cor uniforme em todas as tabelas e listagens tabulares */
+table,thead,tbody,tr,th,td,
+.ledger-head,.ledger-head>div,.row,
+.doc-name,.doc-responsavel,.doc-responsavel .responsavel-nome,
+.doc-type,.doc-date,.doc-updated,
+.reunioes-tabela-head,.reunioes-tabela-head>div,.reuniao-item,
+.reuniao-data,.reuniao-data strong,.reuniao-frequencia,
+.reuniao-celula,.reuniao-link-celula,
+.ata-lista-cabecalho,.ata-lista-cabecalho>span,
+.minuta-reuniao-opcao,.minuta-reuniao-data strong,
+.minuta-reuniao-conteudo strong,.ata-reuniao-pauta,
+.relatorio-registro,.relatorio-registro strong {
+  color: var(--title-color);
+}
+
+.doc-sei,.doc-responsavel .responsavel-setor,
+.doc-responsavel .sem-responsavel,
+.minuta-reuniao-data small,.reuniao-periodicidade,
+.reuniao-formato,.relatorio-registro small {
+  color: var(--subtitle-color);
+}
+
 .editor-texto .texto-maior {
   font-size: var(--type-body-size);
   line-height: var(--type-body-line);
@@ -7735,10 +7928,13 @@ th, .ledger-head, .ledger-head>div, .reunioes-tabela-head, .reunioes-tabela-head
 
     <div class="dashboard-indicadores">
       <button class="dashboard-indicador documentos" type="button" onclick="setTab('acompanhamento')">
-        <span>Documentos</span><strong id="dashboard-total-documentos">0</strong><small id="dashboard-documentos-detalhe">Acompanhe prazos e responsáveis</small>
+        <span>Documentos</span><strong id="dashboard-total-documentos">0</strong><small id="dashboard-documentos-detalhe">Acompanhe prazos</small>
       </button>
       <button class="dashboard-indicador documentos-vencidos" type="button" onclick="setTab('acompanhamento')">
         <span>Documentos vencidos</span><strong id="dashboard-total-documentos-vencidos">0</strong><small>Exigem atenção</small>
+      </button>
+      <button class="dashboard-indicador documentos-sem-normativo" type="button" onclick="abrirDocumentosSemNormativo()">
+        <span>Sem normativo</span><strong id="dashboard-total-documentos-sem-normativo">0</strong><small>Documentos cadastrados</small>
       </button>
       <button class="dashboard-indicador reunioes" type="button" onclick="setTab('reunioes')">
         <span>Reuniões</span><strong id="dashboard-total-reunioes">0</strong><small id="dashboard-reunioes-detalhe">Nenhuma reunião</small>
@@ -7766,7 +7962,7 @@ th, .ledger-head, .ledger-head>div, .reunioes-tabela-head, .reunioes-tabela-head
       </section>
 
       <section class="dashboard-card dashboard-documentos-atencao-card">
-        <div class="dashboard-card-head"><div><h3>Documentos que exigem atenção</h3><p>Vencidos ou próximos do vencimento</p></div><button type="button" onclick="setTab('acompanhamento')">Abrir lista</button></div>
+        <div class="dashboard-card-head"><div><h3>Documentos que exigem atenção</h3><p>Vencidos, próximos do vencimento ou sem normativo</p></div><button type="button" onclick="abrirDocumentosAtencao()">Abrir lista</button></div>
         <div class="dashboard-lista" id="dashboard-documentos-atencao"></div>
       </section>
 
@@ -7817,14 +8013,6 @@ th, .ledger-head, .ledger-head>div, .reunioes-tabela-head, .reunioes-tabela-head
       </div>
 
       <div class="panel documentos-filtros-bloco">
-        <div class="documentos-bloco-head">
-          <div>
-            <div class="documentos-filtros-titulo">
-              <h3>Filtros</h3>
-            </div>
-            <p>Refine os documentos da unidade selecionada.</p>
-          </div>
-        </div>
     <div class="toolbar">
       <div class="toolbar-field">
         <label class="toolbar-label" for="busca-nome">Buscar</label>
@@ -7837,6 +8025,7 @@ th, .ledger-head, .ledger-head>div, .reunioes-tabela-head, .reunioes-tabela-head
         <label class="toolbar-label" for="filtro-status">Status</label>
         <select id="filtro-status" class="filtro-status" onchange="render()">
           <option value="todos">Todos</option>
+          <option value="atencao">Exigem atenção</option>
           <option value="Vigente">Vigente</option>
           <option value="Alerta">A vencer</option>
           <option value="Vencido">Vencido</option>
@@ -7870,6 +8059,10 @@ th, .ledger-head, .ledger-head>div, .reunioes-tabela-head, .reunioes-tabela-head
           <option value="20">20</option>
           <option value="50">50</option>
         </select>
+      </div>
+
+      <div class="toolbar-field documentos-limpar-campo">
+        <button class="documentos-limpar-filtros" type="button" onclick="limparFiltrosDocumentos()">Limpar filtros</button>
       </div>
 
       <div class="toolbar-field documentos-exportar-campo">
@@ -8086,12 +8279,12 @@ th, .ledger-head, .ledger-head>div, .reunioes-tabela-head, .reunioes-tabela-head
 
   <!-- VIEW: REUNIÕES -->
   <div class="view" id="view-reunioes">
-    <div class="reunioes-blocos">
+    <div class="reunioes-blocos modo-calendario">
       <section class="panel reunioes-intro-card" aria-labelledby="reunioes-lista-titulo">
         <div><h2 id="reunioes-lista-titulo">Reuniões cadastradas</h2><div class="desc">Histórico e agenda de reuniões</div></div>
         <div class="reunioes-visualizacao" role="group" aria-label="Modo de visualização">
-          <button id="reunioes-modo-lista" class="active" type="button" onclick="alterarVisualizacaoReunioes('lista')">Lista</button>
-          <button id="reunioes-modo-calendario" type="button" onclick="alterarVisualizacaoReunioes('calendario')">Calendário</button>
+          <button id="reunioes-modo-calendario" class="active" type="button" onclick="alterarVisualizacaoReunioes('calendario')">Calendário</button>
+          <button id="reunioes-modo-lista" type="button" onclick="alterarVisualizacaoReunioes('lista')">Lista</button>
         </div>
       </section>
       <section class="panel reunioes-filtros-card" aria-label="Filtros de reuniões">
@@ -8118,13 +8311,16 @@ th, .ledger-head, .ledger-head>div, .reunioes-tabela-head, .reunioes-tabela-head
               <option value="10">10</option><option value="20">20</option><option value="50">50</option>
             </select>
           </div>
+          <div class="toolbar-field reunioes-limpar-campo">
+            <button class="documentos-limpar-filtros" type="button" onclick="limparFiltrosReunioes()">Limpar filtros</button>
+          </div>
           <div class="toolbar-field toolbar-action reunioes-exportar-campo">
             <span class="toolbar-label toolbar-label-spacer">Ação</span>
             <button class="documentos-exportar-filtro" type="button" onclick="exportarRelatorioReunioes()"><span class="export-icon system-icon system-icon-output" aria-hidden="true"></span>Exportar relatório</button>
           </div>
         </div>
       </section>
-      <section class="panel reunioes-lista-card" id="reunioes-visualizacao-lista" aria-labelledby="reunioes-lista-titulo">
+      <section class="panel reunioes-lista-card" id="reunioes-visualizacao-lista" aria-labelledby="reunioes-lista-titulo" hidden>
         <div class="reunioes-tabela">
           <div class="reunioes-tabela-head">
             <div class="selecao-coluna"><input id="selecionar-reunioes-visiveis" type="checkbox" onchange="selecionarTodasReunioesVisiveis(this.checked)" aria-label="Selecionar todas as reuniões visíveis"></div>
@@ -8143,18 +8339,18 @@ th, .ledger-head, .ledger-head>div, .reunioes-tabela-head, .reunioes-tabela-head
           <div id="reunioes-paginacao" class="paginacao reunioes-paginacao"></div>
         </div>
       </section>
-      <section class="panel reunioes-calendario-card" id="reunioes-visualizacao-calendario" aria-label="Calendário de reuniões" hidden>
+      <section class="panel reunioes-calendario-card" id="reunioes-visualizacao-calendario" aria-label="Calendário de reuniões">
         <div class="reunioes-calendario-toolbar">
-          <button type="button" onclick="navegarCalendarioReunioes(-1)" aria-label="Mês anterior">‹</button>
+          <button type="button" onclick="navegarCalendarioReunioes(-1)" aria-label="Mês anterior"><span class="system-icon system-icon-chevron-back" aria-hidden="true"></span></button>
           <h3 id="reunioes-calendario-titulo"></h3>
-          <button type="button" onclick="navegarCalendarioReunioes(1)" aria-label="Próximo mês">›</button>
+          <button type="button" onclick="navegarCalendarioReunioes(1)" aria-label="Próximo mês"><span class="system-icon system-icon-chevron-forward" aria-hidden="true"></span></button>
           <button class="reunioes-calendario-hoje" type="button" onclick="irHojeCalendarioReunioes()">Hoje</button>
-        </div>
-        <div class="reunioes-calendario-legenda" aria-label="Legenda">
-          <span><i class="agendada"></i>Agendada</span><span><i class="reagendada"></i>Reagendada</span><span><i class="concluida"></i>Concluída</span><span><i class="cancelada"></i>Cancelada</span>
         </div>
         <div class="reunioes-calendario-semana" aria-hidden="true"><span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span></div>
         <div class="reunioes-calendario-grade" id="reunioes-calendario-grade"></div>
+        <div class="reunioes-calendario-legenda" aria-label="Legenda">
+          <span><i class="agendada"></i>Agendada</span><span><i class="reagendada"></i>Reagendada</span><span><i class="concluida"></i>Concluída</span><span><i class="cancelada"></i>Cancelada</span>
+        </div>
         <div class="reunioes-calendario-agenda" id="reunioes-calendario-agenda"></div>
       </section>
     </div>
@@ -8197,6 +8393,9 @@ th, .ledger-head, .ledger-head>div, .reunioes-tabela-head, .reunioes-tabela-head
               <option value="20">20</option>
               <option value="50">50</option>
             </select>
+          </div>
+          <div class="minuta-escolha-busca ata-limpar-campo">
+            <button class="documentos-limpar-filtros" type="button" onclick="limparFiltrosAtas()">Limpar filtros</button>
           </div>
         </div>
       </section>
@@ -9826,6 +10025,36 @@ function abrirUnidadeDocumentos(codigo){
   render();
 }
 
+function abrirDocumentosAtencao(){
+  setTab('acompanhamento');
+  const filtros={
+    'busca-nome':'',
+    'filtro-status':'atencao',
+    'filtro-tipo':'',
+    'filtro-ano':''
+  };
+  Object.entries(filtros).forEach(([id,valor])=>{
+    const campo=document.getElementById(id);
+    if(campo) campo.value=valor;
+  });
+  abrirUnidadeDocumentos('SETOR:TODAS');
+}
+
+function abrirDocumentosSemNormativo(){
+  setTab('acompanhamento');
+  const filtros={
+    'busca-nome':'',
+    'filtro-status':'todos',
+    'filtro-tipo':'Sem normativo',
+    'filtro-ano':''
+  };
+  Object.entries(filtros).forEach(([id,valor])=>{
+    const campo=document.getElementById(id);
+    if(campo) campo.value=valor;
+  });
+  abrirUnidadeDocumentos('SETOR:TODAS');
+}
+
 function definirContextoDocumentos(){
   const contexto=localizarUnidadeDocumento(unidadeSelecionadaDocumentos);
   if(!contexto) return;
@@ -10179,7 +10408,11 @@ function render(){
   let visiveis = unidadeSelecionadaDocumentos
     ? withStatus.filter(documentoPertenceUnidadeSelecionada)
     : withStatus;
-  visiveis = statusSelecionado==='todos' ? visiveis : visiveis.filter(d=>d.status===statusSelecionado);
+  visiveis = statusSelecionado==='todos'
+    ? visiveis
+    : statusSelecionado==='atencao'
+      ? visiveis.filter(d=>['Alerta','Vencido'].includes(d.status) || d.semNormativo || d.tipo==='Sem normativo')
+      : visiveis.filter(d=>d.status===statusSelecionado);
   if(buscaTexto) visiveis = visiveis.filter(d => d.nome.toLowerCase().includes(buscaTexto));
   if(tipoSelecionado) visiveis = visiveis.filter(d => d.tipo === tipoSelecionado);
   if(anoSelecionado) visiveis = visiveis.filter(d => (d.dataVigencia || d.dataCriacao || d.data || '').slice(0,4) === anoSelecionado);
@@ -10298,6 +10531,22 @@ function alterarItensPorPagina(valor){
   render();
 }
 
+function limparFiltrosDocumentos(){
+  const filtros={
+    'busca-nome':'',
+    'filtro-status':'todos',
+    'filtro-tipo':'',
+    'filtro-ano':''
+  };
+  Object.entries(filtros).forEach(([id,valor])=>{
+    const campo=document.getElementById(id);
+    if(campo) campo.value=valor;
+  });
+  paginaAtual=1;
+  filtrosAnteriores='';
+  render();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const seletor = document.getElementById('itens-por-pagina');
   if(seletor) seletor.value = String(ITENS_POR_PAGINA);
@@ -10331,7 +10580,9 @@ function obterDocumentosVisiveis(){
     : withStatus;
   visiveis = statusSelecionado === 'todos'
     ? visiveis
-    : visiveis.filter(d => d.status === statusSelecionado);
+    : statusSelecionado === 'atencao'
+      ? visiveis.filter(d => ['Alerta','Vencido'].includes(d.status) || d.semNormativo || d.tipo === 'Sem normativo')
+      : visiveis.filter(d => d.status === statusSelecionado);
 
   if(buscaTexto) visiveis = visiveis.filter(d => d.nome.toLowerCase().includes(buscaTexto));
   if(tipoSelecionado) visiveis = visiveis.filter(d => d.tipo === tipoSelecionado);
@@ -11846,12 +12097,13 @@ function confirmarExclusaoReuniao(){
 <script data-source="js/reunioes/listagem.js">
 /* ===== LISTAGEM, FILTROS E PAGINAÇÃO DE REUNIÕES ===== */
 
-let visualizacaoReunioes='lista';
+let visualizacaoReunioes='calendario';
 let calendarioReunioesMes=new Date(new Date().getFullYear(),new Date().getMonth(),1);
 let calendarioReunioesDia=todayStr();
 
 function alterarVisualizacaoReunioes(modo){
   visualizacaoReunioes=modo==='calendario'?'calendario':'lista';
+  document.querySelector('.reunioes-blocos')?.classList.toggle('modo-calendario',visualizacaoReunioes==='calendario');
   document.getElementById('reunioes-visualizacao-lista').hidden=visualizacaoReunioes!=='lista';
   document.getElementById('reunioes-visualizacao-calendario').hidden=visualizacaoReunioes!=='calendario';
   document.getElementById('reunioes-modo-lista')?.classList.toggle('active',visualizacaoReunioes==='lista');
@@ -11886,8 +12138,8 @@ function renderCalendarioReunioes(){
     if(data.getMonth()!==calendarioReunioesMes.getMonth())classes.push('fora-mes');
     if(chave===hoje)classes.push('hoje');
     if(chave===calendarioReunioesDia)classes.push('selecionado');
-    const eventosHtml=eventos.slice(0,3).map(reuniao=>`<button class="calendario-evento ${classeSituacaoCalendario(reuniao)}" type="button" onclick="event.stopPropagation();verResumoReuniao('${reuniao.id}')" title="${escapeHtml(`${reuniao.horario||''} · ${reuniao.frequencia||''} · ${reuniao.pauta||'Sem pauta'}`)}"><strong>${escapeHtml(reuniao.horario||'--:--')}</strong> ${escapeHtml(reuniao.frequencia||'Reunião')}</button>`).join('');
-    dias.push(`<div class="${classes.join(' ')}" role="button" tabindex="0" onclick="selecionarDiaCalendarioReunioes('${chave}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selecionarDiaCalendarioReunioes('${chave}')}" aria-label="${data.toLocaleDateString('pt-BR',{day:'numeric',month:'long'})}, ${eventos.length} reunião${eventos.length===1?'':'ões'}"><span class="calendario-dia-numero">${data.getDate()}</span>${eventosHtml}${eventos.length>3?`<span class="calendario-eventos-restantes">+${eventos.length-3} reunião${eventos.length-3===1?'':'ões'}</span>`:''}</div>`);
+    const eventosHtml=eventos.slice(0,2).map(reuniao=>`<button class="calendario-evento ${classeSituacaoCalendario(reuniao)}" type="button" onclick="event.stopPropagation();verResumoReuniao('${reuniao.id}')" title="${escapeHtml(`${reuniao.horario||''} · ${reuniao.frequencia||''} · ${reuniao.pauta||'Sem pauta'}`)}"><strong>${escapeHtml(reuniao.horario||'--:--')}</strong> ${escapeHtml(reuniao.frequencia||'Reunião')}</button>`).join('');
+    dias.push(`<div class="${classes.join(' ')}" role="button" tabindex="0" onclick="selecionarDiaCalendarioReunioes('${chave}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selecionarDiaCalendarioReunioes('${chave}')}" aria-label="${data.toLocaleDateString('pt-BR',{day:'numeric',month:'long'})}, ${eventos.length} reunião${eventos.length===1?'':'ões'}"><span class="calendario-dia-numero">${data.getDate()}</span>${eventosHtml}${eventos.length>2?`<span class="calendario-eventos-restantes">+${eventos.length-2} reunião${eventos.length-2===1?'':'ões'}</span>`:''}</div>`);
   }
   grade.innerHTML=dias.join('');
   renderAgendaDiaCalendario(porData[calendarioReunioesDia]||[]);
@@ -12059,8 +12311,7 @@ function renderEscolhaReuniaoMinuta(){
     const acao = minutaExistente ? `abrirMinutaHistorico('${minutaExistente.id}')` : `abrirMinutaReuniao('${item.id}')`;
     const menu = minutaExistente
       ? `<button type="button" onclick="abrirMinutaHistorico('${minutaExistente.id}')">Editar ata</button>
-         <button class="export-pdf" type="button" onclick="baixarMinutaHistorico('${minutaExistente.id}','pdf')">Baixar PDF</button>
-         <button class="export-docs" type="button" onclick="baixarMinutaHistorico('${minutaExistente.id}','word')">Baixar Word / Docs</button>
+         <button type="button" onclick="abrirModalExportarAta('${minutaExistente.id}')">Exportar</button>
          <div class="divider"></div><button class="del" type="button" onclick="excluirMinutaHistorico('${minutaExistente.id}')">Excluir ata</button>`
       : `<button type="button" onclick="abrirMinutaReuniao('${item.id}')">Gerar ata</button>`;
     return `<div class="minuta-reuniao-opcao${minutaExistente ? ' com-minuta' : ''}" role="button" tabindex="0" onclick="${acao}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();${acao}}">
@@ -12077,6 +12328,14 @@ function renderEscolhaReuniaoMinuta(){
 function filtrarAtas(){
   paginaAtas=1;
   renderEscolhaReuniaoMinuta();
+}
+
+function limparFiltrosAtas(){
+  ['minuta-busca-reuniao','minuta-filtro-ano','minuta-filtro-unidade','ata-filtro-situacao'].forEach(id=>{
+    const campo=document.getElementById(id);
+    if(campo) campo.value='';
+  });
+  filtrarAtas();
 }
 
 function alterarItensAtas(valor){
@@ -12215,6 +12474,14 @@ function filtrarReunioes(){
   renderReunioes();
 }
 
+function limparFiltrosReunioes(){
+  ['reuniao-busca','reuniao-filtro-tipo','reuniao-filtro-ano'].forEach(id=>{
+    const campo=document.getElementById(id);
+    if(campo) campo.value='';
+  });
+  filtrarReunioes();
+}
+
 function alterarItensReunioes(valor){
   const quantidade = Number(valor);
   if(![10,20,50].includes(quantidade)) return;
@@ -12268,7 +12535,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 <script data-source="js/relatorios.js">
 /* ===== CONFIGURADOR DE RELATÓRIOS ===== */
 const RELATORIO_CAMPOS_DOCUMENTOS=[['setorPai','Setor'],['unidade','Unidade escolhida'],['nome','Documento'],['tipo','Tipo'],['baseLegal','Fundamentação legal'],['sei','Nº SEI'],['dataVigencia','Data de vigência'],['validade','Prazo de validade'],['data','Vencimento'],['status','Situação'],['ultimaAtualizacao','Última atualização'],['gestorNome','Gestor responsável'],['gestorSetor','Setor do gestor'],['gestorEmail','E-mail do gestor'],['gestorWhatsapp','WhatsApp do gestor'],['descricao','Descrição']];
-const RELATORIO_CAMPOS_REUNIOES=[['data','Data'],['horario','Horário'],['frequencia','Unidade'],['periodicidade','Periodicidade'],['formato','Formato'],['situacao','Situação'],['link','Link'],['pauta','Pauta'],['membros','Membros'],['convidados','Convidados'],['resumo','Resumo'],['minuta','Situação da ata']];
+const RELATORIO_CAMPOS_REUNIOES=[['data','Data'],['horario','Horário'],['frequencia','Unidade'],['periodicidade','Periodicidade'],['formato','Formato'],['situacao','Situação'],['link','Link'],['pauta','Pauta'],['membros','Membros'],['convidados','Convidados'],['minuta','Situação da ata']];
 let relatorioSelecao={documentos:new Set(),reunioes:new Set()};
 let relatorioVisiveis={documentos:[],reunioes:[]};
 let relatorioFocoAnterior=null;
@@ -12294,7 +12561,7 @@ function garantirModalRelatorio(){
   document.getElementById('relatorio-doc-ano').innerHTML=opcoesRelatorio([...new Set(docs.map(item=>(item.dataVigencia||item.dataCriacao||item.data||'').slice(0,4)).filter(Boolean))].sort((a,b)=>b.localeCompare(a)));
 }
 function secaoRelatorio(tipo,titulo,filtros,campos){return `<section class="relatorio-secao" id="relatorio-secao-${tipo}"><div class="relatorio-secao-head"><div><h4>Campos do relatório</h4><small>Marque somente as informações necessárias.</small></div><div class="relatorio-campos-acoes"><button type="button" onclick="marcarCamposRelatorio('${tipo}',true)">Selecionar todos</button><button type="button" onclick="marcarCamposRelatorio('${tipo}',false)">Limpar</button></div></div><div class="relatorio-campos">${camposRelatorio(tipo,campos)}</div></section>`;}
-function abrirRelatorio(origem='documentos'){
+function abrirRelatorio(origem='documentos', contexto=null){
   garantirModalRelatorio();relatorioFocoAnterior=document.activeElement;
   if(!relatorioSelecao[origem].size){toast(`Selecione ao menos um ${origem==='documentos'?'documento':'registro de reunião'} antes de exportar.`,'alerta');return;}
   relatorioOrigemAtual=origem;
@@ -12305,7 +12572,13 @@ function abrirRelatorio(origem='documentos'){
   const quantidade=relatorioSelecao[origem].size;
   const rotulo=origem==='documentos'?(quantidade===1?'documento':'documentos'):(quantidade===1?'reunião':'reuniões');
   document.getElementById('relatorio-titulo').textContent=`Exportar relatório de ${origem==='documentos'?'documentos':'reuniões'}`;
-  document.getElementById('relatorio-intro').innerHTML=`<strong>${quantidade} ${rotulo} selecionado${quantidade===1?'':'s'}.</strong> Escolha abaixo quais informações devem aparecer no arquivo.`;
+  const resumoPeriodo=quantidade===1
+    ? `A reunião de ${escapeHtml(contexto?.periodo)} será exportada.`
+    : `Todas as ${quantidade} reuniões de ${escapeHtml(contexto?.periodo)} serão exportadas.`;
+  const introducao=contexto?.periodo
+    ? `<strong>${resumoPeriodo}</strong> Escolha abaixo quais informações devem aparecer no arquivo.`
+    : `<strong>${quantidade} ${rotulo} selecionado${quantidade===1?'':'s'}.</strong> Escolha abaixo quais informações devem aparecer no arquivo.`;
+  document.getElementById('relatorio-intro').innerHTML=introducao;
   document.getElementById('relatorio-exportar-pdf').hidden=false;
   ['documentos','reunioes'].forEach(t=>{alternarFonteRelatorio(t);atualizarContadorRelatorio(t);});
   const overlay=document.getElementById('relatorio-modal-overlay');overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');overlay.querySelector('.relatorio-modal').focus();
@@ -12382,7 +12655,11 @@ function gerarRelatorioSelecionado(formato='csv'){
   });
   if(!total){toast('Marque ao menos um registro e um campo em uma das seções.','alerta');return;}
   if(formato==='pdf'){
-    gerarRelatorioPdf(cabecalhos,linhas,total,relatorioOrigemAtual);
+    if(relatorioOrigemAtual==='reunioes'){
+      const campos=[...document.querySelectorAll('[data-campo="reunioes"]:checked')].map(i=>i.value);
+      const itens=reunioes.filter(i=>relatorioSelecao.reunioes.has(i.id));
+      gerarRelatorioPdfReunioes(itens,campos);
+    }else gerarRelatorioPdf(cabecalhos,linhas,total,relatorioOrigemAtual);
     fecharRelatorio();return;
   }
   const escaparCsv=v=>{let texto=String(v??'');if(/^[=+@]/.test(texto))texto=`'${texto}`;return `"${texto.replace(/"/g,'""')}"`;};
@@ -12391,63 +12668,146 @@ function gerarRelatorioSelecionado(formato='csv'){
   link.href=url;link.download=`relatorio_${relatorioOrigemAtual}_${todayStr()}.csv`;document.body.appendChild(link);link.click();link.remove();URL.revokeObjectURL(url);fecharRelatorio();toast(`<b>Relatório CSV exportado</b> — ${total} registro${total===1?'':'s'}.`,'valido');
 }
 
+function gerarRelatorioPdfReunioes(itens,campos){
+  const JsPdf=window.jspdf?.jsPDF;
+  if(!JsPdf){toast('Não foi possível carregar o gerador de PDF.','vencido');return;}
+  const pdf=new JsPdf({orientation:'portrait',unit:'mm',format:'a4',compress:true});
+  const larguraPagina=210,margem=8,larguraUtil=larguraPagina-(margem*2),limitePagina=282,logo=obterLogoNormaDataUrl();
+  const selecionado=new Set(campos),azul=[28,65,108],cinza=[82,82,82],borda=[190,190,190],fundo=[242,242,242];
+  const texto=(valor,padrao='Não informado')=>String(valor||padrao);
+  let pagina=1,y=35;
+  function cabecalho(){
+    if(logo){try{pdf.addImage(logo,'PNG',margem,6,42,10);}catch(e){}}
+    else{pdf.setTextColor(...azul);pdf.setFontSize(15);pdf.setFont('helvetica','bold');pdf.text('NORMA',margem,14);}
+    pdf.setTextColor(35,35,35);pdf.setFontSize(14);pdf.setFont('helvetica','bold');pdf.text('Relatório de reuniões',margem,23);
+    pdf.setTextColor(...cinza);pdf.setFontSize(6.5);pdf.setFont('helvetica','normal');
+    pdf.text(`Emitido em ${new Date().toLocaleString('pt-BR')}`,margem,28);
+    pdf.text(`Página ${pagina}`,larguraPagina-margem,23,{align:'right'});
+    pdf.setDrawColor(160,160,160);pdf.setLineWidth(.25);pdf.line(margem,31,larguraPagina-margem,31);
+    pdf.text(`Página ${pagina}`,larguraPagina/2,291,{align:'center'});
+    y=35;
+  }
+  function novaPagina(){pdf.addPage('a4','portrait');pagina++;cabecalho();}
+  function linhasValor(valor,w,maximo=8){return pdf.splitTextToSize(texto(valor),w-4).slice(0,maximo);}
+  function alturaValor(valor,w,maximo=8){return Math.max(7,3+(linhasValor(valor,w,maximo).length*3.2));}
+  function secao(rotulo,valor,maximo=8){
+    const linhas=linhasValor(valor,larguraUtil,maximo),altura=Math.max(7,3+(linhas.length*3.2));
+    pdf.setFillColor(...fundo);pdf.setDrawColor(...borda);pdf.rect(margem,y,larguraUtil,6,'FD');
+    pdf.setTextColor(...cinza);pdf.setFontSize(7);pdf.setFont('helvetica','bold');pdf.text(rotulo,margem+2,y+4.1);y+=6;
+    pdf.setFillColor(255,255,255);pdf.rect(margem,y,larguraUtil,altura,'FD');
+    pdf.setTextColor(40,40,40);pdf.setFontSize(7);pdf.setFont('helvetica','normal');pdf.text(linhas,margem+2,y+4.4);y+=altura;
+  }
+  cabecalho();
+  itens.forEach(reuniao=>{
+    const unidade=unidadesPersonalizadas.find(u=>u.codigo===reuniao.frequencia)?.nome||reuniao.frequencia;
+    const membros=normalizarMembros(reuniao.membros,reuniao.frequencia).filter(m=>m.nome);
+    const convidados=normalizarParticipantes(reuniao.convidados??reuniao.participantes);
+    const participantes=membros.length+convidados.length;
+    const metas=[];
+    if(selecionado.has('data')||selecionado.has('horario'))metas.push(['Data e horário',[
+      selecionado.has('data')?(reuniao.data?fmtData(reuniao.data):'Data não informada'):'',
+      selecionado.has('horario')?(reuniao.horario?`às ${reuniao.horario}`:'Horário não informado'):''
+    ].filter(Boolean).join(' ')]);
+    if(selecionado.has('frequencia')||selecionado.has('periodicidade'))metas.push(['Unidade',[
+      selecionado.has('frequencia')?texto(unidade):'',
+      selecionado.has('periodicidade')?texto(FREQUENCIAS_REUNIAO[reuniao.frequencia],'Periodicidade não informada'):''
+    ].filter(Boolean).join(' · ')]);
+    if(selecionado.has('formato'))metas.push(['Formato',rotuloFormatoReuniao(reuniao.formato)]);
+    if(selecionado.has('situacao')||selecionado.has('minuta'))metas.push(['Situação',[
+      selecionado.has('situacao')?(typeof obterSituacaoReuniao==='function'?obterSituacaoReuniao(reuniao):texto(reuniao.situacao,'Agendada')):'',
+      selecionado.has('minuta')?(minutasHistorico.some(m=>m.reuniao?.id===reuniao.id)?'Ata gerada':'Sem ata'):''
+    ].filter(Boolean).join(' · ')]);
+    if(selecionado.has('link'))metas.push(['Acesso',reuniao.link||'Não informado']);
+    if(selecionado.has('membros')||selecionado.has('convidados'))metas.push(['Participação',`${participantes} ${participantes===1?'participante':'participantes'}`]);
+    const linhasMeta=[];for(let i=0;i<metas.length;i+=3)linhasMeta.push(metas.slice(i,i+3));
+    let alturaBloco=8;
+    linhasMeta.forEach(linha=>{const w=larguraUtil/linha.length;alturaBloco+=6+Math.max(...linha.map(([,valor])=>alturaValor(valor,w,3)));});
+    if(selecionado.has('pauta'))alturaBloco+=6+alturaValor(reuniao.pauta||'Nenhuma pauta cadastrada.',larguraUtil,8);
+    if(selecionado.has('membros'))alturaBloco+=6+alturaValor(membros.map(m=>`${m.nome} - ${m.cargo}`).join('\n')||'Nenhum membro informado.',larguraUtil,10);
+    if(selecionado.has('convidados'))alturaBloco+=6+alturaValor(convidados.join('\n')||'Nenhum convidado informado.',larguraUtil,10);
+    alturaBloco+=4;
+    if(y+alturaBloco>limitePagina)novaPagina();
+    pdf.setFillColor(211,225,242);pdf.setDrawColor(...borda);pdf.rect(margem,y,larguraUtil,8,'FD');
+    pdf.setTextColor(...azul);pdf.setFontSize(8);pdf.setFont('helvetica','bold');
+    pdf.text(`Reunião: ${texto(reuniao.pauta,'Sem pauta')}`,margem+2,y+5.3,{maxWidth:larguraUtil-4});y+=8;
+    linhasMeta.forEach(linha=>{
+      const w=larguraUtil/linha.length,altura=Math.max(...linha.map(([,valor])=>alturaValor(valor,w,3)));
+      linha.forEach(([rotulo],i)=>{pdf.setFillColor(230,230,230);pdf.setDrawColor(...borda);pdf.rect(margem+i*w,y,w,6,'FD');pdf.setTextColor(45,45,45);pdf.setFontSize(7);pdf.setFont('helvetica','bold');pdf.text(rotulo,margem+i*w+2,y+4.1);});y+=6;
+      linha.forEach(([,valor],i)=>{pdf.setFillColor(255,255,255);pdf.rect(margem+i*w,y,w,altura,'FD');pdf.setTextColor(40,40,40);pdf.setFontSize(7);pdf.setFont('helvetica','normal');pdf.text(linhasValor(valor,w,3),margem+i*w+2,y+4.3);});y+=altura;
+    });
+    if(selecionado.has('pauta'))secao('Pauta',reuniao.pauta||'Nenhuma pauta cadastrada.');
+    if(selecionado.has('membros'))secao('Membros da unidade',membros.map(m=>`${m.nome} - ${m.cargo}`).join('\n')||'Nenhum membro informado.',10);
+    if(selecionado.has('convidados'))secao('Convidados',convidados.join('\n')||'Nenhum convidado informado.',10);
+    y+=4;
+  });
+  pdf.save(`relatorio_norma_reunioes_${todayStr()}.pdf`);
+  toast(`<b>PDF Norma exportado</b> — ${itens.length} reunião${itens.length===1?'':'ões'}.`,'valido');
+}
+
 function gerarRelatorioPdf(cabecalhos,linhas,total,tipo='documentos'){
   const JsPdf=window.jspdf?.jsPDF;
   if(!JsPdf){toast('Não foi possível carregar o gerador de PDF.','vencido');return;}
-  const pdf=new JsPdf({orientation:'landscape',unit:'mm',format:'a4',compress:true});
-  const larguraPagina=297,margem=10,larguraUtil=larguraPagina-(margem*2),alturaLimite=196;
-  const colunas=4,espaco=2,larguraCelula=(larguraUtil-(espaco*(colunas-1)))/colunas;
-  const emitido=new Date().toLocaleString('pt-BR');
-  const logo=obterLogoNormaDataUrl();
-  const reunioesRelatorio=tipo==='reunioes';
-  const tituloRelatorio=reunioesRelatorio?'Relatório de reuniões':'Relatório de documentos';
-  const rotuloRegistro=reunioesRelatorio?'Reunião':'Documento';
-  let pagina=1,y=0;
+  const pdf=new JsPdf({orientation:'portrait',unit:'mm',format:'a4',compress:true});
+  const larguraPagina=210,margem=8,larguraUtil=194,limitePagina=282,logo=obterLogoNormaDataUrl();
+  const azul=[28,65,108],cinza=[82,82,82],borda=[190,190,190],fundo=[242,242,242];
+  let pagina=1,y=35;
   function cabecalhoPagina(){
-    if(logo){try{pdf.addImage(logo,'PNG',margem,7,46,11);}catch(e){}}
-    else{pdf.setTextColor(12,50,111);pdf.setFontSize(16);pdf.setFont('helvetica','bold');pdf.text('NORMA',margem,16);}
-    pdf.setTextColor(12,50,111);pdf.setFontSize(14);pdf.setFont('helvetica','bold');pdf.text(tituloRelatorio,margem,27);
-    pdf.setTextColor(92,102,117);pdf.setFontSize(7);pdf.setFont('helvetica','normal');pdf.text(`${total} registro${total===1?'':'s'} · Emitido em ${emitido}`,margem,32);
-    pdf.setDrawColor(12,50,111);pdf.setLineWidth(.7);pdf.line(margem,35,larguraPagina-margem,35);
-    y=40;
+    if(logo){try{pdf.addImage(logo,'PNG',margem,6,42,10);}catch(e){}}
+    else{pdf.setTextColor(...azul);pdf.setFontSize(15);pdf.setFont('helvetica','bold');pdf.text('NORMA',margem,14);}
+    pdf.setTextColor(35,35,35);pdf.setFontSize(14);pdf.setFont('helvetica','bold');pdf.text('Relatório de documentos',margem,23);
+    pdf.setTextColor(...cinza);pdf.setFontSize(6.5);pdf.setFont('helvetica','normal');pdf.text(`Emitido em ${new Date().toLocaleString('pt-BR')}`,margem,28);
+    pdf.text(`Página ${pagina}`,larguraPagina-margem,23,{align:'right'});pdf.text(`Página ${pagina}`,larguraPagina/2,291,{align:'center'});
+    pdf.setDrawColor(160,160,160);pdf.setLineWidth(.25);pdf.line(margem,31,larguraPagina-margem,31);y=35;
   }
-  function rodapePagina(){pdf.setTextColor(92,102,117);pdf.setFontSize(6);pdf.text(`Norma · Página ${pagina}`,larguraPagina-margem,204,{align:'right'});}
-  function novaPagina(){rodapePagina();pdf.addPage('a4','landscape');pagina++;cabecalhoPagina();}
+  function novaPagina(){pdf.addPage('a4','portrait');pagina++;cabecalhoPagina();}
+  function linhasValor(valor,w,maximo=8){return pdf.splitTextToSize(String(valor||'—'),w-4).slice(0,maximo);}
+  function alturaValor(valor,w,maximo=8){return Math.max(7,3+(linhasValor(valor,w,maximo).length*3.2));}
+  function desenharSecao(rotulo,valor){
+    const linhasTexto=linhasValor(valor,larguraUtil,10),altura=Math.max(7,3+(linhasTexto.length*3.2));
+    pdf.setFillColor(...fundo);pdf.setDrawColor(...borda);pdf.rect(margem,y,larguraUtil,6,'FD');
+    pdf.setTextColor(...cinza);pdf.setFontSize(7);pdf.setFont('helvetica','bold');pdf.text(rotulo,margem+2,y+4.1);y+=6;
+    pdf.setFillColor(255,255,255);pdf.rect(margem,y,larguraUtil,altura,'FD');pdf.setTextColor(40,40,40);pdf.setFont('helvetica','normal');pdf.text(linhasTexto,margem+2,y+4.4);y+=altura;
+  }
   cabecalhoPagina();
   linhas.forEach((linha,indiceLinha)=>{
-    const indiceNome=cabecalhos.findIndex(item=>item===(reunioesRelatorio?'Pauta':'Documento'));
-    const nome=indiceNome>=0?linha[indiceNome]:`${rotuloRegistro} ${indiceLinha+1}`;
-    const campos=cabecalhos.map((rotulo,indice)=>({rotulo,valor:linha[indice]})).filter((_,indice)=>indice!==indiceNome);
+    const indiceNome=cabecalhos.indexOf('Documento'),indiceDescricao=cabecalhos.indexOf('Descrição');
+    const nome=indiceNome>=0?linha[indiceNome]:`Documento ${indiceLinha+1}`;
+    const descricao=indiceDescricao>=0?linha[indiceDescricao]:'';
+    const campos=cabecalhos.map((rotulo,indice)=>({rotulo,valor:linha[indice]})).filter((_,indice)=>indice!==indiceNome&&indice!==indiceDescricao);
     const grupos=[];
-    for(let indice=0;indice<campos.length;indice+=colunas)grupos.push(campos.slice(indice,indice+colunas));
-    const alturas=grupos.map(grupo=>Math.max(14,...grupo.map(campo=>{
-      const valor=pdf.splitTextToSize(String(campo.valor||'—'),larguraCelula-4).slice(0,4);
-      return 8+(valor.length*3.1);
-    })));
-    const alturaBloco=10+alturas.reduce((soma,altura)=>soma+altura,0)+6;
-    if(y+Math.min(alturaBloco,alturaLimite-40)>alturaLimite)novaPagina();
-    pdf.setFillColor(210,224,243);pdf.setDrawColor(170,191,220);pdf.rect(margem,y,larguraUtil,10,'FD');
-    pdf.setTextColor(12,50,111);pdf.setFontSize(9);pdf.setFont('helvetica','bold');
-    pdf.text(`${rotuloRegistro}: ${String(nome||'—')}`,margem+3,y+6.4,{maxWidth:larguraUtil-6});y+=10;
-    grupos.forEach((grupo,indiceGrupo)=>{
-      const altura=alturas[indiceGrupo];
-      if(y+altura>alturaLimite){novaPagina();pdf.setFillColor(233,240,249);pdf.rect(margem,y,larguraUtil,7,'F');pdf.setTextColor(12,50,111);pdf.setFontSize(7);pdf.setFont('helvetica','bold');pdf.text(`${String(nome||'—')} — continuação`,margem+2,y+4.7);y+=7;}
-      grupo.forEach((campo,indiceCampo)=>{
-        const x=margem+(indiceCampo*(larguraCelula+espaco));
-        pdf.setFillColor(242,244,247);pdf.setDrawColor(195,202,212);pdf.rect(x,y,larguraCelula,6,'FD');
-        pdf.setTextColor(32,48,72);pdf.setFontSize(6.5);pdf.setFont('helvetica','bold');pdf.text(String(campo.rotulo),x+2,y+4,{maxWidth:larguraCelula-4});
-        pdf.setFillColor(255,255,255);pdf.rect(x,y+6,larguraCelula,altura-6,'FD');
-        pdf.setTextColor(40,49,63);pdf.setFontSize(7);pdf.setFont('helvetica','normal');
-        const valor=pdf.splitTextToSize(String(campo.valor||'—'),larguraCelula-4).slice(0,4);pdf.text(valor,x+2,y+10);
-      });
-      y+=altura;
+    for(let indice=0;indice<campos.length;indice+=3)grupos.push(campos.slice(indice,indice+3));
+    let alturaBloco=8+4;
+    grupos.forEach(grupo=>{const w=larguraUtil/grupo.length;alturaBloco+=6+Math.max(...grupo.map(campo=>alturaValor(campo.valor,w,4)));});
+    if(indiceDescricao>=0)alturaBloco+=6+alturaValor(descricao,larguraUtil,10);
+    if(y+alturaBloco>limitePagina)novaPagina();
+    pdf.setFillColor(211,225,242);pdf.setDrawColor(...borda);pdf.rect(margem,y,larguraUtil,8,'FD');pdf.setTextColor(...azul);pdf.setFontSize(8);pdf.setFont('helvetica','bold');
+    pdf.text(`Documento: ${String(nome||'—')}`,margem+2,y+5.3,{maxWidth:larguraUtil-4});y+=8;
+    grupos.forEach(grupo=>{
+      const w=larguraUtil/grupo.length,altura=Math.max(...grupo.map(campo=>alturaValor(campo.valor,w,4)));
+      grupo.forEach((campo,i)=>{pdf.setFillColor(230,230,230);pdf.setDrawColor(...borda);pdf.rect(margem+i*w,y,w,6,'FD');pdf.setTextColor(45,45,45);pdf.setFontSize(7);pdf.setFont('helvetica','bold');pdf.text(campo.rotulo,margem+i*w+2,y+4.1,{maxWidth:w-4});});y+=6;
+      grupo.forEach((campo,i)=>{pdf.setFillColor(255,255,255);pdf.rect(margem+i*w,y,w,altura,'FD');pdf.setTextColor(40,40,40);pdf.setFontSize(7);pdf.setFont('helvetica','normal');pdf.text(linhasValor(campo.valor,w,4),margem+i*w+2,y+4.3);});y+=altura;
     });
-    y+=6;
+    if(indiceDescricao>=0)desenharSecao('Descrição',descricao);
+    y+=4;
   });
-  rodapePagina();pdf.save(`relatorio_norma_${tipo}_${todayStr()}.pdf`);toast(`<b>PDF Norma exportado</b> — ${total} registro${total===1?'':'s'}.`,'valido');
+  pdf.save(`relatorio_norma_${tipo}_${todayStr()}.pdf`);toast(`<b>PDF Norma exportado</b> — ${total} registro${total===1?'':'s'}.`,'valido');
 }
 function exportarRelatorio(){abrirRelatorio('documentos');}
-function exportarRelatorioReunioes(){abrirRelatorio('reunioes');}
+function exportarRelatorioReunioes(){
+  let contexto=null;
+  if(typeof visualizacaoReunioes!=='undefined' && visualizacaoReunioes==='calendario' && typeof calendarioReunioesMes!=='undefined'){
+    const mesSelecionado=`${calendarioReunioesMes.getFullYear()}-${String(calendarioReunioesMes.getMonth()+1).padStart(2,'0')}`;
+    const reunioesDoMes=reunioes.filter(reuniao=>(reuniao.data||'').startsWith(mesSelecionado));
+    const rotuloMes=calendarioReunioesMes.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+    if(!reunioesDoMes.length){
+      toast(`Não há reuniões em ${rotuloMes} para exportar.`,'alerta');
+      return;
+    }
+    relatorioSelecao.reunioes=new Set(reunioesDoMes.map(reuniao=>reuniao.id));
+    contexto={periodo:rotuloMes};
+  }
+  abrirRelatorio('reunioes',contexto);
+}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('relatorio-modal-overlay')?.classList.contains('open'))fecharRelatorio();});
 
 </script>
@@ -12940,16 +13300,25 @@ function concluirAta(){
   toast('Ata concluída com sucesso.', 'valido');
 }
 
-function abrirModalExportarAta(){
+let minutaExportacaoHistoricoId = null;
+
+function abrirModalExportarAta(idHistorico = null){
+  minutaExportacaoHistoricoId = idHistorico;
   abrirModalElemento('exportar-ata-modal-overlay');
 }
 
 function fecharModalExportarAta(){
   fecharModalElemento('exportar-ata-modal-overlay');
+  minutaExportacaoHistoricoId = null;
 }
 
 function exportarAta(formato){
+  const idHistorico = minutaExportacaoHistoricoId;
   fecharModalExportarAta();
+  if(idHistorico){
+    baixarMinutaHistorico(idHistorico, formato);
+    return;
+  }
   if(formato === 'pdf') imprimirMinutaPdf();
   else baixarMinutaWord();
 }
@@ -13660,7 +14029,8 @@ function renderDashboard(){
 
   definirTextoDashboard('dashboard-total-documentos',docs.length);
   definirTextoDashboard('dashboard-total-documentos-vencidos',vencidos);
-  definirTextoDashboard('dashboard-documentos-detalhe','Acompanhe prazos e responsáveis');
+  definirTextoDashboard('dashboard-total-documentos-sem-normativo',semNormativo);
+  definirTextoDashboard('dashboard-documentos-detalhe','Acompanhe prazos');
   definirTextoDashboard('dashboard-total-reunioes',reunioes.length);
   definirTextoDashboard('dashboard-reunioes-detalhe',`${new Set(reunioes.map(item=>item.frequencia).filter(Boolean)).size} unidade(s)`);
   definirTextoDashboard('dashboard-total-minutas',minutasHistorico.length);
@@ -13721,13 +14091,25 @@ function renderDashboard(){
       : '<div class="dashboard-lista-vazia">Nenhuma reunião cadastrada.</div>';
   }
 
+  const documentoSemNormativo=documento=>documento.semNormativo || documento.tipo==='Sem normativo';
   const documentosAtencao=statusDocumentos
-    .filter(documento=>['Alerta','Vencido'].includes(documento.status))
-    .sort((a,b)=>String(a.data||'').localeCompare(String(b.data||'')));
+    .filter(documento=>documentoSemNormativo(documento) || ['Alerta','Vencido'].includes(documento.status))
+    .sort((a,b)=>{
+      const semNormativoA=documentoSemNormativo(a);
+      const semNormativoB=documentoSemNormativo(b);
+      if(semNormativoA!==semNormativoB) return semNormativoA?1:-1;
+      return String(a.data||'').localeCompare(String(b.data||''));
+    });
   const listaDocumentos=document.getElementById('dashboard-documentos-atencao');
   if(listaDocumentos){
     listaDocumentos.innerHTML=documentosAtencao.length
-      ? documentosAtencao.map(documento=>`<div class="dashboard-lista-item"><div><strong title="${escapeHtml(documento.nome)}">${escapeHtml(documento.nome)}</strong><span>Vencimento: ${escapeHtml(documento.data?fmtData(documento.data):'não informado')}</span></div><em class="${documento.status==='Vencido'?'vencido':'alerta'}">${escapeHtml(statusLabel(documento.status))}</em></div>`).join('')
+      ? documentosAtencao.map(documento=>{
+        const semNormativo=documentoSemNormativo(documento);
+        const detalhe=semNormativo?'Documento sem vigência normativa':`Vencimento: ${documento.data?fmtData(documento.data):'não informado'}`;
+        const classe=semNormativo?'sem-normativo':documento.status==='Vencido'?'vencido':'alerta';
+        const rotulo=semNormativo?'Sem normativo':statusLabel(documento.status);
+        return `<div class="dashboard-lista-item"><div><strong title="${escapeHtml(documento.nome)}">${escapeHtml(documento.nome)}</strong><span>${escapeHtml(detalhe)}</span></div><em class="${classe}">${escapeHtml(rotulo)}</em></div>`;
+      }).join('')
       : '<div class="dashboard-lista-vazia">Nenhum documento exige atenção.</div>';
   }
 

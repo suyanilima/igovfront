@@ -44,7 +44,8 @@ function renderDashboard(){
 
   definirTextoDashboard('dashboard-total-documentos',docs.length);
   definirTextoDashboard('dashboard-total-documentos-vencidos',vencidos);
-  definirTextoDashboard('dashboard-documentos-detalhe','Acompanhe prazos e responsáveis');
+  definirTextoDashboard('dashboard-total-documentos-sem-normativo',semNormativo);
+  definirTextoDashboard('dashboard-documentos-detalhe','Acompanhe prazos');
   definirTextoDashboard('dashboard-total-reunioes',reunioes.length);
   definirTextoDashboard('dashboard-reunioes-detalhe',`${new Set(reunioes.map(item=>item.frequencia).filter(Boolean)).size} unidade(s)`);
   definirTextoDashboard('dashboard-total-minutas',minutasHistorico.length);
@@ -105,13 +106,25 @@ function renderDashboard(){
       : '<div class="dashboard-lista-vazia">Nenhuma reunião cadastrada.</div>';
   }
 
+  const documentoSemNormativo=documento=>documento.semNormativo || documento.tipo==='Sem normativo';
   const documentosAtencao=statusDocumentos
-    .filter(documento=>['Alerta','Vencido'].includes(documento.status))
-    .sort((a,b)=>String(a.data||'').localeCompare(String(b.data||'')));
+    .filter(documento=>documentoSemNormativo(documento) || ['Alerta','Vencido'].includes(documento.status))
+    .sort((a,b)=>{
+      const semNormativoA=documentoSemNormativo(a);
+      const semNormativoB=documentoSemNormativo(b);
+      if(semNormativoA!==semNormativoB) return semNormativoA?1:-1;
+      return String(a.data||'').localeCompare(String(b.data||''));
+    });
   const listaDocumentos=document.getElementById('dashboard-documentos-atencao');
   if(listaDocumentos){
     listaDocumentos.innerHTML=documentosAtencao.length
-      ? documentosAtencao.map(documento=>`<div class="dashboard-lista-item"><div><strong title="${escapeHtml(documento.nome)}">${escapeHtml(documento.nome)}</strong><span>Vencimento: ${escapeHtml(documento.data?fmtData(documento.data):'não informado')}</span></div><em class="${documento.status==='Vencido'?'vencido':'alerta'}">${escapeHtml(statusLabel(documento.status))}</em></div>`).join('')
+      ? documentosAtencao.map(documento=>{
+        const semNormativo=documentoSemNormativo(documento);
+        const detalhe=semNormativo?'Documento sem vigência normativa':`Vencimento: ${documento.data?fmtData(documento.data):'não informado'}`;
+        const classe=semNormativo?'sem-normativo':documento.status==='Vencido'?'vencido':'alerta';
+        const rotulo=semNormativo?'Sem normativo':statusLabel(documento.status);
+        return `<div class="dashboard-lista-item"><div><strong title="${escapeHtml(documento.nome)}">${escapeHtml(documento.nome)}</strong><span>${escapeHtml(detalhe)}</span></div><em class="${classe}">${escapeHtml(rotulo)}</em></div>`;
+      }).join('')
       : '<div class="dashboard-lista-vazia">Nenhum documento exige atenção.</div>';
   }
 

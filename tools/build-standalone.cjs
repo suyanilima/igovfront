@@ -3,7 +3,7 @@ const path = require('path');
 
 const root = path.resolve(__dirname, '..');
 const sourcePath = path.join(root, 'index.html');
-const outputPath = path.join(root, 'igov-controle.html');
+const outputPath = path.join(root, 'prototipo-norma.html');
 
 let html = fs.readFileSync(sourcePath, 'utf8');
 

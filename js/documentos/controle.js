@@ -28,7 +28,11 @@ function render(){
   let visiveis = unidadeSelecionadaDocumentos
     ? withStatus.filter(documentoPertenceUnidadeSelecionada)
     : withStatus;
-  visiveis = statusSelecionado==='todos' ? visiveis : visiveis.filter(d=>d.status===statusSelecionado);
+  visiveis = statusSelecionado==='todos'
+    ? visiveis
+    : statusSelecionado==='atencao'
+      ? visiveis.filter(d=>['Alerta','Vencido'].includes(d.status) || d.semNormativo || d.tipo==='Sem normativo')
+      : visiveis.filter(d=>d.status===statusSelecionado);
   if(buscaTexto) visiveis = visiveis.filter(d => d.nome.toLowerCase().includes(buscaTexto));
   if(tipoSelecionado) visiveis = visiveis.filter(d => d.tipo === tipoSelecionado);
   if(anoSelecionado) visiveis = visiveis.filter(d => (d.dataVigencia || d.dataCriacao || d.data || '').slice(0,4) === anoSelecionado);
@@ -147,6 +151,22 @@ function alterarItensPorPagina(valor){
   render();
 }
 
+function limparFiltrosDocumentos(){
+  const filtros={
+    'busca-nome':'',
+    'filtro-status':'todos',
+    'filtro-tipo':'',
+    'filtro-ano':''
+  };
+  Object.entries(filtros).forEach(([id,valor])=>{
+    const campo=document.getElementById(id);
+    if(campo) campo.value=valor;
+  });
+  paginaAtual=1;
+  filtrosAnteriores='';
+  render();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const seletor = document.getElementById('itens-por-pagina');
   if(seletor) seletor.value = String(ITENS_POR_PAGINA);
@@ -180,7 +200,9 @@ function obterDocumentosVisiveis(){
     : withStatus;
   visiveis = statusSelecionado === 'todos'
     ? visiveis
-    : visiveis.filter(d => d.status === statusSelecionado);
+    : statusSelecionado === 'atencao'
+      ? visiveis.filter(d => ['Alerta','Vencido'].includes(d.status) || d.semNormativo || d.tipo === 'Sem normativo')
+      : visiveis.filter(d => d.status === statusSelecionado);
 
   if(buscaTexto) visiveis = visiveis.filter(d => d.nome.toLowerCase().includes(buscaTexto));
   if(tipoSelecionado) visiveis = visiveis.filter(d => d.tipo === tipoSelecionado);

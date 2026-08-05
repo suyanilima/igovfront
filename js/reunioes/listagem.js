@@ -1,11 +1,12 @@
 /* ===== LISTAGEM, FILTROS E PAGINAÇÃO DE REUNIÕES ===== */
 
-let visualizacaoReunioes='lista';
+let visualizacaoReunioes='calendario';
 let calendarioReunioesMes=new Date(new Date().getFullYear(),new Date().getMonth(),1);
 let calendarioReunioesDia=todayStr();
 
 function alterarVisualizacaoReunioes(modo){
   visualizacaoReunioes=modo==='calendario'?'calendario':'lista';
+  document.querySelector('.reunioes-blocos')?.classList.toggle('modo-calendario',visualizacaoReunioes==='calendario');
   document.getElementById('reunioes-visualizacao-lista').hidden=visualizacaoReunioes!=='lista';
   document.getElementById('reunioes-visualizacao-calendario').hidden=visualizacaoReunioes!=='calendario';
   document.getElementById('reunioes-modo-lista')?.classList.toggle('active',visualizacaoReunioes==='lista');
@@ -40,8 +41,8 @@ function renderCalendarioReunioes(){
     if(data.getMonth()!==calendarioReunioesMes.getMonth())classes.push('fora-mes');
     if(chave===hoje)classes.push('hoje');
     if(chave===calendarioReunioesDia)classes.push('selecionado');
-    const eventosHtml=eventos.slice(0,3).map(reuniao=>`<button class="calendario-evento ${classeSituacaoCalendario(reuniao)}" type="button" onclick="event.stopPropagation();verResumoReuniao('${reuniao.id}')" title="${escapeHtml(`${reuniao.horario||''} · ${reuniao.frequencia||''} · ${reuniao.pauta||'Sem pauta'}`)}"><strong>${escapeHtml(reuniao.horario||'--:--')}</strong> ${escapeHtml(reuniao.frequencia||'Reunião')}</button>`).join('');
-    dias.push(`<div class="${classes.join(' ')}" role="button" tabindex="0" onclick="selecionarDiaCalendarioReunioes('${chave}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selecionarDiaCalendarioReunioes('${chave}')}" aria-label="${data.toLocaleDateString('pt-BR',{day:'numeric',month:'long'})}, ${eventos.length} reunião${eventos.length===1?'':'ões'}"><span class="calendario-dia-numero">${data.getDate()}</span>${eventosHtml}${eventos.length>3?`<span class="calendario-eventos-restantes">+${eventos.length-3} reunião${eventos.length-3===1?'':'ões'}</span>`:''}</div>`);
+    const eventosHtml=eventos.slice(0,2).map(reuniao=>`<button class="calendario-evento ${classeSituacaoCalendario(reuniao)}" type="button" onclick="event.stopPropagation();verResumoReuniao('${reuniao.id}')" title="${escapeHtml(`${reuniao.horario||''} · ${reuniao.frequencia||''} · ${reuniao.pauta||'Sem pauta'}`)}"><strong>${escapeHtml(reuniao.horario||'--:--')}</strong> ${escapeHtml(reuniao.frequencia||'Reunião')}</button>`).join('');
+    dias.push(`<div class="${classes.join(' ')}" role="button" tabindex="0" onclick="selecionarDiaCalendarioReunioes('${chave}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selecionarDiaCalendarioReunioes('${chave}')}" aria-label="${data.toLocaleDateString('pt-BR',{day:'numeric',month:'long'})}, ${eventos.length} reunião${eventos.length===1?'':'ões'}"><span class="calendario-dia-numero">${data.getDate()}</span>${eventosHtml}${eventos.length>2?`<span class="calendario-eventos-restantes">+${eventos.length-2} reunião${eventos.length-2===1?'':'ões'}</span>`:''}</div>`);
   }
   grade.innerHTML=dias.join('');
   renderAgendaDiaCalendario(porData[calendarioReunioesDia]||[]);
@@ -213,8 +214,7 @@ function renderEscolhaReuniaoMinuta(){
     const acao = minutaExistente ? `abrirMinutaHistorico('${minutaExistente.id}')` : `abrirMinutaReuniao('${item.id}')`;
     const menu = minutaExistente
       ? `<button type="button" onclick="abrirMinutaHistorico('${minutaExistente.id}')">Editar ata</button>
-         <button class="export-pdf" type="button" onclick="baixarMinutaHistorico('${minutaExistente.id}','pdf')">Baixar PDF</button>
-         <button class="export-docs" type="button" onclick="baixarMinutaHistorico('${minutaExistente.id}','word')">Baixar Word / Docs</button>
+         <button type="button" onclick="abrirModalExportarAta('${minutaExistente.id}')">Exportar</button>
          <div class="divider"></div><button class="del" type="button" onclick="excluirMinutaHistorico('${minutaExistente.id}')">Excluir ata</button>`
       : `<button type="button" onclick="abrirMinutaReuniao('${item.id}')">Gerar ata</button>`;
     return `<div class="minuta-reuniao-opcao${minutaExistente ? ' com-minuta' : ''}" role="button" tabindex="0" onclick="${acao}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();${acao}}">
@@ -231,6 +231,14 @@ function renderEscolhaReuniaoMinuta(){
 function filtrarAtas(){
   paginaAtas=1;
   renderEscolhaReuniaoMinuta();
+}
+
+function limparFiltrosAtas(){
+  ['minuta-busca-reuniao','minuta-filtro-ano','minuta-filtro-unidade','ata-filtro-situacao'].forEach(id=>{
+    const campo=document.getElementById(id);
+    if(campo) campo.value='';
+  });
+  filtrarAtas();
 }
 
 function alterarItensAtas(valor){
@@ -367,6 +375,14 @@ function exportarRelatorioReunioes(){
 function filtrarReunioes(){
   paginaReunioes = 1;
   renderReunioes();
+}
+
+function limparFiltrosReunioes(){
+  ['reuniao-busca','reuniao-filtro-tipo','reuniao-filtro-ano'].forEach(id=>{
+    const campo=document.getElementById(id);
+    if(campo) campo.value='';
+  });
+  filtrarReunioes();
 }
 
 function alterarItensReunioes(valor){

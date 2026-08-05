@@ -292,6 +292,7 @@ function abrirModalElemento(id){
   focoAntesDoModal = document.activeElement;
   overlay.classList.add('open');
   overlay.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-aberto');
   if(typeof sincronizarSeletoresPersonalizados === 'function') sincronizarSeletoresPersonalizados();
   requestAnimationFrame(() => overlay.querySelector('.modal')?.focus());
 }
@@ -301,6 +302,7 @@ function fecharModalElemento(id){
   if(!overlay) return;
   overlay.classList.remove('open');
   overlay.setAttribute('aria-hidden', 'true');
+  if(!document.querySelector('[id$="modal-overlay"].open')) document.body.classList.remove('modal-aberto');
   focoAntesDoModal?.focus?.();
   focoAntesDoModal = null;
 }

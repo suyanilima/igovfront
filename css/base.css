@@ -99,6 +99,10 @@ body {
   padding-top: 73px;
 }
 
+body.modal-aberto {
+  overflow: hidden;
+}
+
 .type-display {
   font-size: var(--type-display-size);
   line-height: var(--type-display-line);

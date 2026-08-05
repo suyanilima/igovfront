@@ -114,22 +114,52 @@ button.export-docs:hover,button.export-docs:focus-visible {
 
 /* modal histórico de edições */
 .historico-modal {
+  display: flex;
+  flex-direction: column;
   width: 440px;
-  max-height: 80vh;
-  overflow-y: auto;
+  max-height: calc(100dvh - 32px);
+  overflow-y: hidden;
   overflow-x: hidden;
 }
 
 .historico-timeline {
   display: flex;
   flex-direction: column;
+  flex: 0 1 auto;
   gap: var(--space-3);
+  min-height: 0;
   margin-top: var(--space-3);
-  max-height: 340px;
+  max-height: min(280px,calc(100dvh - 190px));
+  padding-right: 8px;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  scrollbar-color: #AFC3DF transparent;
+  scrollbar-width: thin;
+}
+
+.historico-timeline::-webkit-scrollbar {
+  width: 8px;
+}
+
+.historico-timeline::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.historico-timeline::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: #AFC3DF;
+  background-clip: padding-box;
+}
+
+.historico-timeline::-webkit-scrollbar-thumb:hover {
+  background: var(--gov-blue);
+  background-clip: padding-box;
 }
 
 .historico-item {
+  flex: 0 0 auto;
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: var(--space-3) var(--space-4);
@@ -302,7 +332,7 @@ button.export-docs:hover,button.export-docs:focus-visible {
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 60;
+  z-index: 1000;
   padding: var(--space-4);
 }
 
@@ -315,7 +345,7 @@ button.export-docs:hover,button.export-docs:focus-visible {
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 60;
+  z-index: 1000;
   padding: var(--space-4);
 }
 
@@ -583,7 +613,7 @@ button.export-docs:hover,button.export-docs:focus-visible {
 /* modal editar: mais largo, com rolagem para nunca cortar topo/rodapé */
 .edit-modal {
   width: min(1040px, 94vw);
-  max-height: 88vh;
+  max-height: calc(100dvh - 32px);
   overflow-y: auto;
   overflow-x: hidden;
 }

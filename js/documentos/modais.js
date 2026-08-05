@@ -398,6 +398,8 @@ function verHistorico(id){
     `).join('');
   }
 
+  lista.style.removeProperty('max-height');
+  lista.scrollTop = 0;
   abrirModalElemento('historico-modal-overlay');
 }
 

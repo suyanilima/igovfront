@@ -4,7 +4,7 @@ const APRESENTACAO_NORMA_ETAPAS=[
   {
     numero:'01',
     kicker:'Documentos',
-    titulo:'Controle prazos e responsáveis',
+    titulo:'Gerencie documentos e prazos',
     texto:'Cadastre documentos, acompanhe a vigência e identifique rapidamente os itens vencidos ou que exigem atenção.'
   },
   {

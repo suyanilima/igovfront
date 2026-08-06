@@ -1097,14 +1097,14 @@
 <div id="apresentacao-norma-overlay" aria-hidden="true">
   <div class="apresentacao-norma" role="dialog" aria-modal="true" aria-labelledby="apresentacao-norma-titulo" tabindex="-1">
     <button class="apresentacao-fechar" type="button" onclick="pularApresentacaoNorma()" aria-label="Fechar apresentação">✕</button>
-    <div class="apresentacao-marca">NORMA</div>
+    <div class="apresentacao-marca"><img src="assets/norma-logo.png" alt="Norma"/></div>
     <div class="apresentacao-etapas" aria-label="Progresso da apresentação">
       <span class="ativo"></span><span></span><span></span>
     </div>
     <div class="apresentacao-conteudo" aria-live="polite">
       <div class="apresentacao-icone" id="apresentacao-norma-icone" aria-hidden="true">01</div>
       <span class="apresentacao-kicker" id="apresentacao-norma-kicker">Documentos</span>
-      <h2 id="apresentacao-norma-titulo">Controle prazos e responsáveis</h2>
+      <h2 id="apresentacao-norma-titulo">Gerencie documentos e prazos</h2>
       <p id="apresentacao-norma-texto">Cadastre documentos, acompanhe a vigência e identifique rapidamente os itens vencidos ou que exigem atenção.</p>
     </div>
     <label class="apresentacao-nao-mostrar"><input id="apresentacao-nao-mostrar" type="checkbox" checked> Não mostrar novamente</label>
@@ -1119,17 +1119,30 @@
 </div>
 
 <script src="js/vendor/jspdf.umd.min.js"></script>
-<script src="js/core.js"></script>
+<script src="js/shared/estado.js"></script>
+<script src="js/shared/validacao.js"></script>
+<script src="js/shared/datas-formatacao.js"></script>
+<script src="js/shared/documentos-storage.js"></script>
+<script src="js/shared/interface.js"></script>
+<script src="js/shared/historico.js"></script>
 <script src="js/tabs.js"></script>
 <script src="js/documentos/unidades.js"></script>
 <script src="js/documentos/cadastro.js"></script>
-<script src="js/documentos/controle.js"></script>
-<script src="js/documentos/modais.js"></script>
-<script src="js/reunioes/core.js"></script>
+<script src="js/documentos/listagem.js"></script>
+<script src="js/documentos/renovacao.js"></script>
+<script src="js/documentos/exclusao.js"></script>
+<script src="js/documentos/edicao.js"></script>
+<script src="js/documentos/resumo.js"></script>
+<script src="js/documentos/notificacoes.js"></script>
+<script src="js/documentos/historico.js"></script>
+<script src="js/reunioes/estado.js"></script>
 <script src="js/reunioes/unidades.js"></script>
-<script src="js/reunioes/cadastro.js"></script>
-<script src="js/reunioes/listagem.js"></script>
-<script src="js/relatorios.js"></script>
+<script src="js/reunioes/cadastro-acoes.js"></script>
+<script src="js/reunioes/formulario-participantes.js"></script>
+<script src="js/reunioes/calendario-listagem.js"></script>
+<script src="js/reunioes/atas-listagem.js"></script>
+<script src="js/reunioes/filtros-paginacao.js"></script>
+<script src="js/relatorios/index.js"></script>
 <script src="js/minutas/editor.js"></script>
 <script src="js/minutas/formatacao.js"></script>
 <script src="js/minutas/historico.js"></script>
@@ -1137,8 +1150,8 @@
 <script src="js/minutas/fluxo.js"></script>
 <script src="js/minutas/exportacao.js"></script>
 <script src="js/estados.js"></script>
-<script src="js/dashboard.js"></script>
+<script src="js/dashboard/index.js"></script>
 <script src="js/apresentacao.js"></script>
-<script src="js/init.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>

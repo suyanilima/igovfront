@@ -1,4 +1,4 @@
-/* ===== js/documentos/controle.js ===== */
+/* ===== LISTAGEM E CONTROLE DE DOCUMENTOS ===== */
 /* ===== ABA: CONTROLE (tabela, filtros, menu de ações e exportação) ===== */
 
 function render(){

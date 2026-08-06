@@ -1,4 +1,4 @@
-/* ===== js/init.js ===== */
+/* ===== PONTO DE ENTRADA DA APLICAÇÃO ===== */
 /* ===== INICIALIZAÇÃO: roda por último, depois que todas as funções acima já existem ===== */
 
 function tickClock(){
@@ -92,6 +92,7 @@ function sincronizarSeletoresPersonalizados(){
 }
 
 inicializarNavbar();
+inicializarInterfaceCompartilhada();
 tickClock();
 setInterval(tickClock, 60000);
 

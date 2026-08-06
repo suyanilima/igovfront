@@ -153,7 +153,9 @@
 
 .dashboard-documentos-atencao-card {
   grid-column: 1;
-  grid-row: 2
+  grid-row: 2;
+  display: flex;
+  flex-direction: column
 }
 
 .dashboard-reunioes-card {
@@ -471,7 +473,15 @@
   scrollbar-gutter: stable;
 }
 
-.dashboard-reunioes-card,.dashboard-atas {
+.dashboard-documentos-atencao-card .dashboard-lista {
+  height: 0;
+  min-height: 0;
+  max-height: none;
+  flex: 1;
+  grid-auto-rows: minmax(64px,1fr)
+}
+
+.dashboard-reunioes-card,.dashboard-documentos-atencao-card,.dashboard-atas {
   height: 336px
 }
 
@@ -631,7 +641,7 @@
     order: 4;
   }
 
-  .dashboard-reunioes-card,.dashboard-atas {
+  .dashboard-reunioes-card,.dashboard-documentos-atencao-card,.dashboard-atas {
     height: auto;
     min-height: 420px
   }

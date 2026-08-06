@@ -64,24 +64,37 @@ contexto.window = contexto;
 contexto.globalThis = contexto;
 
 const arquivosDaAplicacao = [
-  'js/core.js',
+  'js/shared/estado.js',
+  'js/shared/validacao.js',
+  'js/shared/datas-formatacao.js',
+  'js/shared/documentos-storage.js',
+  'js/shared/interface.js',
+  'js/shared/historico.js',
   'js/tabs.js',
   'js/documentos/unidades.js',
   'js/documentos/cadastro.js',
-  'js/documentos/controle.js',
-  'js/documentos/modais.js',
-  'js/reunioes/core.js',
+  'js/documentos/listagem.js',
+  'js/documentos/renovacao.js',
+  'js/documentos/exclusao.js',
+  'js/documentos/edicao.js',
+  'js/documentos/resumo.js',
+  'js/documentos/notificacoes.js',
+  'js/documentos/historico.js',
+  'js/reunioes/estado.js',
   'js/reunioes/unidades.js',
-  'js/reunioes/cadastro.js',
-  'js/reunioes/listagem.js',
+  'js/reunioes/cadastro-acoes.js',
+  'js/reunioes/formulario-participantes.js',
+  'js/reunioes/calendario-listagem.js',
+  'js/reunioes/atas-listagem.js',
+  'js/reunioes/filtros-paginacao.js',
   'js/minutas/editor.js',
   'js/minutas/formatacao.js',
   'js/minutas/historico.js',
   'js/minutas/ia.js',
   'js/minutas/fluxo.js',
   'js/minutas/exportacao.js',
-  'js/dashboard.js',
-  'js/init.js'
+  'js/dashboard/index.js',
+  'js/app.js'
 ];
 const app = arquivosDaAplicacao
   .map(arquivo => fs.readFileSync(arquivo, 'utf8'))

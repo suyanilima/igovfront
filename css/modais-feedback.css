@@ -451,10 +451,16 @@ button.export-docs:hover,button.export-docs:focus-visible {
 }
 
 .apresentacao-marca {
-  color: var(--gov-blue-dark);
-  font-size: 15px;
-  font-weight: 900;
-  letter-spacing: .14em;
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+}
+
+.apresentacao-marca img {
+  display: block;
+  width: 190px;
+  height: auto;
+  object-fit: contain;
 }
 
 .apresentacao-etapas {
